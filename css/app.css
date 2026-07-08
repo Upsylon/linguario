@@ -223,6 +223,21 @@ input  { font: inherit; }
 /* Unit hint */
 .hm-unit-hint { font-size: .8rem; color: var(--muted); text-align: center; }
 
+/* Backup / restore */
+.hm-backup { display: flex; gap: .5rem; justify-content: center; margin-top: 1.5rem; }
+.hm-backup-btn {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.35);
+  border-radius: .45rem;
+  padding: .35rem .85rem;
+  font-size: .7rem;
+  cursor: pointer;
+  transition: background .15s;
+}
+.hm-backup-btn:hover { background: rgba(255,255,255,.12); color: rgba(255,255,255,.6); }
+.hm-backup-lbl { display: inline-flex; align-items: center; }
+
 /* ── Quick Session ───────────────────────────────────────────────────── */
 .qs-session { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 1.25rem 1.5rem; gap: 1rem; }
 .qs-topbar  { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
