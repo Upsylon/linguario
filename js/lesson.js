@@ -2,9 +2,9 @@
 /*
   Flow d'une nouvelle leçon :
     1. Dialogue (4 lignes + note culturelle)
-    2. Exercices sur 5 mots (meaning-mc / gap-fill / translate-mc)
-    3. Grammaire MC
-    4. Self-assess sur les 10 mots (SRS)
+    2. Grammaire MC
+    3. Exercices sur les 10 mots (meaning-mc / gap-fill / translate-mc en rotation)
+    4. Self-assess sur les 10 mots (SRS)  — mots ratés ré-exposés automatiquement
     5. Écran de fin + XP
 
   startSmart()    : SRS due ≥ 3 → révision ; sinon → prochaine unité.
@@ -14,7 +14,6 @@
 
 const Lesson = (() => {
 
-  const LESSON_WORDS     = 5;
   const REVIEW_THRESHOLD = 3;
 
   // Callbacks — set per session, reset each time
@@ -129,20 +128,24 @@ const Lesson = (() => {
      New lesson — dialogue → exercises → grammar → self-assess
   ══════════════════════════════════════════════════════════════ */
   function _lesson(container, unit) {
-    const mode  = _getMode();
-    const words = unit.words.slice(0, LESSON_WORDS);
+    const mode   = _getMode();
     let ok = 0, xpEarned = 0;
+    const missed = new Set();
 
-    // Optimal sequence (Schmidt noticing hypothesis): dialogue → grammar → exercises → SRS
+    // Optimal sequence (Schmidt noticing hypothesis): dialogue → grammar → exercises (ALL 10) → self-assess
     const steps = [{ type: 'dialogue' }, { type: 'grammar' }];
-    words.forEach((w, i) => {
-      const t = ['meaning-mc', 'gap-fill', 'translate-mc'][i % 3];
-      steps.push({ type: t, word: w });
+    unit.words.forEach((w, i) => {
+      steps.push({ type: ['meaning-mc', 'gap-fill', 'translate-mc'][i % 3], word: w });
     });
     unit.words.forEach(w => steps.push({ type: 'self-assess', word: w }));
 
     let si = 0;
     function run() {
+      // Re-queue missed self-assess words for a second pass before ending
+      if (si === steps.length) {
+        const repass = [...missed].map(en => ({ type: 'self-assess', word: unit.words.find(x => x.en === en), repass: true }));
+        if (repass.length) { steps.push(...repass); missed.clear(); }
+      }
       if (si >= steps.length) { _end(container, steps.length, ok, xpEarned, false, mode); return; }
       const step = steps[si];
       _bar(container, si, steps.length, `${unit.icon} ${unit.name}`, mode);
@@ -157,7 +160,10 @@ const Lesson = (() => {
             const k = _key(unit.id, step.word.en, mode);
             _save(k, isOk);
             if (isOk) XP.markWordMastered(unit.id, step.word.en);
-            else       XP.markWordSeen(unit.id, step.word.en);
+            else {
+              XP.markWordSeen(unit.id, step.word.en);
+              if (!step.repass) missed.add(step.word.en);
+            }
           }
         }
         si++; run();
