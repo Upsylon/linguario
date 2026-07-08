@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>LinguaRío — FR ↔ Espagnol Argentin</title>
+  <meta name="description" content="Apprends le français ou l'espagnol argentin — leçons, exercices et révisions SRS." />
+  <meta name="theme-color" content="#06060f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<!-- ── Header ──────────────────────────────────────────────────────── -->
+<header class="app-header">
+  <span class="app-logo">🌊</span>
+  <span class="app-name">LinguaRío</span>
+</header>
+
+<!-- ── Navigation ───────────────────────────────────────────────────── -->
+<nav id="sidenav">
+  <button class="snav-tab active" data-screen="home">
+    <span class="snav-icon">▶</span>
+    <span class="snav-label">Apprendre</span>
+  </button>
+  <button class="snav-tab" data-screen="parcours">
+    <span class="snav-icon">🗺️</span>
+    <span class="snav-label">Parcours</span>
+  </button>
+  <button class="snav-tab" data-screen="duel">
+    <span class="snav-icon">⚔️</span>
+    <span class="snav-label">Duel</span>
+  </button>
+</nav>
+
+<!-- ── Main content ─────────────────────────────────────────────────── -->
+<main id="app-main">
+
+  <!-- BIENVENUE ──────────────────────────────────────────────────── -->
+  <section id="screen-welcome" class="screen active">
+    <div class="wc-wrap">
+      <div class="wc-logo">🌊</div>
+      <div class="wc-title">LinguaRío</div>
+      <div class="wc-sub">Français ↔ Espagnol argentin</div>
+
+      <div class="wc-cards">
+        <div class="wc-card selected" data-mode="fr-es">
+          <div class="wc-flag">🇫🇷→🇦🇷</div>
+          <div class="wc-lang">J'apprends l'espagnol</div>
+        </div>
+        <div class="wc-card" data-mode="es-fr">
+          <div class="wc-flag">🇦🇷→🇫🇷</div>
+          <div class="wc-lang">Aprendo francés</div>
+        </div>
+      </div>
+
+      <input class="wc-name" type="text" id="welcome-name" placeholder="Ton prénom (optionnel)" maxlength="30" />
+      <button class="wc-start-btn" id="welcome-start">Commencer ▶</button>
+    </div>
+  </section>
+
+  <!-- ACCUEIL ────────────────────────────────────────────────────── -->
+  <section id="screen-home" class="screen"></section>
+
+  <!-- DUEL ──────────────────────────────────────────────────────── -->
+  <section id="screen-duel" class="screen"></section>
+
+  <!-- PARCOURS B1 ─────────────────────────────────────────────────── -->
+  <section id="screen-parcours" class="screen"></section>
+
+  <!-- SESSION RAPIDE / LEÇON ─────────────────────────────────────── -->
+  <section id="screen-quick-session" class="screen"></section>
+
+</main>
+
+<!-- ── Scripts (order critical) ────────────────────────────────────── -->
+<script src="js/storage.js"></script>
+<script src="js/srs.js"></script>
+<script src="js/i18n.js"></script>
+<script src="data/verbs.js"></script>
+<script src="data/curriculum-b1.js"></script>
+<script src="data/curriculum-b1-es.js"></script>
+<script src="js/xp.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/duel.js"></script>
+<script src="js/quick-session.js"></script>
+<script src="js/parcours.js"></script>
+<script src="js/lesson-engine.js"></script>
+<script src="js/lesson.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>

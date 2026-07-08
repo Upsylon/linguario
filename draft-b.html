@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LinguaRío · Draft B — Atelier</title>
+<style>
+:root {
+  --bg:   #f4f3ee;
+  --bg2:  #eeede8;
+  --card: #ffffff;
+  --tx:   #1a1a2e;
+  --m:    #8a8a96;
+  --m2:   #c8c7cc;
+  --brd:  #e8e7e2;
+  --a:    #4361ee;
+  --a10:  rgba(67,97,238,.1);
+  --a20:  rgba(67,97,238,.2);
+  --co:   #e85040;
+  --co10: rgba(232,80,64,.1);
+  --g:    #16a34a;
+  --g10:  rgba(22,163,74,.1);
+  --y:    #d97706;
+  --y10:  rgba(217,119,6,.1);
+  --r:    .875rem;
+  --rs:   .625rem;
+  --sh:   0 1px 4px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.05);
+  --sh2:  0 2px 8px rgba(0,0,0,.06), 0 8px 32px rgba(0,0,0,.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--tx);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+.screen { display: none; position: fixed; inset: 0; flex-direction: column; overflow-y: auto; overflow-x: hidden; }
+.screen.on { display: flex; }
+
+/* NAV — bottom tabs with labels */
+nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--card); border-top: 1px solid var(--brd);
+  display: flex; padding: .5rem .5rem max(.5rem, env(safe-area-inset-bottom));
+  z-index: 999;
+}
+nav button {
+  flex: 1; border: none; background: none; color: var(--m);
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  padding: .4rem .2rem; cursor: pointer; border-radius: var(--rs);
+  transition: color .15s; font-size: inherit;
+}
+nav button .ni { font-size: 1.1rem; }
+nav button .nl { font-size: .62rem; font-weight: 600; letter-spacing: .02em; }
+nav button.on   { color: var(--a); }
+
+/* ── HOME ── */
+#home { padding: 0 0 5rem; }
+
+.hm-header {
+  background: var(--card); border-bottom: 1px solid var(--brd);
+  padding: 1rem 1.25rem .85rem; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10;
+}
+.hm-logo { display: flex; align-items: center; gap: .4rem; }
+.hm-wave { font-size: 1.2rem; }
+.hm-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -.04em; color: var(--a); }
+.hm-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--a10); border: 2px solid var(--a20);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; font-weight: 700; color: var(--a);
+}
+
+.hm-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+/* Today card */
+.today-card {
+  background: var(--a); border-radius: var(--r); padding: 1.5rem;
+  color: #fff; display: flex; align-items: center; gap: 1.25rem;
+  box-shadow: 0 4px 24px rgba(67,97,238,.35);
+  cursor: pointer;
+}
+.today-left { flex: 1; display: flex; flex-direction: column; gap: .4rem; }
+.today-tag  { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.today-h    { font-size: 1.35rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.2; }
+.today-sub  { font-size: .8rem; opacity: .7; }
+.today-btn  {
+  background: rgba(255,255,255,.2); border: 1.5px solid rgba(255,255,255,.3);
+  color: #fff; border-radius: 2rem; padding: .7rem 1.25rem;
+  font-size: .85rem; font-weight: 800; cursor: pointer;
+  white-space: nowrap; backdrop-filter: blur(4px);
+  transition: background .15s;
+}
+.today-btn:active { background: rgba(255,255,255,.3); }
+
+/* Streak bar */
+.streak-wrap { background: var(--card); border-radius: var(--r); padding: 1.1rem 1.25rem; box-shadow: var(--sh); display: flex; align-items: center; justify-content: space-between; }
+.streak-left { display: flex; flex-direction: column; gap: .15rem; }
+.streak-t    { font-size: .78rem; font-weight: 700; color: var(--tx); }
+.streak-s    { font-size: .7rem; color: var(--m); }
+.streak-days { display: flex; gap: .35rem; }
+.sday { width: 28px; height: 28px; border-radius: .4rem; display: flex; align-items: center; justify-content: center; font-size: .7rem; }
+.sday.done { background: var(--y10); color: var(--y); font-weight: 800; }
+.sday.today{ background: var(--y); color: #fff; font-weight: 800; }
+.sday.miss { background: var(--bg2); color: var(--m2); }
+
+/* Section header */
+.sh { font-size: .7rem; font-weight: 700; color: var(--m); letter-spacing: .08em; text-transform: uppercase; padding: 0 .25rem; }
+
+/* Grid cards */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.gc {
+  background: var(--card); border-radius: var(--r);
+  padding: 1.1rem; box-shadow: var(--sh); cursor: pointer;
+  display: flex; flex-direction: column; gap: .6rem;
+  transition: box-shadow .15s, transform .12s;
+  border: 1px solid var(--brd);
+}
+.gc:active { transform: scale(.98); }
+.gc-icon { width: 36px; height: 36px; border-radius: .6rem; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; }
+.gc-title { font-size: .9rem; font-weight: 700; letter-spacing: -.01em; }
+.gc-sub   { font-size: .7rem; color: var(--m); }
+.gc-prog  { height: 3px; background: var(--bg2); border-radius: 2px; overflow: hidden; margin-top: .25rem; }
+.gc-fill  { height: 100%; border-radius: 2px; }
+
+/* ── FLASHCARDS ── */
+#flashcards { padding: 0 0 5rem; background: var(--bg); }
+
+.fc-hd {
+  background: var(--card); border-bottom: 1px solid var(--brd);
+  padding: 1rem 1.25rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 10;
+}
+.fc-back { font-size: 1.1rem; color: var(--m); cursor: pointer; padding: .2rem; }
+.fc-prog-wrap { flex: 1; display: flex; flex-direction: column; gap: .3rem; }
+.fc-hd-count  { font-size: .75rem; font-weight: 700; color: var(--tx); }
+.fc-bar  { height: 5px; background: var(--bg2); border-radius: 3px; overflow: hidden; }
+.fc-fill { height: 100%; width: 30%; background: linear-gradient(90deg, var(--a), #7b9fff); border-radius: 3px; }
+.fc-hd-pts { font-size: .78rem; color: var(--m); }
+
+.fc-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+
+.fc-card-wrap {
+  background: var(--card); border-radius: var(--r); box-shadow: var(--sh2);
+  padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center;
+  gap: .6rem; min-height: 260px; justify-content: center; border: 1px solid var(--brd);
+  cursor: pointer;
+}
+.fc-badge {
+  background: var(--a10); color: var(--a);
+  font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  padding: .25rem .75rem; border-radius: 99px;
+}
+.fc-cw     { font-size: 4rem; font-weight: 900; letter-spacing: -.07em; text-align: center; line-height: .95; color: var(--tx); }
+.fc-tap    { font-size: .8rem; color: var(--m); margin-top: .5rem; }
+.fc-ans-w  { font-size: 3rem; font-weight: 900; letter-spacing: -.06em; color: var(--a); display: none; }
+.fc-langs  { display: flex; gap: 1.5rem; align-items: center; display: none; }
+.fc-lang   { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.fc-lflag  { font-size: 1.5rem; }
+.fc-lword  { font-size: 1.25rem; font-weight: 700; }
+.fc-lsep   { font-size: 1rem; color: var(--m2); }
+.fc-ctx2   { font-size: .78rem; color: var(--m); font-style: italic; text-align: center; display: none; }
+
+.fc-reveal-btn {
+  background: var(--a); color: #fff; border: none; border-radius: var(--r);
+  padding: .9rem; font-size: .9rem; font-weight: 700; cursor: pointer;
+  width: 100%; margin-top: .25rem; transition: opacity .15s;
+}
+.fc-reveal-btn:active { opacity: .9; }
+.fc-vote { display: flex; gap: .75rem; display: none; }
+.fc-vote button { flex: 1; border: none; border-radius: var(--r); padding: .9rem; font-size: .88rem; font-weight: 700; cursor: pointer; }
+.fc-no  { background: var(--co10); color: var(--co); border: 1.5px solid rgba(232,80,64,.2); }
+.fc-yes { background: var(--g10);  color: var(--g);  border: 1.5px solid rgba(22,163,74,.2); }
+
+/* Stats row */
+.fc-stats { display: flex; gap: .75rem; }
+.fc-stat  { flex: 1; background: var(--card); border: 1px solid var(--brd); border-radius: var(--rs); padding: .85rem .75rem; text-align: center; box-shadow: var(--sh); }
+.fc-sn    { font-size: 1.5rem; font-weight: 900; color: var(--tx); }
+.fc-sl    { font-size: .65rem; color: var(--m); letter-spacing: .04em; }
+
+/* ── CONJUGATION ── */
+#conjugation { padding: 0 0 5rem; }
+
+.co-hd { background: var(--card); border-bottom: 1px solid var(--brd); padding: 1rem 1.25rem; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: .85rem; }
+.co-back { font-size: 1.1rem; color: var(--m); cursor: pointer; }
+.co-hd-title { font-size: 1rem; font-weight: 800; }
+
+.co-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+.co-verb-row { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .25rem; -webkit-overflow-scrolling: touch; }
+.co-verb-row::-webkit-scrollbar { display: none; }
+.co-vpill { border: none; border-radius: 99px; padding: .4rem 1.05rem; font-size: .85rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.co-vpill.on      { background: var(--a); color: #fff; box-shadow: 0 2px 12px rgba(67,97,238,.3); }
+.co-vpill:not(.on){ background: var(--card); color: var(--m); border: 1px solid var(--brd); }
+
+.co-tense-row { display: flex; gap: .4rem; }
+.co-tense { border: none; border-radius: 99px; padding: .3rem .85rem; font-size: .78rem; font-weight: 600; cursor: pointer; }
+.co-tense.on      { background: var(--y10); color: var(--y); border: 1px solid rgba(217,119,6,.25); }
+.co-tense:not(.on){ background: var(--card); color: var(--m); border: 1px solid var(--brd); }
+
+.co-hero { background: var(--a); color: #fff; border-radius: var(--r); padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+.co-hero-verb { font-size: 2.25rem; font-weight: 900; letter-spacing: -.07em; }
+.co-hero-tag  { font-size: .72rem; opacity: .7; font-weight: 600; }
+
+.co-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.co-cell { background: var(--card); border: 1px solid var(--brd); border-radius: var(--rs); padding: .9rem; box-shadow: var(--sh); }
+.co-pron { font-size: .65rem; color: var(--m); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .3rem; font-weight: 600; }
+.co-form { font-size: 1.35rem; font-weight: 800; color: var(--tx); }
+.co-cell.ar { border-color: rgba(67,97,238,.25); background: var(--a10); }
+.co-cell.ar .co-form { color: var(--a); }
+.co-cell.ar .co-pron { color: var(--a); }
+
+.co-note { background: var(--y10); border: 1px solid rgba(217,119,6,.2); border-radius: var(--rs); padding: .85rem 1rem; display: flex; gap: .6rem; align-items: flex-start; }
+.co-note-ic { font-size: 1rem; }
+.co-note-tx { font-size: .78rem; color: var(--y); font-weight: 600; line-height: 1.5; }
+
+/* ── DUEL ── */
+#duel { flex-direction: row; overflow: hidden; }
+.du-half { flex: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.du-fr { background: linear-gradient(160deg, #eef1fd, #dce4fb); }
+.du-ar { background: linear-gradient(160deg, #ecfdf5, #d1fae5); border-left: 1px solid #e8e7e2; }
+.du-inner { display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+.du-flag  { font-size: 2.5rem; }
+.du-pts   { font-size: 5.5rem; font-weight: 900; letter-spacing: -.06em; line-height: 1; }
+.du-fr .du-pts { color: var(--a); }
+.du-ar .du-pts { color: var(--g); }
+.du-lbl   { font-size: .65rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-align: center; }
+.du-fr .du-lbl { color: rgba(67,97,238,.6); }
+.du-ar .du-lbl { color: rgba(22,163,74,.6); }
+.du-tap   { font-size: .7rem; color: var(--m); margin-top: .15rem; }
+
+.du-ov { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.du-card {
+  background: var(--card); border: 1px solid var(--brd);
+  border-radius: 1.5rem; padding: 1.75rem 2.5rem;
+  box-shadow: 0 8px 48px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  pointer-events: auto;
+}
+.du-rd  { font-size: .65rem; color: var(--m); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.du-prog{ width: 140px; height: 4px; background: var(--bg2); border-radius: 2px; overflow: hidden; }
+.du-pf  { height: 100%; width: 70%; background: linear-gradient(90deg, var(--a), #7b9fff); border-radius: 2px; }
+.du-word{ font-size: 3.25rem; font-weight: 900; letter-spacing: -.07em; color: var(--tx); }
+.du-btn {
+  background: var(--a); color: #fff; border: none; border-radius: 2rem;
+  padding: .75rem 2.25rem; font-size: .9rem; font-weight: 800; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(67,97,238,.3);
+}
+</style>
+</head>
+<body>
+
+<!-- ── HOME ── -->
+<main class="screen on" id="home">
+  <div class="hm-header">
+    <div class="hm-logo">
+      <span class="hm-wave">🌊</span>
+      <span class="hm-name">LinguaRío</span>
+    </div>
+    <div class="hm-avatar">P</div>
+  </div>
+
+  <div class="hm-body">
+    <!-- Today card -->
+    <div class="today-card" onclick="go('flashcards')">
+      <div class="today-left">
+        <div class="today-tag">Aujourd'hui</div>
+        <div class="today-h">23 mots<br>à réviser</div>
+        <div class="today-sub">Objectif quotidien · 15 min</div>
+      </div>
+      <button class="today-btn">▶ Commencer</button>
+    </div>
+
+    <!-- Streak -->
+    <div class="streak-wrap">
+      <div class="streak-left">
+        <div class="streak-t">🔥 7 jours d'affilée</div>
+        <div class="streak-s">Continue comme ça !</div>
+      </div>
+      <div class="streak-days">
+        <div class="sday done">L</div>
+        <div class="sday done">M</div>
+        <div class="sday done">M</div>
+        <div class="sday done">J</div>
+        <div class="sday done">V</div>
+        <div class="sday done">S</div>
+        <div class="sday today">D</div>
+      </div>
+    </div>
+
+    <div class="sh">Sections</div>
+
+    <!-- Grid -->
+    <div class="grid2">
+      <div class="gc" onclick="go('flashcards')">
+        <div class="gc-icon" style="background:var(--a10)">🃏</div>
+        <div>
+          <div class="gc-title">Flashcards</div>
+          <div class="gc-sub">23 à réviser</div>
+        </div>
+        <div class="gc-prog"><div class="gc-fill" style="width:65%;background:var(--a)"></div></div>
+      </div>
+      <div class="gc" onclick="go('conjugation')">
+        <div class="gc-icon" style="background:var(--y10)">✍️</div>
+        <div>
+          <div class="gc-title">Conjugaison</div>
+          <div class="gc-sub">12 verbes</div>
+        </div>
+        <div class="gc-prog"><div class="gc-fill" style="width:42%;background:var(--y)"></div></div>
+      </div>
+      <div class="gc" onclick="go('flashcards')">
+        <div class="gc-icon" style="background:var(--g10)">🔁</div>
+        <div>
+          <div class="gc-title">Révision SRS</div>
+          <div class="gc-sub">142 mots actifs</div>
+        </div>
+        <div class="gc-prog"><div class="gc-fill" style="width:80%;background:var(--g)"></div></div>
+      </div>
+      <div class="gc" onclick="go('duel')">
+        <div class="gc-icon" style="background:var(--co10)">⚔️</div>
+        <div>
+          <div class="gc-title">Duel</div>
+          <div class="gc-sub">2 joueurs</div>
+        </div>
+        <div class="gc-prog"><div class="gc-fill" style="width:20%;background:var(--co)"></div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── FLASHCARDS ── -->
+<main class="screen" id="flashcards">
+  <div class="fc-hd">
+    <span class="fc-back" onclick="go('home')">‹</span>
+    <div class="fc-prog-wrap">
+      <div class="fc-hd-count">Révision — 7 / 23 mots</div>
+      <div class="fc-bar"><div class="fc-fill"></div></div>
+    </div>
+    <span class="fc-hd-pts">+4 🔥</span>
+  </div>
+
+  <div class="fc-body">
+    <div class="fc-stats">
+      <div class="fc-stat"><div class="fc-sn" style="color:var(--g)">4</div><div class="fc-sl">Sus ✓</div></div>
+      <div class="fc-stat"><div class="fc-sn" style="color:var(--co)">2</div><div class="fc-sl">Ratés ✗</div></div>
+      <div class="fc-stat"><div class="fc-sn">16</div><div class="fc-sl">Restants</div></div>
+    </div>
+
+    <div class="fc-card-wrap" onclick="fcReveal()">
+      <div class="fc-badge">🇬🇧 Anglais → Traduire</div>
+      <div class="fc-cw">house</div>
+      <div class="fc-tap" id="fc-tap">Tape pour révéler</div>
+      <div class="fc-langs" id="fc-langs">
+        <div class="fc-lang">
+          <div class="fc-lflag">🇫🇷</div>
+          <div class="fc-lword">maison</div>
+        </div>
+        <div class="fc-lsep">·</div>
+        <div class="fc-lang">
+          <div class="fc-lflag">🇦🇷</div>
+          <div class="fc-lword">casa</div>
+        </div>
+      </div>
+      <div class="fc-ctx2" id="fc-ctx">« La maison est grande · La casa es grande »</div>
+    </div>
+
+    <button class="fc-reveal-btn" id="fc-rev" onclick="fcReveal()">Révéler la traduction</button>
+
+    <div class="fc-vote" id="fc-vote">
+      <button class="fc-no" onclick="fcNext()">✗ &nbsp;Je l'avais pas</button>
+      <button class="fc-yes" onclick="fcNext()">✓ &nbsp;Je l'avais !</button>
+    </div>
+  </div>
+</main>
+
+<!-- ── CONJUGATION ── -->
+<main class="screen" id="conjugation">
+  <div class="co-hd">
+    <span class="co-back" onclick="go('home')">‹</span>
+    <div class="co-hd-title">Conjugaison</div>
+  </div>
+  <div class="co-body">
+    <div class="co-verb-row">
+      <button class="co-vpill on">hablar</button>
+      <button class="co-vpill">ser</button>
+      <button class="co-vpill">estar</button>
+      <button class="co-vpill">tener</button>
+      <button class="co-vpill">ir</button>
+      <button class="co-vpill">hacer</button>
+      <button class="co-vpill">poder</button>
+    </div>
+    <div class="co-tense-row">
+      <button class="co-tense on">Présent</button>
+      <button class="co-tense">Passé</button>
+      <button class="co-tense">Futur</button>
+      <button class="co-tense">Subj.</button>
+    </div>
+    <div class="co-hero">
+      <div class="co-hero-verb">hablar</div>
+      <div class="co-hero-tag">→ parler</div>
+    </div>
+    <div class="co-grid">
+      <div class="co-cell"><div class="co-pron">yo</div><div class="co-form">hablo</div></div>
+      <div class="co-cell ar"><div class="co-pron">vos ⚡</div><div class="co-form">hablás</div></div>
+      <div class="co-cell"><div class="co-pron">él / ella</div><div class="co-form">habla</div></div>
+      <div class="co-cell"><div class="co-pron">nosotros</div><div class="co-form">hablamos</div></div>
+      <div class="co-cell"><div class="co-pron">ustedes</div><div class="co-form">hablan</div></div>
+    </div>
+    <div class="co-note">
+      <span class="co-note-ic">💡</span>
+      <div class="co-note-tx">En Argentine, <b>vos</b> remplace <b>tú</b>. L'accent tonique se déplace sur la dernière syllabe : <b>hablás</b>, non <i>hablas</i>.</div>
+    </div>
+  </div>
+</main>
+
+<!-- ── DUEL ── -->
+<main class="screen" id="duel" style="flex-direction:row;position:fixed;inset:0;">
+  <div class="du-half du-fr">
+    <div class="du-inner" style="transform:rotate(180deg)">
+      <div class="du-flag">🇫🇷</div>
+      <div class="du-pts">3</div>
+      <div class="du-lbl">apprend<br>le français</div>
+      <div class="du-tap">← Tape ici si premier</div>
+    </div>
+  </div>
+  <div class="du-half du-ar">
+    <div class="du-inner">
+      <div class="du-flag">🇦🇷</div>
+      <div class="du-pts">5</div>
+      <div class="du-lbl">apprend<br>l'espagnol</div>
+      <div class="du-tap">Tape ici si primero →</div>
+    </div>
+  </div>
+  <div class="du-ov">
+    <div class="du-card">
+      <div class="du-rd">Manche 8 / 10</div>
+      <div class="du-prog"><div class="du-pf"></div></div>
+      <div class="du-word">rain</div>
+      <button class="du-btn">Révéler</button>
+    </div>
+  </div>
+</main>
+
+<!-- NAV -->
+<nav>
+  <button class="on" data-s="home"       onclick="go('home')"><span class="ni">🏠</span><span class="nl">Accueil</span></button>
+  <button          data-s="flashcards"  onclick="go('flashcards')"><span class="ni">🃏</span><span class="nl">Révision</span></button>
+  <button          data-s="conjugation" onclick="go('conjugation')"><span class="ni">✍️</span><span class="nl">Conjugaison</span></button>
+  <button          data-s="duel"        onclick="go('duel')"><span class="ni">⚔️</span><span class="nl">Duel</span></button>
+</nav>
+
+<script>
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`[data-s="${id}"]`)?.classList.add('on');
+}
+let revealed = false;
+function fcReveal() {
+  if (revealed) return;
+  revealed = true;
+  document.getElementById('fc-tap').style.display = 'none';
+  document.getElementById('fc-langs').style.display = 'flex';
+  document.getElementById('fc-ctx').style.display = 'block';
+  document.getElementById('fc-rev').style.display = 'none';
+  document.getElementById('fc-vote').style.display = 'flex';
+}
+function fcNext() {
+  revealed = false;
+  document.getElementById('fc-tap').style.display = 'block';
+  document.getElementById('fc-langs').style.display = 'none';
+  document.getElementById('fc-ctx').style.display = 'none';
+  document.getElementById('fc-rev').style.display = 'block';
+  document.getElementById('fc-vote').style.display = 'none';
+}
+</script>
+</body>
+</html>

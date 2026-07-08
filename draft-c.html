@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LinguaRío · Draft C — Río</title>
+<style>
+:root {
+  --grad-a: #1a0a35;
+  --grad-b: #6d28d9;
+  --grad-c: #be185d;
+  --card:   #ffffff;
+  --bg:     #f8f7ff;
+  --tx:     #18181b;
+  --m:      #71717a;
+  --m2:     #d4d4d8;
+  --brd:    #f0effe;
+  --a:      #6d28d9;
+  --a10:    rgba(109,40,217,.1);
+  --a20:    rgba(109,40,217,.18);
+  --pink:   #be185d;
+  --pk10:   rgba(190,24,93,.1);
+  --gold:   #d97706;
+  --go10:   rgba(217,119,6,.1);
+  --g:      #059669;
+  --g10:    rgba(5,150,105,.1);
+  --r:      1rem;
+  --rs:     .75rem;
+  --sh:     0 2px 8px rgba(109,40,217,.08), 0 1px 3px rgba(0,0,0,.05);
+  --sh2:    0 4px 24px rgba(109,40,217,.12), 0 8px 32px rgba(0,0,0,.06);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--tx);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'Segoe UI', Roboto, sans-serif; }
+
+.screen { display: none; position: fixed; inset: 0; flex-direction: column; overflow-y: auto; overflow-x: hidden; }
+.screen.on { display: flex; }
+
+/* NAV — colored pill tabs */
+nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--card); border-top: 1px solid var(--brd);
+  display: flex; padding: .45rem .75rem max(.45rem, env(safe-area-inset-bottom));
+  z-index: 999; gap: .3rem;
+}
+nav button {
+  flex: 1; border: none; background: none; color: var(--m);
+  display: flex; flex-direction: column; align-items: center; gap: .12rem;
+  padding: .4rem .2rem; cursor: pointer; border-radius: .75rem;
+  transition: all .18s; font-size: inherit;
+}
+nav button .ni { font-size: 1.1rem; line-height: 1; }
+nav button .nl { font-size: .6rem; font-weight: 700; letter-spacing: .02em; }
+nav button.on  { background: var(--a10); color: var(--a); }
+
+/* ── HOME ── */
+#home { padding-bottom: 5rem; }
+
+.hm-hero {
+  background: linear-gradient(145deg, var(--grad-a) 0%, var(--grad-b) 55%, var(--grad-c) 100%);
+  padding: 2.5rem 1.5rem 3.5rem; position: relative; overflow: hidden;
+}
+.hm-hero::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0; height: 2.5rem;
+  background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.hm-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.hm-logo { display: flex; align-items: center; gap: .45rem; }
+.hm-ic   { font-size: 1.3rem; }
+.hm-name { font-size: 1.05rem; font-weight: 800; color: #fff; letter-spacing: -.03em; }
+.hm-ava  { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.18); border: 2px solid rgba(255,255,255,.3); display: flex; align-items: center; justify-content: center; font-size: .9rem; font-weight: 800; color: #fff; }
+
+.hm-greet { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -.04em; line-height: 1.2; margin-bottom: .4rem; }
+.hm-sub   { font-size: .82rem; color: rgba(255,255,255,.6); margin-bottom: 1.75rem; }
+.hm-stats { display: flex; gap: 1rem; }
+.hm-stat  { display: flex; flex-direction: column; gap: .05rem; }
+.hm-stat-n{ font-size: 1.75rem; font-weight: 900; color: #fff; letter-spacing: -.05em; line-height: 1; }
+.hm-stat-l{ font-size: .65rem; color: rgba(255,255,255,.5); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.hm-stat-sep { width: 1px; background: rgba(255,255,255,.15); margin: .15rem 0; }
+
+.hm-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; margin-top: -1rem; }
+
+/* CTA card */
+.cta-card {
+  background: linear-gradient(135deg, var(--a), var(--pink));
+  border-radius: 1.25rem; padding: 1.25rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(109,40,217,.3); cursor: pointer;
+}
+.cta-info { display: flex; flex-direction: column; gap: .2rem; }
+.cta-tag  { font-size: .65rem; font-weight: 800; color: rgba(255,255,255,.65); letter-spacing: .1em; text-transform: uppercase; }
+.cta-h    { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: -.03em; }
+.cta-sub  { font-size: .75rem; color: rgba(255,255,255,.65); }
+.cta-btn  { background: rgba(255,255,255,.22); border: 1.5px solid rgba(255,255,255,.3); border-radius: 99px; color: #fff; padding: .65rem 1.1rem; font-size: .85rem; font-weight: 800; cursor: pointer; white-space: nowrap; backdrop-filter: blur(6px); }
+
+/* Section chips */
+.sec-row { display: flex; gap: .6rem; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: .1rem; }
+.sec-row::-webkit-scrollbar { display: none; }
+.sec-chip {
+  flex-shrink: 0; background: var(--card); border: 1.5px solid var(--brd);
+  border-radius: 99px; padding: .5rem 1.1rem;
+  display: flex; align-items: center; gap: .45rem;
+  cursor: pointer; transition: all .15s; box-shadow: var(--sh);
+  font-size: .82rem; font-weight: 700; color: var(--tx);
+}
+.sec-chip:active { transform: scale(.97); }
+.sec-chip .ci { font-size: .95rem; }
+
+/* Big section cards */
+.sec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.sc {
+  border-radius: 1.1rem; padding: 1.25rem 1.1rem;
+  cursor: pointer; display: flex; flex-direction: column; gap: .75rem;
+  transition: transform .13s; box-shadow: var(--sh);
+}
+.sc:active { transform: scale(.97); }
+.sc-ic { width: 40px; height: 40px; border-radius: .75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+.sc-t  { font-size: .92rem; font-weight: 800; }
+.sc-s  { font-size: .7rem; }
+.sc-prog { height: 4px; border-radius: 2px; overflow: hidden; background: rgba(255,255,255,.3); }
+.sc-fill { height: 100%; border-radius: 2px; background: rgba(255,255,255,.9); }
+
+.sc-flash { background: linear-gradient(135deg, #6d28d9, #8b5cf6); color: #fff; }
+.sc-flash .sc-s { color: rgba(255,255,255,.7); }
+.sc-conj  { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
+.sc-conj  .sc-s { color: rgba(255,255,255,.7); }
+.sc-rev   { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+.sc-rev   .sc-s { color: rgba(255,255,255,.7); }
+.sc-duel  { background: linear-gradient(135deg, #be185d, #ec4899); color: #fff; }
+.sc-duel  .sc-s { color: rgba(255,255,255,.7); }
+
+/* ── FLASHCARDS ── */
+#flashcards { background: var(--bg); padding-bottom: 5rem; }
+
+.fc-hd {
+  background: linear-gradient(145deg, var(--grad-a) 0%, var(--grad-b) 100%);
+  padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem;
+}
+.fc-hd-top { display: flex; align-items: center; justify-content: space-between; }
+.fc-back   { font-size: 1.1rem; color: rgba(255,255,255,.7); cursor: pointer; padding: .25rem; }
+.fc-hd-title { font-size: .95rem; font-weight: 800; color: #fff; }
+.fc-hd-close { font-size: .85rem; color: rgba(255,255,255,.5); cursor: pointer; }
+.fc-hd-prog { display: flex; flex-direction: column; gap: .5rem; }
+.fc-hd-info { display: flex; justify-content: space-between; }
+.fc-hd-cnt  { font-size: .78rem; color: rgba(255,255,255,.7); font-weight: 600; }
+.fc-hd-pct  { font-size: .78rem; color: rgba(255,255,255,.5); }
+.fc-bar  { height: 6px; background: rgba(255,255,255,.15); border-radius: 3px; overflow: hidden; }
+.fc-fill { height: 100%; width: 30%; background: rgba(255,255,255,.85); border-radius: 3px; }
+
+.fc-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+
+.fc-card {
+  background: var(--card); border-radius: 1.25rem;
+  box-shadow: var(--sh2); border: 1px solid var(--brd);
+  padding: 2.5rem 1.5rem; display: flex; flex-direction: column;
+  align-items: center; gap: .65rem; cursor: pointer;
+}
+.fc-badge {
+  background: var(--a10); color: var(--a);
+  font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  padding: .25rem .85rem; border-radius: 99px;
+}
+.fc-word  { font-size: 4.25rem; font-weight: 900; letter-spacing: -.08em; text-align: center; line-height: .92; color: var(--tx); }
+.fc-tap   { font-size: .8rem; color: var(--m2); margin-top: .35rem; }
+.fc-ans   { display: none; width: 100%; }
+.fc-ans-row { display: flex; justify-content: center; gap: 2rem; margin-bottom: .5rem; }
+.fc-lang  { display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.fc-lflag { font-size: 1.75rem; }
+.fc-lword { font-size: 1.5rem; font-weight: 800; color: var(--a); }
+.fc-sep   { font-size: 1.5rem; color: var(--m2); align-self: center; }
+.fc-ctx   { font-size: .78rem; color: var(--m); font-style: italic; text-align: center; background: var(--brd); padding: .5rem .85rem; border-radius: .625rem; width: 100%; }
+
+.fc-reveal-btn {
+  background: linear-gradient(135deg, var(--a), var(--pink)); color: #fff;
+  border: none; border-radius: 1rem; padding: .9rem;
+  font-size: .9rem; font-weight: 800; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(109,40,217,.3); width: 100%;
+  transition: opacity .15s;
+}
+.fc-vote { display: flex; gap: .75rem; display: none; }
+.fc-vote button { flex: 1; border: none; border-radius: 1rem; padding: .9rem; font-size: .88rem; font-weight: 800; cursor: pointer; transition: transform .1s; }
+.fc-vote button:active { transform: scale(.97); }
+.fc-no  { background: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; }
+.fc-yes { background: #f0fdf4; color: #16a34a; border: 1.5px solid #bbf7d0; }
+
+/* ── CONJUGATION ── */
+#conjugation { background: var(--bg); padding-bottom: 5rem; }
+
+.co-hd {
+  background: linear-gradient(145deg, #1c1003, #d97706, #f59e0b);
+  padding: 1.25rem 1.5rem 2rem; position: relative; overflow: hidden;
+}
+.co-hd::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1.5rem;
+  background: var(--bg); clip-path: ellipse(55% 100% at 50% 100%);
+}
+.co-hd-top { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+.co-back { color: rgba(255,255,255,.7); font-size: 1.1rem; cursor: pointer; }
+.co-hd-title { font-size: .95rem; font-weight: 800; color: #fff; }
+.co-hd-verb { font-size: 3rem; font-weight: 900; color: #fff; letter-spacing: -.07em; line-height: 1; }
+.co-hd-tr   { font-size: .85rem; color: rgba(255,255,255,.65); margin-top: .2rem; }
+
+.co-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; margin-top: -.5rem; }
+
+.co-verb-row { display: flex; gap: .45rem; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: .15rem; }
+.co-verb-row::-webkit-scrollbar { display: none; }
+.co-vp { border: 1.5px solid var(--brd); background: var(--card); border-radius: 99px; padding: .4rem 1rem; font-size: .83rem; font-weight: 700; cursor: pointer; white-space: nowrap; color: var(--m); transition: all .15s; }
+.co-vp.on { background: var(--gold); border-color: var(--gold); color: #fff; box-shadow: 0 4px 16px rgba(217,119,6,.3); }
+
+.co-tense-row { display: flex; gap: .4rem; }
+.co-tn { border: 1.5px solid var(--brd); background: var(--card); border-radius: 99px; padding: .3rem .85rem; font-size: .78rem; font-weight: 700; cursor: pointer; color: var(--m); }
+.co-tn.on { border-color: rgba(217,119,6,.4); background: var(--go10); color: var(--gold); }
+
+.co-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+.co-cell { background: var(--card); border: 1.5px solid var(--brd); border-radius: var(--r); padding: 1rem; box-shadow: var(--sh); }
+.co-pron { font-size: .63rem; color: var(--m); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .35rem; font-weight: 700; }
+.co-form { font-size: 1.45rem; font-weight: 800; color: var(--tx); }
+.co-cell.sp { background: linear-gradient(135deg, rgba(109,40,217,.07), rgba(190,24,93,.05)); border-color: rgba(109,40,217,.2); }
+.co-cell.sp .co-form { color: var(--a); }
+.co-cell.sp .co-pron { color: var(--a); }
+
+.co-note { background: linear-gradient(135deg, var(--a10), var(--pk10)); border: 1.5px solid var(--a20); border-radius: var(--r); padding: 1rem 1.1rem; display: flex; gap: .65rem; }
+.co-note-ic { font-size: 1.1rem; flex-shrink: 0; }
+.co-note-tx { font-size: .8rem; color: var(--a); font-weight: 600; line-height: 1.6; }
+.co-note-tx b { color: var(--pink); }
+
+/* ── DUEL ── */
+#duel { position: fixed; inset: 0; flex-direction: row; overflow: hidden; }
+.dh { flex: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.dh-fr { background: linear-gradient(160deg, #f5f0ff, #ede9fe); }
+.dh-ar { background: linear-gradient(160deg, #fdf2f8, #fce7f3); border-left: 1px solid rgba(190,24,93,.1); }
+.dh-inner { display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+.dh-flag  { font-size: 2.5rem; }
+.dh-pts   { font-size: 5.5rem; font-weight: 900; letter-spacing: -.06em; line-height: 1; }
+.dh-fr .dh-pts { color: var(--a); }
+.dh-ar .dh-pts { color: var(--pink); }
+.dh-lbl   { font-size: .65rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-align: center; }
+.dh-fr .dh-lbl { color: rgba(109,40,217,.55); }
+.dh-ar .dh-lbl { color: rgba(190,24,93,.55); }
+.dh-tap   { font-size: .7rem; color: var(--m2); }
+
+.du-ov { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.du-card {
+  background: var(--card); border: 1px solid var(--brd);
+  border-radius: 1.5rem; padding: 1.75rem 2.5rem;
+  box-shadow: 0 8px 48px rgba(109,40,217,.15), 0 2px 12px rgba(0,0,0,.07);
+  display: flex; flex-direction: column; align-items: center; gap: .85rem;
+  pointer-events: auto;
+}
+.du-rd  { font-size: .65rem; color: var(--m); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.du-prog{ width: 140px; height: 5px; background: var(--brd); border-radius: 3px; overflow: hidden; }
+.du-pf  { height: 100%; width: 70%; background: linear-gradient(90deg, var(--a), var(--pink)); border-radius: 3px; }
+.du-word{ font-size: 3.25rem; font-weight: 900; letter-spacing: -.08em; color: var(--tx); }
+.du-btn {
+  background: linear-gradient(135deg, var(--a), var(--pink)); color: #fff;
+  border: none; border-radius: 2rem; padding: .75rem 2.25rem;
+  font-size: .9rem; font-weight: 800; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(109,40,217,.3);
+}
+</style>
+</head>
+<body>
+
+<!-- ── HOME ── -->
+<main class="screen on" id="home">
+  <div class="hm-hero">
+    <div class="hm-top">
+      <div class="hm-logo">
+        <span class="hm-ic">🌊</span>
+        <span class="hm-name">LinguaRío</span>
+      </div>
+      <div class="hm-ava">P</div>
+    </div>
+    <div class="hm-greet">Bonjour 👋<br>Continuons !</div>
+    <div class="hm-sub">FR ↔ Español Argentino · 7 jours d'affilée 🔥</div>
+    <div class="hm-stats">
+      <div class="hm-stat"><div class="hm-stat-n">23</div><div class="hm-stat-l">À réviser</div></div>
+      <div class="hm-stat-sep"></div>
+      <div class="hm-stat"><div class="hm-stat-n">142</div><div class="hm-stat-l">Appris</div></div>
+      <div class="hm-stat-sep"></div>
+      <div class="hm-stat"><div class="hm-stat-n">7</div><div class="hm-stat-l">Jours</div></div>
+    </div>
+  </div>
+
+  <div class="hm-body">
+    <!-- CTA -->
+    <div class="cta-card" onclick="go('flashcards')">
+      <div class="cta-info">
+        <div class="cta-tag">Session du jour</div>
+        <div class="cta-h">23 mots à réviser</div>
+        <div class="cta-sub">≈ 8 minutes · Objectif quotidien</div>
+      </div>
+      <button class="cta-btn">▶ Go</button>
+    </div>
+
+    <!-- Quick access chips -->
+    <div class="sec-row">
+      <div class="sec-chip" onclick="go('conjugation')"><span class="ci">✍️</span> Conjugaison</div>
+      <div class="sec-chip" onclick="go('duel')"><span class="ci">⚔️</span> Mode Duel</div>
+      <div class="sec-chip" onclick="go('flashcards')"><span class="ci">🔁</span> Révision SRS</div>
+    </div>
+
+    <!-- Section grid -->
+    <div class="sec-grid">
+      <div class="sc sc-flash" onclick="go('flashcards')">
+        <div class="sc-ic" style="background:rgba(255,255,255,.2)">🃏</div>
+        <div>
+          <div class="sc-t">Flashcards</div>
+          <div class="sc-s">23 à réviser</div>
+        </div>
+        <div class="sc-prog"><div class="sc-fill" style="width:65%"></div></div>
+      </div>
+      <div class="sc sc-conj" onclick="go('conjugation')">
+        <div class="sc-ic" style="background:rgba(255,255,255,.2)">✍️</div>
+        <div>
+          <div class="sc-t">Conjugaison</div>
+          <div class="sc-s">12 verbes</div>
+        </div>
+        <div class="sc-prog"><div class="sc-fill" style="width:42%"></div></div>
+      </div>
+      <div class="sc sc-rev" onclick="go('flashcards')">
+        <div class="sc-ic" style="background:rgba(255,255,255,.2)">🔁</div>
+        <div>
+          <div class="sc-t">Révision SRS</div>
+          <div class="sc-s">142 mots actifs</div>
+        </div>
+        <div class="sc-prog"><div class="sc-fill" style="width:80%"></div></div>
+      </div>
+      <div class="sc sc-duel" onclick="go('duel')">
+        <div class="sc-ic" style="background:rgba(255,255,255,.2)">⚔️</div>
+        <div>
+          <div class="sc-t">Duel</div>
+          <div class="sc-s">2 joueurs · 10 manches</div>
+        </div>
+        <div class="sc-prog"><div class="sc-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── FLASHCARDS ── -->
+<main class="screen" id="flashcards">
+  <div class="fc-hd">
+    <div class="fc-hd-top">
+      <span class="fc-back" onclick="go('home')">‹</span>
+      <span class="fc-hd-title">Révision Flashcards</span>
+      <span class="fc-hd-close" onclick="go('home')">✕</span>
+    </div>
+    <div class="fc-hd-prog">
+      <div class="fc-hd-info">
+        <span class="fc-hd-cnt">7 / 23 mots</span>
+        <span class="fc-hd-pct">30 %</span>
+      </div>
+      <div class="fc-bar"><div class="fc-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="fc-body">
+    <div class="fc-card" onclick="fcReveal()">
+      <div class="fc-badge">🇬🇧 Anglais → Traduire</div>
+      <div class="fc-word">house</div>
+      <div class="fc-tap" id="fc-tap">Tape pour voir la traduction</div>
+      <div class="fc-ans" id="fc-ans">
+        <div class="fc-ans-row">
+          <div class="fc-lang">
+            <div class="fc-lflag">🇫🇷</div>
+            <div class="fc-lword">maison</div>
+          </div>
+          <div class="fc-sep">·</div>
+          <div class="fc-lang">
+            <div class="fc-lflag">🇦🇷</div>
+            <div class="fc-lword">casa</div>
+          </div>
+        </div>
+        <div class="fc-ctx">« La maison est grande · La casa es grande »</div>
+      </div>
+    </div>
+
+    <button class="fc-reveal-btn" id="fc-rev" onclick="fcReveal()">Révéler la traduction →</button>
+
+    <div class="fc-vote" id="fc-vote">
+      <button class="fc-no"  onclick="fcNext()">✗ &nbsp;Pas su</button>
+      <button class="fc-yes" onclick="fcNext()">✓ &nbsp;Su !</button>
+    </div>
+  </div>
+</main>
+
+<!-- ── CONJUGATION ── -->
+<main class="screen" id="conjugation">
+  <div class="co-hd">
+    <div class="co-hd-top">
+      <span class="co-back" onclick="go('home')">‹</span>
+      <span class="co-hd-title">Conjugaison</span>
+    </div>
+    <div class="co-hd-verb">hablar</div>
+    <div class="co-hd-tr">→ parler · espagnol argentin</div>
+  </div>
+
+  <div class="co-body">
+    <div class="co-verb-row">
+      <button class="co-vp on">hablar</button>
+      <button class="co-vp">ser</button>
+      <button class="co-vp">estar</button>
+      <button class="co-vp">tener</button>
+      <button class="co-vp">ir</button>
+      <button class="co-vp">hacer</button>
+      <button class="co-vp">poder</button>
+    </div>
+    <div class="co-tense-row">
+      <button class="co-tn on">Présent</button>
+      <button class="co-tn">Passé</button>
+      <button class="co-tn">Futur</button>
+      <button class="co-tn">Subj.</button>
+    </div>
+    <div class="co-grid">
+      <div class="co-cell"><div class="co-pron">yo</div><div class="co-form">hablo</div></div>
+      <div class="co-cell sp"><div class="co-pron">⚡ vos</div><div class="co-form">hablás</div></div>
+      <div class="co-cell"><div class="co-pron">él / ella</div><div class="co-form">habla</div></div>
+      <div class="co-cell"><div class="co-pron">nosotros</div><div class="co-form">hablamos</div></div>
+      <div class="co-cell"><div class="co-pron">ustedes</div><div class="co-form">hablan</div></div>
+    </div>
+    <div class="co-note">
+      <span class="co-note-ic">💡</span>
+      <div class="co-note-tx">En Argentine, <b>vos</b> remplace <b>tú</b>. <b>hablás</b> au lieu de <i>hablas</i> — l'accent monte sur la dernière syllabe.</div>
+    </div>
+  </div>
+</main>
+
+<!-- ── DUEL ── -->
+<main class="screen" id="duel" style="flex-direction:row;position:fixed;inset:0;">
+  <div class="dh dh-fr">
+    <div class="dh-inner" style="transform:rotate(180deg)">
+      <div class="dh-flag">🇫🇷</div>
+      <div class="dh-pts">3</div>
+      <div class="dh-lbl">apprend<br>le français</div>
+      <div class="dh-tap">← Tape ici</div>
+    </div>
+  </div>
+  <div class="dh dh-ar">
+    <div class="dh-inner">
+      <div class="dh-flag">🇦🇷</div>
+      <div class="dh-pts">5</div>
+      <div class="dh-lbl">apprend<br>l'espagnol</div>
+      <div class="dh-tap">Toca aquí →</div>
+    </div>
+  </div>
+  <div class="du-ov">
+    <div class="du-card">
+      <div class="du-rd">Manche 8 / 10</div>
+      <div class="du-prog"><div class="du-pf"></div></div>
+      <div class="du-word">rain</div>
+      <button class="du-btn">Révéler</button>
+    </div>
+  </div>
+</main>
+
+<!-- NAV -->
+<nav>
+  <button class="on" data-s="home"       onclick="go('home')"><span class="ni">🏠</span><span class="nl">Accueil</span></button>
+  <button          data-s="flashcards"  onclick="go('flashcards')"><span class="ni">🃏</span><span class="nl">Révision</span></button>
+  <button          data-s="conjugation" onclick="go('conjugation')"><span class="ni">✍️</span><span class="nl">Conjugaison</span></button>
+  <button          data-s="duel"        onclick="go('duel')"><span class="ni">⚔️</span><span class="nl">Duel</span></button>
+</nav>
+
+<script>
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`[data-s="${id}"]`)?.classList.add('on');
+}
+let revealed = false;
+function fcReveal() {
+  if (revealed) return;
+  revealed = true;
+  document.getElementById('fc-tap').style.display = 'none';
+  document.getElementById('fc-ans').style.display = 'block';
+  document.getElementById('fc-rev').style.display = 'none';
+  document.getElementById('fc-vote').style.display = 'flex';
+}
+function fcNext() {
+  revealed = false;
+  document.getElementById('fc-tap').style.display = 'block';
+  document.getElementById('fc-ans').style.display = 'none';
+  document.getElementById('fc-rev').style.display = 'block';
+  document.getElementById('fc-vote').style.display = 'none';
+}
+</script>
+</body>
+</html>
