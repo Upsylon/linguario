@@ -430,7 +430,8 @@ input  { font: inherit; }
 .du-tab-wrap {
   display: flex; flex-direction: column;
   background: linear-gradient(160deg, #101828 0%, #1e1b4b 50%, #101828 100%);
-  min-height: calc(100dvh - var(--header-h) - var(--topnav-h));
+  height: calc(100dvh - var(--header-h) - 5.5rem);
+  max-height: calc(100dvh - var(--header-h) - 5.5rem);
   overflow: hidden;
 }
 .du-tab-bar {
@@ -481,7 +482,8 @@ input  { font: inherit; }
 .du-start {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 1.5rem; padding: 2rem 1.5rem; text-align: center;
+  gap: 1.25rem; padding: 1.5rem 1.25rem; text-align: center;
+  overflow-y: auto;
 }
 .du-start-top  { display: flex; flex-direction: column; align-items: center; gap: .75rem; }
 .du-start-badge {
@@ -549,9 +551,9 @@ input  { font: inherit; }
   background: rgba(8, 10, 28, 0.82);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255,255,255,.1); border-radius: 1.25rem;
-  padding: 1.25rem 2rem 1.5rem;
-  display: flex; flex-direction: column; align-items: center; gap: .7rem;
-  min-width: 180px; box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+  width: min(220px, 58vw); box-shadow: 0 8px 40px rgba(0,0,0,.5);
 }
 
 .du-prog-track { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,.08); pointer-events: none; }
@@ -589,6 +591,12 @@ input  { font: inherit; }
   .snav-tab { padding: .55rem .85rem; min-width: 44px; }
   .snav-label { font-size: .55rem; }
   .qs-word { font-size: 3.75rem; }
+  /* Duel — tighter on small phones */
+  .du-en-word { font-size: 2rem; }
+  .du-half-pts { font-size: 2.75rem; }
+  .du-half-answer { font-size: 1.4rem; }
+  .du-start-title { font-size: 1.25rem; }
+  .du-start-sub { font-size: .75rem; }
 }
 @media (min-width: 600px) {
   .pa-wrap { padding: 1.5rem; }
@@ -598,6 +606,10 @@ input  { font: inherit; }
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   #sidenav { bottom: max(1.25rem, env(safe-area-inset-bottom)); }
   #app-main { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+  .du-tab-wrap {
+    height: calc(100dvh - var(--header-h) - 5.5rem - env(safe-area-inset-bottom));
+    max-height: calc(100dvh - var(--header-h) - 5.5rem - env(safe-area-inset-bottom));
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

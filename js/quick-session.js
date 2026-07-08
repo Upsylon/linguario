@@ -10,6 +10,8 @@ const QuickSession = (() => {
     try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; }
   }
 
+  function _ui(fr, es, mode) { return mode === 'es-fr' ? es : fr; }
+
   function buildQueue() {
     const mode       = _getMode();
     const curriculum = window.CURRICULUM_B1 || [];
@@ -63,12 +65,13 @@ const QuickSession = (() => {
   }
 
   function _renderEmpty(container) {
+    const mode = _getMode();
     container.innerHTML = `
       <div class="qs-done">
         <div class="qs-done-icon">✨</div>
-        <div class="qs-done-title">Tout est à jour !</div>
-        <div class="qs-done-sub">Reviens demain pour continuer.<br>Continue sur le Parcours pour débloquer plus.</div>
-        <button class="qs-done-btn" onclick="App.showParcours()">🗺️ Voir le Parcours</button>
+        <div class="qs-done-title">${_ui('Tout est à jour !', '¡Todo al día!', mode)}</div>
+        <div class="qs-done-sub">${_ui('Reviens demain pour continuer.<br>Continue sur le Parcours pour débloquer plus.', 'Volvé mañana para continuar.<br>Continuá en el Recorrido para desbloquear más.', mode)}</div>
+        <button class="qs-done-btn" onclick="App.showParcours()">🗺️ ${_ui('Voir le Parcours', 'Ver el Recorrido', mode)}</button>
       </div>`;
   }
 
@@ -101,10 +104,10 @@ const QuickSession = (() => {
             <div class="qs-counter">${idx + 1}/${queue.length}</div>
           </div>
 
-          ${isNew ? '<div class="qs-new-badge">✦ Nouveau mot</div>' : ''}
+          ${isNew ? `<div class="qs-new-badge">✦ ${_ui('Nouveau mot', 'Palabra nueva', mode)}</div>` : ''}
 
           <div class="qs-card-area">
-            <div class="qs-lang">${nativeFlag} Tu connais la traduction ?</div>
+            <div class="qs-lang">${nativeFlag} ${_ui('Tu connais la traduction ?', '¿Conocés la traducción?', mode)}</div>
             <div class="qs-word">${nativeVal}</div>
             <div class="qs-unit-tag">${unit.icon} ${unit.name}</div>
           </div>
@@ -117,17 +120,17 @@ const QuickSession = (() => {
           </div>
 
           <div class="qs-actions" id="qs-actions">
-            <button class="qs-reveal-btn" id="qs-reveal">Révéler →</button>
+            <button class="qs-reveal-btn" id="qs-reveal">${_ui('Révéler →', 'Revelar →', mode)}</button>
           </div>
 
           <div class="qs-vote" id="qs-vote" style="display:none;">
-            <button class="qs-btn-wrong" id="qs-no">✗ Raté</button>
-            <button class="qs-btn-right" id="qs-yes">✓ Su !</button>
+            <button class="qs-btn-wrong" id="qs-no">✗ ${_ui('Raté', 'Error', mode)}</button>
+            <button class="qs-btn-right" id="qs-yes">✓ ${_ui('Su !', '¡Correcto!', mode)}</button>
           </div>
         </div>`;
 
       container.querySelector('#qs-exit-btn').addEventListener('click', () => {
-        _renderEndScreen(container, idx, correct, xpEarned, queue);
+        _renderEndScreen(container, idx, correct, xpEarned, queue, mode);
       });
       container.querySelector('#qs-reveal').addEventListener('click', () => revealCard());
       // tap anywhere on card area also reveals
@@ -182,7 +185,7 @@ const QuickSession = (() => {
       setTimeout(() => {
         idx++;
         if (idx >= queue.length) {
-          _renderEndScreen(container, idx, correct, xpEarned, queue);
+          _renderEndScreen(container, idx, correct, xpEarned, queue, mode);
         } else {
           showCard();
         }
@@ -202,15 +205,15 @@ const QuickSession = (() => {
   }
 
   /* ── End Screen ─────────────────────────────────────────────────────── */
-  function _renderEndScreen(container, done, correct, xpEarned, queue) {
+  function _renderEndScreen(container, done, correct, xpEarned, queue, mode) {
+    mode = mode || _getMode();
     const isPerfect = correct === queue.length && done === queue.length;
     const bonusXP   = isPerfect ? XP.REWARDS.perfectSession : XP.REWARDS.sessionComplete;
     XP.addXP(bonusXP);
     xpEarned += bonusXP;
 
-    // Record streak + session count
     const streak = XP.recordActivity();
-    if (streak > 1) XP.addXP(XP.REWARDS.dailyStreak); // streak bonus
+    if (streak > 1) XP.addXP(XP.REWARDS.dailyStreak);
 
     const level   = XP.getLevel();
     const nextLv  = XP.getNextLevel();
@@ -218,41 +221,43 @@ const QuickSession = (() => {
     const progPct = Math.round(XP.getLevelProgress() * 100);
 
     const perfMsg = isPerfect
-      ? '<div class="qs-end-perf">⚡ Session parfaite !</div>'
+      ? `<div class="qs-end-perf">⚡ ${_ui('Session parfaite !', '¡Sesión perfecta!', mode)}</div>`
       : '';
 
     container.innerHTML = `
       <div class="qs-end">
         <div class="qs-end-trophy">${isPerfect ? '🏆' : '✨'}</div>
-        <div class="qs-end-title">Session terminée !</div>
+        <div class="qs-end-title">${_ui('Session terminée !', '¡Sesión terminada!', mode)}</div>
         ${perfMsg}
 
         <div class="qs-end-stats">
           <div class="qs-end-stat">
             <div class="qs-end-n" style="color:#4ade80">${correct}</div>
-            <div class="qs-end-l">Sus</div>
+            <div class="qs-end-l">${_ui('Sus', 'Correctas', mode)}</div>
           </div>
           <div class="qs-end-stat">
             <div class="qs-end-n" style="color:#f87171">${done - correct}</div>
-            <div class="qs-end-l">Ratés</div>
+            <div class="qs-end-l">${_ui('Ratés', 'Errores', mode)}</div>
           </div>
           <div class="qs-end-stat">
             <div class="qs-end-n" style="color:#7b9fff">+${xpEarned}</div>
-            <div class="qs-end-l">XP gagnés</div>
+            <div class="qs-end-l">${_ui('XP gagnés', 'XP ganados', mode)}</div>
           </div>
         </div>
 
         <div class="qs-end-level">
           <div class="qs-end-lv-info">
             <span class="qs-end-lv-name" style="color:${level.color}">${level.name}</span>
-            ${nextLv ? `<span class="qs-end-lv-next">→ ${nextLv.name} dans ${toNext} XP</span>` : '<span class="qs-end-lv-next">🎉 Objectif atteint !</span>'}
+            ${nextLv
+              ? `<span class="qs-end-lv-next">→ ${nextLv.name} ${_ui(`dans ${toNext} XP`, `faltan ${toNext} XP`, mode)}</span>`
+              : `<span class="qs-end-lv-next">🎉 ${_ui('Objectif atteint !', '¡Objetivo alcanzado!', mode)}</span>`}
           </div>
           <div class="qs-end-lvbar"><div class="qs-end-lvfill" style="width:${progPct}%;background:${level.color}"></div></div>
         </div>
 
         <div class="qs-end-btns">
-          <button class="qs-end-again" id="qs-again">▶ Encore une session</button>
-          <button class="qs-end-home"  id="qs-home">Accueil</button>
+          <button class="qs-end-again" id="qs-again">▶ ${_ui('Encore une session', 'Otra sesión', mode)}</button>
+          <button class="qs-end-home"  id="qs-home">${_ui('Accueil', 'Inicio', mode)}</button>
         </div>
       </div>`;
 

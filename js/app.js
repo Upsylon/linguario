@@ -30,7 +30,9 @@ const App = (() => {
     if (hdr) {
       hdr.addEventListener('click', () => {
         if (_currentScreen === 'quick-session') {
-          if (!confirm('Retourner à l\'accueil ? Ta progression sera perdue.')) return;
+          const mode = (() => { try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; } })();
+          const msg  = _ui('Retourner à l\'accueil ? Ta progression sera perdue.', '¿Volver al inicio? Tu progreso se perderá.', mode);
+          if (!confirm(msg)) return;
         }
         showHome();
       });
@@ -169,7 +171,7 @@ const App = (() => {
       <div class="hm-simple">
 
         <div class="hm-lang-switch">
-          <span class="hm-lang-label">J'apprends :</span>
+          <span class="hm-lang-label">${_ui('J\'apprends :', 'Aprendo:', mode)}</span>
           <div class="hm-lang-pills">
             <button class="hm-lang-pill${mode === 'fr-es' ? ' hm-lang-pill--active' : ''}" data-mode="fr-es">🇦🇷 Espagnol</button>
             <button class="hm-lang-pill${mode === 'es-fr' ? ' hm-lang-pill--active' : ''}" data-mode="es-fr">🇫🇷 Français</button>
@@ -177,8 +179,8 @@ const App = (() => {
         </div>
 
         ${streak
-          ? `<div class="hm-streak-pill">🔥 ${streak} jour${streak > 1 ? 's' : ''}</div>`
-          : `<div class="hm-streak-pill hm-streak-zero">Commence ta série aujourd'hui !</div>`}
+          ? `<div class="hm-streak-pill">🔥 ${streak} ${_ui(`jour${streak > 1 ? 's' : ''}`, `día${streak > 1 ? 's' : ''}`, mode)}</div>`
+          : `<div class="hm-streak-pill hm-streak-zero">${_ui('Commence ta série aujourd\'hui !', '¡Empezá tu racha hoy!', mode)}</div>`}
 
         <div class="hm-xp-block">
           <div class="hm-xp-labels">
@@ -189,10 +191,10 @@ const App = (() => {
           <div class="hm-xpbar">
             <div class="hm-xpbar-fill" style="width:${progPct}%;background:${level.color}"></div>
           </div>
-          ${nextLv ? `<div class="hm-xp-hint">encore ${xpToGo} XP pour ${nextLv.name}</div>` : ''}
+          ${nextLv ? `<div class="hm-xp-hint">${_ui(`encore ${xpToGo} XP pour ${nextLv.name}`, `faltan ${xpToGo} XP para ${nextLv.name}`, mode)}</div>` : ''}
         </div>
 
-        <button class="hm-play-btn" id="hm-play">▶ &nbsp;APPRENDRE</button>
+        <button class="hm-play-btn" id="hm-play">▶ &nbsp;${_ui('APPRENDRE', 'APRENDER', mode)}</button>
 
         <div class="hm-unit-hint">${unitHint}</div>
 
@@ -263,6 +265,8 @@ const App = (() => {
   function showQuickSessionForUnit(unit)  { showLessonForUnit(unit); }
 
   // ── Utils ─────────────────────────────────────────────────────────────
+  function _ui(fr, es, mode) { return mode === 'es-fr' ? es : fr; }
+
   function esc(s) {
     return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
