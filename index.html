@@ -19,6 +19,7 @@
 <header class="app-header">
   <span class="app-logo">🌊</span>
   <span class="app-name">LinguaRío</span>
+  <button id="sync-btn" class="sync-btn" title="Se connecter avec Google pour sauvegarder">☁</button>
 </header>
 
 <!-- ── Navigation ───────────────────────────────────────────────────── -->
@@ -77,6 +78,11 @@
 
 </main>
 
+<!-- ── Firebase SDK (compat) — chargé avant sync.js ────────────────── -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <!-- ── Scripts (order critical) ────────────────────────────────────── -->
 <script src="js/storage.js"></script>
 <script src="js/srs.js"></script>
@@ -92,8 +98,34 @@
 <script src="js/lesson-engine.js"></script>
 <script src="js/lesson.js"></script>
 <script src="js/app.js"></script>
+<script src="js/sync.js"></script>
 
 <script>
+  /* ── Firebase config ───────────────────────────────────────────────
+     1. Va sur https://console.firebase.google.com
+     2. Crée un projet → Ajoute une app Web
+     3. Active Authentication > Google
+     4. Active Firestore Database (mode production)
+     5. Remplace les valeurs ci-dessous par ton config
+  ──────────────────────────────────────────────────────────────────── */
+  const FIREBASE_CONFIG = {
+    apiKey:            'REMPLACE_MOI',
+    authDomain:        'TON_PROJET.firebaseapp.com',
+    projectId:         'TON_PROJET',
+    storageBucket:     'TON_PROJET.appspot.com',
+    messagingSenderId: '000000000000',
+    appId:             '1:000000000000:web:000000000000'
+  };
+
+  if (FIREBASE_CONFIG.apiKey !== 'REMPLACE_MOI') {
+    Sync.init(FIREBASE_CONFIG);
+  }
+
+  document.getElementById('sync-btn').addEventListener('click', () => {
+    if (window.Sync && Sync.getUser()) Sync.signOut();
+    else if (window.Sync) Sync.signIn();
+  });
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }

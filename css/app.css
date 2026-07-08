@@ -61,6 +61,21 @@ input  { font: inherit; }
   font-weight: 900; font-size: 1rem; letter-spacing: -.05em;
   background: linear-gradient(90deg, #4361ee, #7b9fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
+.sync-btn {
+  margin-left: auto;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.4);
+  border-radius: .4rem;
+  padding: .22rem .6rem;
+  font-size: .7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.sync-btn:hover { background: rgba(255,255,255,.13); color: rgba(255,255,255,.8); }
+.sync-btn.sync-signed-in { color: #4ade80; border-color: rgba(74,222,128,.3); }
 
 /* ── Bottom nav pill ─────────────────────────────────────────────────── */
 #sidenav {

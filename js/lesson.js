@@ -261,6 +261,8 @@ const Lesson = (() => {
     container.querySelector('#le-next').addEventListener('click',      () => startSmart(container));
     container.querySelector('#le-again').addEventListener('click',     () => onAgain());
     container.querySelector('#le-home').addEventListener('click',      () => onExit());
+
+    if (window.Sync) Sync.push();
   }
 
   /* ── All caught up ────────────────────────────────────────────── */
