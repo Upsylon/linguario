@@ -102,6 +102,23 @@ const LessonEngine = (() => {
       ? esOverrides.dialogueNote
       : d.note;
 
+    const btnNext     = _isEsMode(mode) ? 'Siguiente →'      : 'Suite →';
+    const btnNote     = _isEsMode(mode) ? 'Nota cultural →'  : 'Note culturelle →';
+    const btnContinue = _isEsMode(mode) ? 'Continuar →'      : 'Continuer →';
+
+    // In fr-es: primary bubble = ES (target being learnt), subtitle = FR (native)
+    // In es-fr: primary bubble = FR (target being learnt), subtitle = ES (native)
+    function _bubbleHTML(line, cls) {
+      const primary   = _isEsMode(mode) ? line.fr  : line.es;
+      const secondary = _isEsMode(mode) ? line.es  : line.fr;
+      const primFlag  = _isEsMode(mode) ? '🇫🇷'   : '🇦🇷';
+      return `
+        <div class="le-bubble ${cls}">
+          <div class="le-bubble-es"><span class="le-bubble-flag">${primFlag}</span>${primary}</div>
+          <div class="le-bubble-fr">${secondary}</div>
+        </div>`;
+    }
+
     let lineIdx = 0;
 
     function show() {
@@ -110,7 +127,7 @@ const LessonEngine = (() => {
           <div class="le-card le-card--note">
             <div class="le-note-icon">💡</div>
             <div class="le-note-text">${note}</div>
-            <button class="le-next-btn" id="le-next">Continuer →</button>
+            <button class="le-next-btn" id="le-next">${btnContinue}</button>
           </div>`;
         container.querySelector('#le-next').addEventListener('click', onDone);
         return;
@@ -118,22 +135,17 @@ const LessonEngine = (() => {
 
       const line = d.lines[lineIdx];
       const prevLines = d.lines.slice(0, lineIdx);
-      const bubbles = prevLines.map((l, i) => `
-        <div class="le-bubble le-bubble--prev ${i%2===0?'le-bubble--left':'le-bubble--right'}">
-          <div class="le-bubble-es">${l.es}</div>
-          <div class="le-bubble-fr">${l.fr}</div>
-        </div>`).join('');
+      const bubbles = prevLines.map((l, i) =>
+        _bubbleHTML(l, `le-bubble--prev ${i%2===0?'le-bubble--left':'le-bubble--right'}`)
+      ).join('');
 
       container.innerHTML = `
         <div class="le-card le-card--dialogue">
           <div class="le-dial-label">📖 ${unit.icon} ${unit.name}</div>
           <div class="le-dial-history">${bubbles}</div>
-          <div class="le-bubble le-bubble--active ${lineIdx%2===0?'le-bubble--left':'le-bubble--right'}">
-            <div class="le-bubble-es">${line.es}</div>
-            <div class="le-bubble-fr">${line.fr}</div>
-          </div>
+          ${_bubbleHTML(line, `le-bubble--active ${lineIdx%2===0?'le-bubble--left':'le-bubble--right'}`)}
           <button class="le-next-btn" id="le-next">
-            ${lineIdx < d.lines.length - 1 ? 'Suite →' : 'Note culturelle →'}
+            ${lineIdx < d.lines.length - 1 ? btnNext : btnNote}
           </button>
         </div>`;
 
@@ -165,11 +177,15 @@ const LessonEngine = (() => {
       ? '🇫🇷 ¿Qué significa esta palabra?'
       : '🇦🇷 Que signifie ce mot ?';
 
+    // Blank out the answer word in the hint sentence so it gives context without revealing the answer
+    const re = new RegExp(correct.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    const hintBlanked = hintSent.replace(re, '…');
+
     container.innerHTML = `
       <div class="le-card le-card--mc">
         <div class="le-mc-type">${label}</div>
         <div class="le-mc-sentence">${highlighted}</div>
-        <div class="le-mc-hint">${_nativeFlag(mode)} ${hintSent}</div>
+        <div class="le-mc-hint">${_nativeFlag(mode)} ${hintBlanked}</div>
         <div class="le-mc-options" id="le-opts">
           ${options.map((o, i) => `<button class="le-opt" data-i="${i}">${o}</button>`).join('')}
         </div>
@@ -207,7 +223,7 @@ const LessonEngine = (() => {
     if (wrongs.length < 2) { onDone(false); return; }
 
     const options = _shuffle([targetWord, ..._pick(wrongs, Math.min(3, wrongs.length))]);
-    const label = _isEsMode(mode) ? '🇫🇷 Complétez la phrase' : '🇦🇷 Completá la frase';
+    const label = _isEsMode(mode) ? '🇫🇷 Complétez la phrase' : '🇦🇷 Complète la phrase';
 
     container.innerHTML = `
       <div class="le-card le-card--mc">
@@ -246,7 +262,7 @@ const LessonEngine = (() => {
     if (wrongs.length < 1) { onDone(false); return; }
 
     const options = _shuffle([correct, ..._pick(wrongs, Math.min(3, wrongs.length))]);
-    const label = _isEsMode(mode) ? '🇦🇷→🇫🇷 Traduis la phrase' : '🇫🇷→🇦🇷 Traducí la frase';
+    const label = _isEsMode(mode) ? '🇦🇷→🇫🇷 Traduis la phrase' : '🇫🇷→🇦🇷 Traduis la phrase';
 
     container.innerHTML = `
       <div class="le-card le-card--mc">
@@ -284,7 +300,7 @@ const LessonEngine = (() => {
 
     container.innerHTML = `
       <div class="le-card le-card--grammar">
-        <div class="le-gram-badge">📐 Grammaire</div>
+        <div class="le-gram-badge">📐 ${_isEsMode(mode) ? 'Gramática' : 'Grammaire'}</div>
         <div class="le-gram-title">${g.title}</div>
         <div class="le-gram-note">${note}</div>
         ${g.examples ? g.examples.map(ex => `
@@ -321,21 +337,26 @@ const LessonEngine = (() => {
     const targetFlag = _targetFlag(mode);
     const exSent     = _targetEx(word, mode);
 
+    const assessLabel  = _isEsMode(mode) ? `${targetFlag} ¿Traducción al francés?`  : `${targetFlag} Traduction espagnole ?`;
+    const revealLabel  = _isEsMode(mode) ? 'Revelar →'  : 'Révéler →';
+    const btnNo        = _isEsMode(mode) ? '✗ Error'    : '✗ Raté';
+    const btnYes       = _isEsMode(mode) ? '✓ ¡Sabía!'  : '✓ Su !';
+
     container.innerHTML = `
       <div class="le-card le-card--assess">
-        <div class="le-assess-lang">${nativeFlag} Tu connais ce mot ?</div>
+        <div class="le-assess-lang">${assessLabel}</div>
         <div class="le-assess-word">${nativeVal}</div>
         <div class="le-assess-ans" id="le-ans" style="display:none">
           <div class="le-assess-divider"></div>
           <div class="le-assess-row le-assess-row--target"><span class="le-assess-flag">${targetFlag}</span><span>${targetVal}</span></div>
-          ${exSent ? `<div class="le-assess-ex">"${exSent}"</div>` : ''}
+          ${exSent ? `<div class="le-assess-ex">${targetFlag} "${exSent}"</div>` : ''}
         </div>
         <div id="le-reveal-wrap">
-          <button class="le-reveal-btn" id="le-reveal">Révéler →</button>
+          <button class="le-reveal-btn" id="le-reveal">${revealLabel}</button>
         </div>
         <div class="le-assess-vote" id="le-vote" style="display:none">
-          <button class="le-vote-no"  id="le-no">✗ Raté</button>
-          <button class="le-vote-yes" id="le-yes">✓ Su !</button>
+          <button class="le-vote-no"  id="le-no">${btnNo}</button>
+          <button class="le-vote-yes" id="le-yes">${btnYes}</button>
         </div>
       </div>`;
 
