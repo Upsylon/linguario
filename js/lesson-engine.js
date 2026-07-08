@@ -105,17 +105,32 @@ const LessonEngine = (() => {
     const btnNext     = _isEsMode(mode) ? 'Siguiente →'      : 'Suite →';
     const btnNote     = _isEsMode(mode) ? 'Nota cultural →'  : 'Note culturelle →';
     const btnContinue = _isEsMode(mode) ? 'Continuar →'      : 'Continuer →';
+    const btnTrad     = _isEsMode(mode) ? 'Ver traducción'   : 'Voir la traduction';
 
-    // In fr-es: primary bubble = ES (target being learnt), subtitle = FR (native)
-    // In es-fr: primary bubble = FR (target being learnt), subtitle = ES (native)
-    function _bubbleHTML(line, cls) {
-      const primary   = _isEsMode(mode) ? line.fr  : line.es;
-      const secondary = _isEsMode(mode) ? line.es  : line.fr;
-      const primFlag  = _isEsMode(mode) ? '🇫🇷'   : '🇦🇷';
+    // target = what you're learning; native = your language
+    function _targetLine(line) { return _isEsMode(mode) ? line.fr : line.es; }
+    function _nativeLine(line) { return _isEsMode(mode) ? line.es : line.fr; }
+    const tgtFlag = _isEsMode(mode) ? '🇫🇷' : '🇦🇷';
+    const natFlag = _isEsMode(mode) ? '🇦🇷' : '🇫🇷';
+
+    // History bubble: show target prominently + native as muted subtitle (already seen)
+    function _histBubble(line, i) {
+      const side = i%2===0 ? 'le-bubble--left' : 'le-bubble--right';
       return `
-        <div class="le-bubble ${cls}">
-          <div class="le-bubble-es"><span class="le-bubble-flag">${primFlag}</span>${primary}</div>
-          <div class="le-bubble-fr">${secondary}</div>
+        <div class="le-bubble le-bubble--prev ${side}">
+          <div class="le-bubble-target"><span class="le-bubble-flag">${tgtFlag}</span>${_targetLine(line)}</div>
+          <div class="le-bubble-native">${natFlag} ${_nativeLine(line)}</div>
+        </div>`;
+    }
+
+    // Active bubble: target language ONLY — translation hidden behind a tap
+    function _activeBubble(line, i) {
+      const side = i%2===0 ? 'le-bubble--left' : 'le-bubble--right';
+      return `
+        <div class="le-bubble le-bubble--active ${side}">
+          <div class="le-bubble-target"><span class="le-bubble-flag">${tgtFlag}</span>${_targetLine(line)}</div>
+          <button class="le-bubble-trad-btn" id="le-trad-btn">${btnTrad}</button>
+          <div class="le-bubble-native" id="le-bubble-nat" style="display:none">${natFlag} ${_nativeLine(line)}</div>
         </div>`;
     }
 
@@ -134,21 +149,22 @@ const LessonEngine = (() => {
       }
 
       const line = d.lines[lineIdx];
-      const prevLines = d.lines.slice(0, lineIdx);
-      const bubbles = prevLines.map((l, i) =>
-        _bubbleHTML(l, `le-bubble--prev ${i%2===0?'le-bubble--left':'le-bubble--right'}`)
-      ).join('');
+      const bubbles = d.lines.slice(0, lineIdx).map(_histBubble).join('');
 
       container.innerHTML = `
         <div class="le-card le-card--dialogue">
           <div class="le-dial-label">📖 ${unit.icon} ${unit.name}</div>
           <div class="le-dial-history">${bubbles}</div>
-          ${_bubbleHTML(line, `le-bubble--active ${lineIdx%2===0?'le-bubble--left':'le-bubble--right'}`)}
+          ${_activeBubble(line, lineIdx)}
           <button class="le-next-btn" id="le-next">
             ${lineIdx < d.lines.length - 1 ? btnNext : btnNote}
           </button>
         </div>`;
 
+      container.querySelector('#le-trad-btn').addEventListener('click', function() {
+        document.getElementById('le-bubble-nat').style.display = 'block';
+        this.style.display = 'none';
+      });
       container.querySelector('#le-next').addEventListener('click', () => { lineIdx++; show(); });
     }
 
