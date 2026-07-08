@@ -303,35 +303,34 @@ const DUEL = (() => {
     const pct  = (_st.round / ROUNDS) * 100;
 
     container.innerHTML = `
-      <div class="du-split">
+      <div class="du-game">
 
-        <div class="du-half du-half--fr" id="du-hfr">
-          <div class="du-half-top">
-            <span class="du-half-flag">🇫🇷</span>
-            <span class="du-half-pts" id="du-s0">${_st.scores[0]}</span>
+        <div class="du-word-area">
+          <div class="du-prog-track"><div class="du-prog-fill" style="width:${pct}%"></div></div>
+          <div class="du-word-meta">
+            <span>${_theme.icon} ${_theme.label}</span>
+            <span class="du-manche">${_st.round + 1} / ${ROUNDS}</span>
           </div>
-          <div class="du-half-body" id="du-bfr"></div>
+          <div class="du-en-word">${word.en}</div>
+          <div id="du-action">
+            <button class="du-reveal-btn" id="du-reveal">Révéler</button>
+          </div>
         </div>
 
-        <div class="du-half du-half--ar" id="du-har">
-          <div class="du-half-top du-half-top--r">
-            <span class="du-half-flag">🇦🇷</span>
-            <span class="du-half-pts" id="du-s1">${_st.scores[1]}</span>
-          </div>
-          <div class="du-half-body" id="du-bar"></div>
-        </div>
-
-        <div class="du-overlay">
-          <div class="du-prog-track">
-            <div class="du-prog-fill" style="width:${pct}%"></div>
-          </div>
-          <div class="du-word-card">
-            <div class="du-theme-chip">${_theme.icon} ${_theme.label}</div>
-            <div class="du-manche">${_st.round + 1} / ${ROUNDS}</div>
-            <div class="du-en-word" id="du-enword">${word.en}</div>
-            <div id="du-action">
-              <button class="du-reveal-btn" id="du-reveal">Révéler</button>
+        <div class="du-halves">
+          <div class="du-half du-half--fr" id="du-hfr">
+            <div class="du-half-top">
+              <span class="du-half-flag">🇫🇷</span>
+              <span class="du-half-pts" id="du-s0">${_st.scores[0]}</span>
             </div>
+            <div class="du-half-body" id="du-bfr"></div>
+          </div>
+          <div class="du-half du-half--ar" id="du-har">
+            <div class="du-half-top">
+              <span class="du-half-flag">🇦🇷</span>
+              <span class="du-half-pts" id="du-s1">${_st.scores[1]}</span>
+            </div>
+            <div class="du-half-body" id="du-bar"></div>
           </div>
         </div>
 

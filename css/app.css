@@ -510,17 +510,34 @@ input  { font: inherit; }
 .du-start-btn:hover   { opacity: .92; }
 .du-start-btn:active  { transform: scale(.97); }
 
-.du-split {
-  flex: 1; display: grid; grid-template-columns: 1fr 1fr;
-  position: relative; overflow: hidden; min-height: 0;
+/* ── Duel round layout (vertical: word-area on top, halves below) ── */
+.du-game {
+  flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden;
 }
+
+.du-word-area {
+  position: relative; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+  gap: .45rem; padding: .75rem 1.25rem 1rem;
+  background: rgba(0,0,0,.28); border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.du-word-meta {
+  display: flex; align-items: center; gap: .75rem; margin-top: .25rem;
+  font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.3);
+}
+
+.du-halves {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; overflow: hidden;
+}
+
 @keyframes du-pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes du-win-flash { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.3)} }
 
 .du-half {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  padding: 1.5rem .75rem; gap: .5rem;
+  padding: 1rem .6rem; gap: .5rem;
   transition: background .35s;
 }
 .du-half--fr { background: rgba(67,97,238,.09); }
@@ -531,35 +548,18 @@ input  { font: inherit; }
 .du-half--ar.du-half--won { background: rgba(34,197,94,.35); animation: du-win-flash .4s ease; }
 .du-half--lost { opacity: .25; transition: opacity .35s; }
 
-.du-half-top     { display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
-.du-half-top--r  { align-items: center; }
-.du-half-flag    { font-size: 1.6rem; }
-.du-half-pts     { font-size: 3.5rem; font-weight: 900; letter-spacing: -.07em; line-height: 1; color: rgba(255,255,255,.9); }
-.du-half-body    { display: flex; flex-direction: column; align-items: center; gap: .35rem; text-align: center; }
-.du-half-answer  { font-size: 1.75rem; font-weight: 900; letter-spacing: -.04em; color: rgba(255,255,255,.95); animation: du-pop .2s ease; }
-.du-half-cue     { font-size: .68rem; color: rgba(255,255,255,.3); font-weight: 700; letter-spacing: .05em; animation: du-pulse 1.5s ease-in-out infinite; }
+.du-half-top  { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.du-half-flag { font-size: 1.6rem; }
+.du-half-pts  { font-size: 3.5rem; font-weight: 900; letter-spacing: -.07em; line-height: 1; color: rgba(255,255,255,.9); }
+.du-half-body { display: flex; flex-direction: column; align-items: center; gap: .35rem; text-align: center; }
+.du-half-answer { font-size: 1.75rem; font-weight: 900; letter-spacing: -.04em; color: rgba(255,255,255,.95); animation: du-pop .2s ease; }
+.du-half-cue  { font-size: .68rem; color: rgba(255,255,255,.3); font-weight: 700; letter-spacing: .05em; animation: du-pulse 1.5s ease-in-out infinite; }
 @keyframes du-pulse { 0%,100%{opacity:.3} 50%{opacity:.8} }
-
-.du-overlay {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; padding: 1rem;
-  pointer-events: none;
-}
-.du-overlay > * { pointer-events: auto; }
-
-.du-word-card {
-  background: rgba(8, 10, 28, 0.82);
-  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,255,255,.1); border-radius: 1.25rem;
-  padding: 1rem 1.5rem 1.25rem;
-  display: flex; flex-direction: column; align-items: center; gap: .6rem;
-  width: min(220px, 58vw); box-shadow: 0 8px 40px rgba(0,0,0,.5);
-}
 
 .du-prog-track { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,.08); pointer-events: none; }
 .du-prog-fill  { height: 100%; background: rgba(255,255,255,.4); transition: width .35s; }
 .du-manche     { font-size: .7rem; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.3); background: rgba(255,255,255,.06); padding: .2rem .6rem; border-radius: 99px; }
-.du-en-word    { font-size: 2.6rem; font-weight: 900; letter-spacing: -.05em; color: #fff; text-align: center; line-height: 1.1; text-shadow: 0 0 40px rgba(0,0,0,.5); animation: du-pop .18s ease; }
+.du-en-word    { font-size: 2.4rem; font-weight: 900; letter-spacing: -.05em; color: #fff; text-align: center; line-height: 1.1; animation: du-pop .18s ease; }
 
 .du-reveal-btn { background: #fff; color: #101828; border: none; border-radius: 2rem; padding: .7rem 1.75rem; font-size: .9rem; font-weight: 800; cursor: pointer; min-height: 48px; box-shadow: 0 4px 20px rgba(0,0,0,.4); transition: transform .1s, opacity .1s; }
 .du-reveal-btn:active { transform: scale(.96); opacity: .9; }
