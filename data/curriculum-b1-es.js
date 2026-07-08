@@ -31,10 +31,10 @@ const CURRICULUM_B1_ES = {
     dialogueNote: 'En Francia los apartamentos se llaman "appartements". La mayoría de los parisinos alquilan — comprar en París es muy caro. El "gardien" cuida el edificio y gestiona el correo.',
     grammarNote:  '"Il y a" traduce "hay" en todos los casos. "Il y a une table." / "Il y a des chaises." En negación: "Il n\'y a pas de table." / "Il n\'y a pas de chaises." (nunca "des" en negación).',
     question:     '¿Cómo se dice "no hay sillas" en francés?',
-    options:      ['Il y a pas des chaises', 'Il n\'y a pas de chaises', 'Il n\'y a pas des chaises'],
+    options:      ['Il y a pas des chaises', 'Il n\'y a pas des chaises', 'Il n\'y a pas de chaises'],
   },
   u06: {
-    dialogueNote: 'En francés los adjetivos van generalmente DESPUÉS del sustantivo: "une robe rouge", "un chat noir". Solo algunos van antes: beau, grand, petit, jeune, vieux, bon, mauvais.',
+    dialogueNote: 'Los franceses son muy precisos para describir — colores, formas, estilos. El arte y el diseño son parte de la identidad francesa: de la moda parisina al Art Nouveau del metro de París.',
     grammarNote:  'Los adjetivos concuerdan en género y número: un chat noir / une robe noire / des chats noirs. Van generalmente DESPUÉS del sustantivo. Excepción: grand, petit, beau, vieux van ANTES.',
     question:     '¿Cómo se dice "una pelota roja" en francés?',
     options:      ['une rouge balle', 'une balle rouge', 'un balle rouge'],
@@ -67,7 +67,7 @@ const CURRICULUM_B1_ES = {
     dialogueNote: 'El TGV (Train à Grande Vitesse) une París con Lyon en 2h y con Marsella en 3h. La SNCF es la empresa ferroviaria nacional. Francia tiene la red de alta velocidad más extensa de Europa.',
     grammarNote:  'El passé composé se forma con avoir/être + participio. Mayoría de verbos usan avoir: j\'ai pris, j\'ai voyagé. Verbos de movimiento usan être: je suis allé(e), je suis parti(e) — participio concuerda.',
     question:     '¿Cuál es el passé composé de "voyager" en primera persona?',
-    options:      ['j\'ai voyagé', 'je suis voyagé', 'j\'avais voyagé'],
+    options:      ['je suis voyagé', 'j\'ai voyagé', 'j\'avais voyagé'],
   },
   u12: {
     dialogueNote: 'Francia tiene climas muy variados: mediterráneo en el sur, oceánico en el oeste, continental en el este. París recibe bastante lluvia — un paraguas es indispensable.',
@@ -85,7 +85,7 @@ const CURRICULUM_B1_ES = {
     dialogueNote: 'La semana laboral francesa es de 35 horas — una de las más cortas del mundo. Los franceses tienen 5 semanas de vacaciones pagas. Las "Grandes Écoles" (HEC, Polytechnique) son más valoradas que las universidades.',
     grammarNote:  'El futuro próximo "aller + infinitif" es el más usado en la lengua oral: je vais travailler (voy a trabajar). El futuro simple (-rai, -ras, -ra, -rons, -rez, -ront) es más formal y escrito.',
     question:     '¿Cómo se dice "vas a estudiar" (futuro próximo) en francés?',
-    options:      ['Tu vas étudier', 'Tu iras étudier', 'Tu étudieras'],
+    options:      ['Tu iras étudier', 'Tu vas étudier', 'Tu étudieras'],
   },
   u15: {
     dialogueNote: 'La Sécurité Sociale francesa reembolsa gran parte de los gastos médicos. El "médecin traitant" (médico de cabecera) es el primer contacto obligatorio para acceder a los especialistas.',
@@ -109,7 +109,7 @@ const CURRICULUM_B1_ES = {
     dialogueNote: 'El Tour de France (julio) es el evento deportivo más visto de Francia. Roland Garros en mayo es el único Grand Slam en tierra batida. El rugby es muy popular en el sur del país.',
     grammarNote:  'El imperfecto (-ais, -ais, -ait, -ions, -iez, -aient) expresa hábitos pasados: "Quand j\'étais jeune, je jouais au foot." La raíz = nous del presente: nous jouons → je jou-ais.',
     question:     '¿Cuál es el imperfecto de "jouer" en primera persona?',
-    options:      ['je jouais', 'je jouée', 'j\'ai joué'],
+    options:      ['j\'ai joué', 'je jouais', 'je jouerais'],
   },
   u19: {
     dialogueNote: 'Francia es el país más visitado del mundo: más de 100 millones de turistas al año. La Torre Eiffel, el Louvre y el Mont-Saint-Michel son los monumentos más visitados de Europa.',
