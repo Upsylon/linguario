@@ -133,12 +133,12 @@ const Lesson = (() => {
     const words = unit.words.slice(0, LESSON_WORDS);
     let ok = 0, xpEarned = 0;
 
-    const steps = [{ type: 'dialogue' }];
+    // Optimal sequence (Schmidt noticing hypothesis): dialogue → grammar → exercises → SRS
+    const steps = [{ type: 'dialogue' }, { type: 'grammar' }];
     words.forEach((w, i) => {
       const t = ['meaning-mc', 'gap-fill', 'translate-mc'][i % 3];
       steps.push({ type: t, word: w });
     });
-    steps.push({ type: 'grammar' });
     unit.words.forEach(w => steps.push({ type: 'self-assess', word: w }));
 
     let si = 0;

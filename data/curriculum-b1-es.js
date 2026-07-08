@@ -65,9 +65,9 @@ const CURRICULUM_B1_ES = {
   },
   u11: {
     dialogueNote: '"Subte" (metro) y "colectivo" (bus) son los transportes típicos de Buenos Aires — la SUBE es la tarjeta recargable.',
-    grammarNote:  'he/has/ha + participio. Usado para acciones recientes. Participios: -ar → -ado, -er/-ir → -ido.',
-    question:     '¿Cuál es el participio pasado de "viajar"?',
-    options:      ['viajido', 'viajado', 'viajedo'],
+    grammarNote:  'En Argentina el pretérito indefinido se usa incluso para acciones recientes. -ar: viajé, viajaste, viajó. -er/-ir: tomé, tomaste, tomó. (El perfecto "he tomado" es raro en el habla rioplatense.)',
+    question:     '¿Cómo se dice "j\'ai voyagé" en argentino?',
+    options:      ['he viajado', 'viajé', 'viajaba'],
   },
   u12: {
     dialogueNote: 'En Argentina las estaciones están invertidas: el verano va de diciembre a marzo. Enero = pleno verano en Buenos Aires.',
