@@ -198,14 +198,6 @@ const App = (() => {
 
         <div class="hm-unit-hint">${unitHint}</div>
 
-        <div class="hm-backup">
-          <button class="hm-backup-btn" id="hm-export">${_ui('⬇ Sauvegarder', '⬇ Guardar', mode)}</button>
-          <label class="hm-backup-btn hm-backup-lbl">
-            ${_ui('⬆ Restaurer', '⬆ Restaurar', mode)}
-            <input type="file" id="hm-import" accept=".json" style="display:none">
-          </label>
-        </div>
-
       </div>`;
 
     el.querySelectorAll('.hm-lang-pill').forEach(btn => {
@@ -219,38 +211,6 @@ const App = (() => {
     });
 
     el.querySelector('#hm-play').addEventListener('click', showLesson);
-    el.querySelector('#hm-export').addEventListener('click', _exportData);
-    el.querySelector('#hm-import').addEventListener('change', e => {
-      if (e.target.files[0]) _importData(e.target.files[0]);
-    });
-  }
-
-  function _exportData() {
-    const prefixes = ['langapp:', 'lrio:', 'qs:'];
-    const out = { v: 1, ts: Date.now(), keys: {} };
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && prefixes.some(pr => k.startsWith(pr))) out.keys[k] = localStorage.getItem(k);
-    }
-    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = `linguario-${new Date().toISOString().split('T')[0]}.json`;
-    a.click(); URL.revokeObjectURL(url);
-  }
-
-  function _importData(file) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const data = JSON.parse(e.target.result);
-        if (!data.keys || typeof data.keys !== 'object') throw new Error();
-        Object.entries(data.keys).forEach(([k, v]) => localStorage.setItem(k, v));
-        App.toast('✓ Progression restaurée !');
-        showHome();
-      } catch { App.toast('Fichier invalide'); }
-    };
-    reader.readAsText(file);
   }
 
   // ── Duel ─────────────────────────────────────────────────────────────
