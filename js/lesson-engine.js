@@ -319,11 +319,15 @@ const LessonEngine = (() => {
         <div class="le-gram-badge">📐 ${_isEsMode(mode) ? 'Gramática' : 'Grammaire'}</div>
         <div class="le-gram-title">${g.title}</div>
         <div class="le-gram-note">${note}</div>
-        ${g.examples ? g.examples.map(ex => `
-          <div class="le-gram-ex">
-            <span class="le-gram-fr">🇫🇷 ${ex.fr}</span>
-            <span class="le-gram-es">🇦🇷 ${ex.es}</span>
-          </div>`).join('') : ''}
+        ${g.examples ? g.examples.map(ex => {
+          const isEs = _isEsMode(mode);
+          const tgt = isEs ? `🇫🇷 ${ex.fr}` : `🇦🇷 ${ex.es}`;
+          const nat = isEs ? `🇦🇷 ${ex.es}` : `🇫🇷 ${ex.fr}`;
+          return `<div class="le-gram-ex">
+            <span class="le-gram-tgt">${tgt}</span>
+            <span class="le-gram-nat">${nat}</span>
+          </div>`;
+        }).join('') : ''}
         <div class="le-gram-q">${question}</div>
         <div class="le-mc-options" id="le-opts">
           ${options.map((o, i) => `<button class="le-opt" data-i="${i}">${o}</button>`).join('')}

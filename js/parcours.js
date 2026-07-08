@@ -163,18 +163,22 @@ const Parcours = (() => {
           <div class="pa-gram-hd">📖 ${gramTitle}</div>
           <div class="pa-gram-body">${gramNote}</div>
           <div class="pa-gram-phrase">
-            <span>🇫🇷 <em>${unit.phrase.fr}</em></span>
-            <span>🇦🇷 <em>${unit.phrase.es}</em></span>
+            <span>${mode === 'es-fr' ? '🇫🇷' : '🇦🇷'} <em>${mode === 'es-fr' ? unit.phrase.fr : unit.phrase.es}</em></span>
+            <span>${mode === 'es-fr' ? '🇦🇷' : '🇫🇷'} <em>${mode === 'es-fr' ? unit.phrase.es : unit.phrase.fr}</em></span>
           </div>
         </div>
 
         <div class="pa-words">
           <div class="pa-words-title">${_ui('Vocabulaire', 'Vocabulario', mode)}</div>
           ${unit.words.map(w => {
-            const ok = seen.includes(w.en);
+            const ok     = seen.includes(w.en);
+            const tgtW   = mode === 'es-fr' ? w.fr : (w.esTarget || w.es);
+            const natW   = mode === 'es-fr' ? (w.esTarget || w.es) : w.fr;
+            const tgtF   = mode === 'es-fr' ? '🇫🇷' : '🇦🇷';
+            const natF   = mode === 'es-fr' ? '🇦🇷' : '🇫🇷';
             return `<div class="pa-word${ok ? ' pa-word--ok' : ''}">
-              <span class="pa-word-fr">🇫🇷 ${w.fr}</span>
-              <span class="pa-word-es">🇦🇷 ${w.esTarget || w.es}</span>
+              <span class="pa-word-tgt">${tgtF} ${tgtW}</span>
+              <span class="pa-word-nat">${natF} ${natW}</span>
               ${ok ? '<span class="pa-word-ck">✓</span>' : ''}
             </div>`;
           }).join('')}
