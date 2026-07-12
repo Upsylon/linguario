@@ -46,6 +46,7 @@ const App = (() => {
       if      (screen === 'home')     showHome();
       else if (screen === 'duel')     showDuelTab();
       else if (screen === 'parcours') showParcours();
+      else if (screen === 'vocab')    showVocab();
       else                            showHome();
     });
   }
@@ -86,6 +87,7 @@ const App = (() => {
         if      (t === 'home')     showHome();
         else if (t === 'parcours') showParcours();
         else if (t === 'duel')     showDuelTab();
+        else if (t === 'vocab')    showVocab();
       });
     });
   }
@@ -235,6 +237,14 @@ const App = (() => {
     if (c && window.DUEL) DUEL.render(c);
   }
 
+  // ── Lexique ───────────────────────────────────────────────────────────
+  function showVocab() {
+    show('vocab');
+    setActiveTab('vocab');
+    const el = document.getElementById('screen-vocab');
+    if (el && window.Vocab) Vocab.render(el);
+  }
+
   // ── Parcours ──────────────────────────────────────────────────────────
   function showParcours() {
     show('parcours');
@@ -281,7 +291,7 @@ const App = (() => {
     _toastTO = setTimeout(() => el.classList.remove('show'), 2800);
   }
 
-  return { init, showHome, showParcours, showLesson, showLessonForUnit, showQuickSession, showQuickSessionForUnit, toast };
+  return { init, showHome, showParcours, showVocab, showLesson, showLessonForUnit, showQuickSession, showQuickSessionForUnit, toast };
 })();
 
 window.App = App;

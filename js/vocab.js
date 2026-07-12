@@ -1,369 +1,164 @@
-/* ===== vocab.js v3 — Production mode + Audio + Raccourcis ===== */
+/* ===== vocab.js — Lexique : révision vocabulaire par thème ===== */
 const Vocab = (() => {
 
-  let currentCard = null;
-  let currentMode = 'fr-es';
-  let revealed    = false;
-  let prodAnswered = false;
-  let onRate      = null;
+  let _el        = null;
+  let _filter    = 'all';   // 'all' | 'seen' | 'unseen'
+  let _openUnits = new Set();
 
-  function getWords(mode)  { return mode === 'fr-es' ? window.WORDS_FR_ES  : window.WORDS_ES_FR; }
-  function getChunks(mode) { return mode === 'fr-es' ? window.CHUNKS_FR_ES : window.CHUNKS_ES_FR; }
-  function srcLang(mode)   { return mode === 'fr-es' ? 'fr' : 'es'; }
-  function tgtLang(mode)   { return mode === 'fr-es' ? 'es' : 'fr'; }
-
-  function previewIntervals(srsState) {
-    const c = srsState || { interval: 0, easeFactor: 2.5, reps: 0 };
-    const good = c.reps === 0 ? 1 : c.reps === 1 ? 6 : Math.round(c.interval * c.easeFactor);
-    return {
-      again: 1,
-      hard:  Math.max(1, Math.round((c.interval || 1) * 0.8)),
-      good,
-      easy:  c.reps < 2 ? 6 : Math.round(good * 1.3),
-    };
+  // ── Public ────────────────────────────────────────────────────────────
+  function render(el) {
+    _el = el;
+    _draw();
   }
 
-  function fmt(days) {
-    if (days <= 1) return '1j';
-    if (days < 30) return `${days}j`;
-    if (days < 365) return `${Math.round(days / 30)}m`;
-    return `${Math.round(days / 365)}an`;
-  }
+  // ── Main render ───────────────────────────────────────────────────────
+  function _draw() {
+    if (!_el) return;
+    const mode   = (Storage.getProfile().mode || 'fr-es');
+    const prog   = XP.getUnitProgress();
+    const units  = window.CURRICULUM_B1 || [];
+    const isFrEs = mode === 'fr-es';
 
-  /* ── Rendu principal : reconnaissance vs production ── */
-  function render(word, mode) {
-    currentCard  = word;
-    currentMode  = mode;
-    revealed     = false;
-    prodAnswered = false;
+    const allUnits = units.map(unit => {
+      const p = prog[unit.id] || { seen: [], mastered: [] };
+      const seenSet     = new Set(p.seen);
+      const masteredSet = new Set(p.mastered);
+      const words = unit.words.map(w => ({
+        ...w,
+        isSeen:     seenSet.has(w.en),
+        isMastered: masteredSet.has(w.en),
+      }));
+      return { unit, words, seenCount: p.seen.length, masteredCount: p.mastered.length };
+    });
 
-    const srsState = Storage.getSRSCard(mode, word.id);
-    const isChunk  = word.kind === 'chunk';
-    // Production mode (typing) for single words with 3+ reps — chunks always stay recognition
-    const isProd = !isChunk && srsState && srsState.reps >= 3;
+    const totalWords  = allUnits.reduce((s, u) => s + u.words.length, 0);
+    const seenWords   = allUnits.reduce((s, u) => s + u.seenCount, 0);
+    const unseenWords = totalWords - seenWords;
 
-    if (isProd) return renderProduction(word, mode, srsState);
-    return renderRecognition(word, mode, srsState);
-  }
+    const visible = allUnits.filter(({ seenCount, words }) => {
+      if (_filter === 'seen')   return seenCount > 0;
+      if (_filter === 'unseen') return words.some(w => !w.isSeen);
+      return true;
+    });
 
-  /* ── Mode reconnaissance (flip card 3D) ── */
-  function renderRecognition(word, mode, srsState) {
-    const ivs      = previewIntervals(srsState);
-    const isChunk  = word.kind === 'chunk';
-    const catLabel = isChunk ? (word.category ? catName(word.category) : 'Expression') : posLabel(word.pos);
-    const lvl      = word.level || 'A1';
+    _el.innerHTML = `
+      <div class="vc-wrap">
+        <div class="vc-topbar">
+          <span class="vc-title">${isFrEs ? 'Lexique' : 'Léxico'}</span>
+          <div class="vc-filters">
+            <button class="vc-f${_filter === 'all'    ? ' vc-f--on' : ''}" data-f="all">
+              ${isFrEs ? 'Tous' : 'Todos'}<span class="vc-badge">${totalWords}</span>
+            </button>
+            <button class="vc-f${_filter === 'seen'   ? ' vc-f--on' : ''}" data-f="seen">
+              ${isFrEs ? 'Vus' : 'Vistos'}<span class="vc-badge">${seenWords}</span>
+            </button>
+            <button class="vc-f${_filter === 'unseen' ? ' vc-f--on' : ''}" data-f="unseen">
+              ${isFrEs ? 'À voir' : 'Por ver'}<span class="vc-badge">${unseenWords}</span>
+            </button>
+          </div>
+        </div>
 
-    setTimeout(() => { if (window.TTS && TTS.isOn()) TTS.speak(word.l1, srcLang(mode)); }, 150);
+        <div class="vc-list">
+          ${visible.length === 0
+            ? `<p class="vc-empty">${isFrEs ? 'Aucun mot à afficher ici.' : 'Ninguna palabra que mostrar.'}</p>`
+            : visible.map(({ unit, words, seenCount }) => _unitBlock(unit, words, seenCount, mode)).join('')
+          }
+        </div>
+      </div>`;
 
-    return `
-<div class="card-scene popIn" id="card-scene">
-  <div class="card-3d" id="card-3d">
+    _el.querySelectorAll('.vc-f').forEach(btn => {
+      btn.addEventListener('click', () => { _filter = btn.dataset.f; _draw(); });
+    });
 
-    <!-- Face avant (question) -->
-    <div class="card-face card-face--front">
-      <div class="card-badge">
-        <span class="badge badge-level-${lvl}">${lvl}</span>
-        ${isChunk
-          ? `<span class="badge badge-chunk">chunk</span>`
-          : `<span class="badge badge-pos">${catLabel}</span>`}
-      </div>
-      <button class="audio-btn" id="card-audio" title="Écouter (A)">🔊</button>
-
-      ${isChunk
-        ? `<p class="card-word-chunk">${esc(word.l1)}</p>
-           <p class="text-sm" style="color:var(--text-3);margin-top:0.3rem;">${esc(catLabel)}</p>`
-        : `<p class="card-word">${esc(word.l1)}</p>
-           <p class="card-pos-label">${catLabel}</p>`
-      }
-      <div class="card-hint-click"><span>↩</span> ${I18N.t('card.flipHint')} <kbd>Espace</kbd></div>
-    </div>
-
-    <!-- Face arrière (réponse) -->
-    <div class="card-face card-face--back">
-      ${isChunk
-        ? `<p class="card-translation-chunk">${esc(word.l2)}</p>`
-        : `<p class="card-translation">${esc(word.l2)}</p>`
-      }
-      ${word.note
-        ? `<div class="card-note"><span class="card-ar-flag">🇦🇷</span>${esc(word.note)}</div>`
-        : ''}
-      ${isChunk ? `<p style="font-size:.75rem;opacity:.65;margin-top:.8rem;color:rgba(255,255,255,.8);">${esc(catLabel)}</p>` : ''}
-    </div>
-
-  </div>
-</div>
-
-<div class="rating-wrap" id="rating-wrap">
-  <p class="rating-label">${I18N.t('card.ratingQuestion')} <span class="kbd-hint">${I18N.t('card.ratingHint')}</span></p>
-  <div class="rating-grid">
-    <button class="r-btn r-again" data-q="1">${I18N.t('card.again')}<span class="r-int">${fmt(ivs.again)}</span></button>
-    <button class="r-btn r-hard"  data-q="3">${I18N.t('card.hard')}<span class="r-int">${fmt(ivs.hard)}</span></button>
-    <button class="r-btn r-good"  data-q="4">${I18N.t('card.good')}<span class="r-int">${fmt(ivs.good)}</span></button>
-    <button class="r-btn r-easy"  data-q="5">${I18N.t('card.easy')}<span class="r-int">${fmt(ivs.easy)}</span></button>
-  </div>
-</div>`;
-  }
-
-  /* ── Mode production (saisie) ── */
-  function renderProduction(word, mode, srsState) {
-    const ivs      = previewIntervals(srsState);
-    const catLabel = posLabel(word.pos);
-    const lvl      = word.level || 'A1';
-
-    setTimeout(() => { if (window.TTS && TTS.isOn()) TTS.speak(word.l1, srcLang(mode)); }, 150);
-
-    return `
-<div class="prod-card popIn" id="prod-card">
-  <button class="prod-audio-btn" id="prod-audio" title="Écouter (A)">🔊</button>
-
-  <div class="prod-header">
-    <span class="badge badge-level-${lvl}">${lvl}</span>
-    <span class="badge badge-pos">${catLabel}</span>
-    <span class="prod-mode-badge">${I18N.t('card.prodMode')}</span>
-  </div>
-
-  <p class="prod-word">${esc(word.l1)}</p>
-  <p class="prod-pos">${catLabel}</p>
-
-  <div class="prod-input-row">
-    <input class="prod-input" id="prod-input"
-           placeholder="${I18N.t('card.prodPlaceholder')}"
-           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    <button class="btn btn-primary" id="prod-check">${I18N.t('card.checkBtn')}</button>
-  </div>
-
-  <div class="prod-feedback" id="prod-fb"></div>
-
-  <div class="rating-wrap" id="rating-wrap">
-    <p class="rating-label">${I18N.t('card.ratingQuestion')} <span class="kbd-hint">${I18N.t('card.ratingHint')}</span></p>
-    <div class="rating-grid">
-      <button class="r-btn r-again" data-q="1">${I18N.t('card.again')}<span class="r-int">${fmt(ivs.again)}</span></button>
-      <button class="r-btn r-hard"  data-q="3">${I18N.t('card.hard')}<span class="r-int">${fmt(ivs.hard)}</span></button>
-      <button class="r-btn r-good"  data-q="4">${I18N.t('card.good')}<span class="r-int">${fmt(ivs.good)}</span></button>
-      <button class="r-btn r-easy"  data-q="5">${I18N.t('card.easy')}<span class="r-int">${fmt(ivs.easy)}</span></button>
-    </div>
-  </div>
-</div>`;
-  }
-
-  /* ── Liaison événements ── */
-  function bindEvents(container, mode, rateCallback) {
-    onRate = rateCallback;
-
-    // ── Mode recognition ──
-    const scene    = container.querySelector('#card-3d');
-    const cardAudio = container.querySelector('#card-audio');
-    if (scene) scene.addEventListener('click', () => flip(container));
-    if (cardAudio) {
-      cardAudio.addEventListener('click', e => {
-        e.stopPropagation();
-        if (window.TTS && currentCard) TTS.speak(currentCard.l1, srcLang(mode));
-      });
-    }
-
-    // ── Mode production ──
-    const prodInput = container.querySelector('#prod-input');
-    const prodCheck = container.querySelector('#prod-check');
-    const prodAudio = container.querySelector('#prod-audio');
-    if (prodInput) {
-      setTimeout(() => { try { prodInput.focus(); } catch(_) {} }, 80);
-      prodInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !prodAnswered) checkProd(container);
-      });
-    }
-    if (prodCheck) prodCheck.addEventListener('click', () => { if (!prodAnswered) checkProd(container); });
-    if (prodAudio) {
-      prodAudio.addEventListener('click', () => {
-        if (window.TTS && currentCard) TTS.speak(currentCard.l1, srcLang(mode));
-      });
-    }
-
-    // ── Boutons notation ──
-    container.querySelectorAll('.r-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const q = parseInt(btn.dataset.q, 10);
-        saveRating(q, mode);
-        if (onRate) onRate(q, currentCard);
+    _el.querySelectorAll('.vc-unit-hd').forEach(hd => {
+      hd.addEventListener('click', () => {
+        const id   = hd.dataset.unit;
+        const open = _openUnits.has(id);
+        if (open) _openUnits.delete(id); else _openUnits.add(id);
+        const unitEl = hd.closest('.vc-unit');
+        const body   = unitEl && unitEl.querySelector('.vc-body');
+        const arrow  = hd.querySelector('.vc-arrow');
+        if (!open) {
+          unitEl.classList.add('vc-unit--open');
+          if (body)  body.removeAttribute('hidden');
+          if (arrow) arrow.textContent = '▲';
+        } else {
+          unitEl.classList.remove('vc-unit--open');
+          if (body)  body.setAttribute('hidden', '');
+          if (arrow) arrow.textContent = '▼';
+        }
       });
     });
   }
 
-  /* ── Vérification mode production ── */
-  function checkProd(container) {
-    if (prodAnswered || !currentCard) return;
-    const input    = container.querySelector('#prod-input');
-    const fb       = container.querySelector('#prod-fb');
-    const checkBtn = container.querySelector('#prod-check');
-    if (!input || !fb) return;
+  // ── Unit block ────────────────────────────────────────────────────────
+  function _unitBlock(unit, words, seenCount, mode) {
+    const isFrEs = mode === 'fr-es';
+    const total  = words.length;
+    const isOpen = _openUnits.has(unit.id);
+    const pct    = Math.round(seenCount / total * 100);
+    const done   = seenCount === total;
 
-    const raw       = input.value.trim();
-    const isCorrect = fuzzyMatch(raw, currentCard.l2);
-    prodAnswered    = true;
+    let shown = words;
+    if (_filter === 'seen')   shown = words.filter(w => w.isSeen);
+    if (_filter === 'unseen') shown = words.filter(w => !w.isSeen);
+    if (shown.length === 0)   return '';
 
-    input.classList.add(isCorrect ? 'correct' : 'wrong');
-    input.disabled = true;
-    if (checkBtn) checkBtn.style.display = 'none';
+    return `
+      <div class="vc-unit${isOpen ? ' vc-unit--open' : ''}">
+        <button class="vc-unit-hd" data-unit="${unit.id}">
+          <span class="vc-unit-ico">${unit.icon}</span>
+          <div class="vc-unit-meta">
+            <span class="vc-unit-name">${esc(unit.name)}</span>
+            <div class="vc-prog-bar">
+              <div class="vc-prog-fill${done ? ' vc-prog-fill--done' : ''}" style="width:${pct}%"></div>
+            </div>
+          </div>
+          <span class="vc-unit-cnt">${seenCount}<span class="vc-unit-tot">/${total}</span></span>
+          <span class="vc-arrow">${isOpen ? '▲' : '▼'}</span>
+        </button>
 
-    fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
-    fb.innerHTML = isCorrect
-      ? I18N.t('card.correct', esc(currentCard.l2))
-      : I18N.t('card.wrong', esc(currentCard.l2)) + (raw ? I18N.t('card.wrongYou', esc(raw)) : '');
-
-    if (window.TTS && TTS.isOn() && currentCard) {
-      setTimeout(() => TTS.speak(currentCard.l2, tgtLang(currentMode)), 350);
-    }
-
-    const rw = container.querySelector('#rating-wrap');
-    if (rw) rw.classList.add('show');
+        <div class="vc-body"${isOpen ? '' : ' hidden'}>
+          <div class="vc-col-labels">
+            <span>${isFrEs ? '🇫🇷 Français' : '🇦🇷 Español'}</span>
+            <span>${isFrEs ? '🇦🇷 Español' : '🇫🇷 Français'}</span>
+          </div>
+          ${shown.map(w => _wordRow(w, mode)).join('')}
+        </div>
+      </div>`;
   }
 
-  /* ── Retournement carte ── */
-  function flip(container) {
-    if (revealed) return;
-    revealed = true;
-    const card = container.querySelector('#card-3d');
-    if (card) card.classList.add('flipped');
-    const rw = container.querySelector('#rating-wrap');
-    if (rw) rw.classList.add('show');
-    if (window.TTS && TTS.isOn() && currentCard) {
-      setTimeout(() => TTS.speak(currentCard.l2, tgtLang(currentMode)), 420);
-    }
-  }
+  // ── Word row (uses <details> for example on click) ─────────────────────
+  function _wordRow(w, mode) {
+    const isFrEs = mode === 'fr-es';
+    const src    = isFrEs ? w.fr          : w.es;
+    const tgt    = isFrEs ? (w.esTarget || w.es) : w.fr;
+    const exSrc  = isFrEs ? w.example.fr  : w.example.es;
+    const exTgt  = isFrEs ? w.example.es  : w.example.fr;
 
-  /* ── Gestionnaire clavier (appelé par App) ── */
-  function handleKey(e, container) {
-    if (!container) return false;
+    const dotCls = w.isMastered ? 'vc-dot--done' : w.isSeen ? 'vc-dot--seen' : 'vc-dot--new';
 
-    // Production mode
-    if (container.querySelector('#prod-card')) {
-      if (prodAnswered && ['1','2','3','4'].includes(e.key)) {
-        const qs = { '1': 1, '2': 3, '3': 4, '4': 5 };
-        const btn = [...container.querySelectorAll('.r-btn')]
-          .find(b => parseInt(b.dataset.q) === qs[e.key]);
-        if (btn) { btn.click(); return true; }
-      }
-      if (e.key === 'a' || e.key === 'A') {
-        if (window.TTS && currentCard) TTS.speak(currentCard.l1, srcLang(currentMode));
-        return true;
-      }
-      return false;
-    }
-
-    // Recognition mode
-    if (e.key === ' ') {
-      e.preventDefault();
-      if (!revealed) { flip(container); return true; }
-    }
-    if (e.key === 'a' || e.key === 'A') {
-      if (window.TTS && currentCard) TTS.speak(currentCard.l1, srcLang(currentMode));
-      return true;
-    }
-    if (revealed && ['1','2','3','4'].includes(e.key)) {
-      const qs = { '1': 1, '2': 3, '3': 4, '4': 5 };
-      const btn = [...container.querySelectorAll('.r-btn')]
-        .find(b => parseInt(b.dataset.q) === qs[e.key]);
-      if (btn) { btn.click(); return true; }
-    }
-    return false;
-  }
-
-  /* ── Enregistrement notation SRS ── */
-  function saveRating(quality, mode) {
-    if (!currentCard) return;
-    let state = Storage.getSRSCard(mode, currentCard.id);
-    if (!state) state = SRS.newCard(currentCard.id);
-    Storage.saveSRSCard(mode, currentCard.id, SRS.sm2(state, quality));
-  }
-
-  /* ── Correspondance floue (accents tolérés) ── */
-  function fuzzyMatch(input, answer) {
-    const norm = s => (s || '').toLowerCase().trim()
-      .normalize('NFD').replace(/[̀-ͯ]/g, '')
-      .replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ');
-    const ni = norm(input);
-    if (!ni) return false;
-    const alts = answer.split(/[\/,|]/).map(a => norm(a.trim()));
-    return alts.some(a => a === ni);
-  }
-
-  /* ── File de session : 60% chunks + 40% mots ── */
-  function buildSessionQueue(mode, totalTarget = 28) {
-    const words  = getWords(mode);
-    const chunks = getChunks(mode) || [];
-
-    const chunkTarget = Math.round(totalTarget * 0.6);
-    const wordTarget  = totalTarget - chunkTarget;
-
-    const dueChunks = SRS.getDueCards(chunks, mode).slice(0, Math.round(chunkTarget * 0.7));
-    const newChunks  = SRS.getNewCards(chunks, mode, chunkTarget - dueChunks.length);
-    const chunkQueue = shuffle([...dueChunks, ...newChunks]);
-
-    const dueWords = SRS.getDueCards(words, mode).slice(0, Math.round(wordTarget * 0.7));
-    const newWords  = SRS.getNewCards(words, mode, wordTarget - dueWords.length);
-    const wordQueue  = shuffle([...dueWords, ...newWords]);
-
-    return interleave(chunkQueue, wordQueue, 0.6);
-  }
-
-  function interleave(primary, secondary, ratio) {
-    const result = [];
-    let pi = 0, si = 0;
-    const total = primary.length + secondary.length;
-    while (result.length < total) {
-      const usePrimary = pi < primary.length &&
-        (si >= secondary.length || Math.random() < ratio);
-      if (usePrimary) result.push(primary[pi++]);
-      else if (si < secondary.length) result.push(secondary[si++]);
-      else break;
-    }
-    return result;
-  }
-
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+    return `
+      <details class="vc-word">
+        <summary class="vc-word-row">
+          <span class="vc-dot ${dotCls}"></span>
+          <span class="vc-src">${esc(src)}</span>
+          <span class="vc-sep">→</span>
+          <span class="vc-tgt">${esc(tgt)}</span>
+          <span class="vc-ex-ico">💬</span>
+        </summary>
+        <div class="vc-ex">
+          <div class="vc-ex-line vc-ex-line--src">${esc(exSrc)}</div>
+          <div class="vc-ex-line vc-ex-line--tgt">${esc(exTgt)}</div>
+        </div>
+      </details>`;
   }
 
   function esc(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  function catName(cat) {
-    const map = {
-      'salutations':'Salutations','communication':'Communication',
-      'collocation-tener':'Tener + ...','collocation-hacer':'Hacer + ...',
-      'collocation-ir':'Ir + ...','collocation-estar':'Estar + ...',
-      'vie-quotidienne':'Vie quotidienne','restaurant':'Au restaurant',
-      'transport':'Transport','argentin':'Argentin 🇦🇷','travail':'Travail',
-      'santé':'Santé','grammaire':'Structure grammaticale',
-      'émotions':'Émotions','opinions':'Opinions',
-      'connecteurs':'Connecteurs','social':'Social'
-    };
-    return map[cat] || cat;
-  }
-
-  function posLabel(pos) {
-    const map = { v:'verbe', n:'nom', adj:'adjectif', adv:'adverbe',
-                  prep:'préposition', conj:'conjonction', pron:'pronom', expr:'expression' };
-    return map[pos] || pos || '';
-  }
-
-  function getCardStats(mode) {
-    const all = [...getWords(mode), ...(getChunks(mode) || [])];
-    return SRS.getCardStats(all, mode);
-  }
-
-  function b1Progress(mode) {
-    const all = [...getWords(mode), ...(getChunks(mode) || [])];
-    return SRS.b1Progress(all, mode);
-  }
-
-  return { render, bindEvents, handleKey, flip, saveRating, buildSessionQueue,
-           getWords, getChunks, getCardStats, b1Progress, esc };
+  return { render };
 })();
 
 window.Vocab = Vocab;
