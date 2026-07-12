@@ -27,7 +27,10 @@ const Sync = (() => {
     if (!_auth) return;
     const provider = new firebase.auth.GoogleAuthProvider();
     _auth.signInWithPopup(provider).catch(() => {
-      if (window.App) App.toast('Connexion annulée');
+      if (window.App) {
+        const mode = (() => { try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; } })();
+        App.toast(mode === 'es-fr' ? 'Conexión cancelada' : 'Connexion annulée');
+      }
     });
   }
 
@@ -75,14 +78,16 @@ const Sync = (() => {
   function _updateBtn() {
     const btn = document.getElementById('sync-btn');
     if (!btn) return;
+    const mode = (() => { try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; } })();
+    const isEs = mode === 'es-fr';
     if (_user) {
       const name = _user.displayName ? _user.displayName.split(' ')[0].slice(0, 9) : '●';
       btn.textContent = name;
-      btn.title = 'Déconnecter / Sauvegarder';
+      btn.title = isEs ? 'Desconectar / Guardar' : 'Déconnecter / Sauvegarder';
       btn.classList.add('sync-signed-in');
     } else {
       btn.textContent = '☁';
-      btn.title = 'Se connecter avec Google pour sauvegarder';
+      btn.title = isEs ? 'Conectarse con Google para guardar' : 'Se connecter avec Google pour sauvegarder';
       btn.classList.remove('sync-signed-in');
     }
   }

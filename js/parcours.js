@@ -117,14 +117,15 @@ const Parcours = (() => {
   function _renderAchievements(mode) {
     const unlocked = XP.getUnlocked();
     if (!unlocked.length) return '';
+    const isEs = mode === 'es-fr';
     return `
       <div class="pa-achieve">
         <div class="pa-achieve-title">${_ui('Succès débloqués', 'Logros desbloqueados', mode)}</div>
         <div class="pa-achieve-list">
           ${unlocked.map(a => `
-            <div class="pa-badge" title="${a.desc}">
+            <div class="pa-badge" title="${isEs ? (a.descEs || a.desc) : a.desc}">
               <div class="pa-badge-ic">${a.icon}</div>
-              <div class="pa-badge-lbl">${a.label}</div>
+              <div class="pa-badge-lbl">${isEs ? (a.labelEs || a.label) : a.label}</div>
             </div>`).join('')}
         </div>
       </div>`;

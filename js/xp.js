@@ -143,17 +143,17 @@ const XP = (() => {
 
   /* ── Achievements ──────────────────────────────────────────────────── */
   const ACHIEVEMENTS = [
-    { id: 'first',     icon: '🌊', label: 'Premier pas',       desc: 'Première session complétée',            test: (_xp, s) => s >= 1          },
-    { id: 'streak3',   icon: '🔥', label: 'En feu',            desc: '3 jours d\'affilée',                    test: (_xp, _s, streak) => streak >= 3  },
-    { id: 'streak7',   icon: '⚡', label: 'Une semaine',       desc: '7 jours d\'affilée',                    test: (_xp, _s, streak) => streak >= 7  },
-    { id: 'xp500',     icon: '✨', label: 'Premiers 500 XP',   desc: 'Atteint 500 XP',                        test: (xp) => xp >= 500            },
-    { id: 'a2',        icon: '🎯', label: 'Niveau A2',         desc: 'Atteint le niveau A2',                  test: (xp) => xp >= 800            },
-    { id: 'b1start',   icon: '🚀', label: 'Cap sur le B1',     desc: 'Atteint le niveau B1 intermédiaire',    test: (xp) => xp >= 2500           },
-    { id: 'b1done',    icon: '🏆', label: 'B1 atteint !',      desc: 'Objectif B1 accompli',                  test: (xp) => xp >= 6000           },
-    { id: 'sessions10',icon: '💪', label: '10 sessions',       desc: '10 sessions complétées',                test: (_xp, s) => s >= 10          },
-    { id: 'sessions50',icon: '🦾', label: '50 sessions',       desc: '50 sessions complétées',                test: (_xp, s) => s >= 50          },
-    { id: 'b2start',   icon: '🌟', label: 'Cap sur le B2',     desc: 'Atteint le niveau B2 intermédiaire',    test: (xp) => xp >= 10000          },
-    { id: 'b2done',    icon: '👑', label: 'B2 atteint !',      desc: 'Objectif B2 accompli — félicitations !', test: (xp) => xp >= 18000         },
+    { id: 'first',     icon: '🌊', label: 'Premier pas',       labelEs: 'Primer paso',          desc: 'Première session complétée',             descEs: 'Primera sesión completada',             test: (_xp, s) => s >= 1               },
+    { id: 'streak3',   icon: '🔥', label: 'En feu',            labelEs: 'En llamas',            desc: '3 jours d\'affilée',                     descEs: '3 días seguidos',                       test: (_xp, _s, streak) => streak >= 3 },
+    { id: 'streak7',   icon: '⚡', label: 'Une semaine',       labelEs: 'Una semana',           desc: '7 jours d\'affilée',                     descEs: '7 días seguidos',                       test: (_xp, _s, streak) => streak >= 7 },
+    { id: 'xp500',     icon: '✨', label: 'Premiers 500 XP',   labelEs: 'Primeros 500 XP',      desc: 'Atteint 500 XP',                         descEs: 'Alcanzados 500 XP',                     test: (xp) => xp >= 500                },
+    { id: 'a2',        icon: '🎯', label: 'Niveau A2',         labelEs: 'Nivel A2',             desc: 'Atteint le niveau A2',                   descEs: 'Alcanzaste el nivel A2',                test: (xp) => xp >= 800                },
+    { id: 'b1start',   icon: '🚀', label: 'Cap sur le B1',     labelEs: 'Rumbo al B1',          desc: 'Atteint le niveau B1 intermédiaire',     descEs: 'Alcanzaste el B1 intermedio',           test: (xp) => xp >= 2500               },
+    { id: 'b1done',    icon: '🏆', label: 'B1 atteint !',      labelEs: '¡B1 alcanzado!',       desc: 'Objectif B1 accompli',                   descEs: 'Objetivo B1 logrado',                   test: (xp) => xp >= 6000               },
+    { id: 'sessions10',icon: '💪', label: '10 sessions',       labelEs: '10 sesiones',          desc: '10 sessions complétées',                 descEs: '10 sesiones completadas',               test: (_xp, s) => s >= 10              },
+    { id: 'sessions50',icon: '🦾', label: '50 sessions',       labelEs: '50 sesiones',          desc: '50 sessions complétées',                 descEs: '50 sesiones completadas',               test: (_xp, s) => s >= 50              },
+    { id: 'b2start',   icon: '🌟', label: 'Cap sur le B2',     labelEs: 'Rumbo al B2',          desc: 'Atteint le niveau B2 intermédiaire',     descEs: 'Alcanzaste el B2 intermedio',           test: (xp) => xp >= 10000              },
+    { id: 'b2done',    icon: '👑', label: 'B2 atteint !',      labelEs: '¡B2 alcanzado!',       desc: 'Objectif B2 accompli — félicitations !', descEs: '¡Objetivo B2 logrado — felicitaciones!',test: (xp) => xp >= 18000             },
   ];
 
   function getUnlocked() {

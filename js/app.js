@@ -128,23 +128,44 @@ const App = (() => {
   // ── Welcome ───────────────────────────────────────────────────────────
   function bindWelcome() {
     let selectedMode = 'fr-es';
+
+    function _adaptWelcome(mode) {
+      const isEs = mode === 'es-fr';
+      const nameInput = document.getElementById('welcome-name');
+      const startBtn  = document.getElementById('welcome-start');
+      if (nameInput) nameInput.placeholder = isEs ? 'Tu nombre (opcional)' : 'Ton prénom (optionnel)';
+      if (startBtn)  startBtn.textContent  = isEs ? 'Empezar ▶' : 'Commencer ▶';
+    }
+
     document.querySelectorAll('.wc-card').forEach(card => {
       card.addEventListener('click', () => {
         document.querySelectorAll('.wc-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         selectedMode = card.dataset.mode;
+        _adaptWelcome(selectedMode);
       });
     });
     const startBtn = document.getElementById('welcome-start');
     if (startBtn) {
       startBtn.addEventListener('click', () => {
         const nameEl = document.getElementById('welcome-name');
-        const name = (nameEl ? nameEl.value.trim() : '') || 'Apprenant';
+        const defaultName = selectedMode === 'es-fr' ? 'Aprendiz' : 'Apprenant';
+        const name = (nameEl ? nameEl.value.trim() : '') || defaultName;
         Storage.saveProfile({ name, mode: selectedMode, onboarded: true, createdAt: SRS.today() });
         showHome();
         toast(I18N.t('toast.welcome', name));
       });
     }
+  }
+
+  // ── Nav i18n ──────────────────────────────────────────────────────────
+  function _updateNavLabels(mode) {
+    const isEs = mode === 'es-fr';
+    [['home','Apprendre','Aprender'],['parcours','Parcours','Recorrido'],['duel','Duel','Duelo'],['vocab','Lexique','Léxico']]
+      .forEach(([screen, fr, es]) => {
+        const el = document.querySelector(`.snav-tab[data-screen="${screen}"] .snav-label`);
+        if (el) el.textContent = isEs ? es : fr;
+      });
   }
 
   // ── Home ──────────────────────────────────────────────────────────────
@@ -159,6 +180,7 @@ const App = (() => {
 
   function _showHomeXP(el, p) {
     const mode    = p.mode || 'fr-es';
+    _updateNavLabels(mode);
     const xp      = XP.getXP();
     const level   = XP.getLevel();
     const nextLv  = XP.getNextLevel();
