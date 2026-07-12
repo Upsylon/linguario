@@ -766,7 +766,7 @@ input  { font: inherit; }
 .le-end-close:hover { color: var(--text); }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   Lexique — Vocabulaire par thème v2
+   Lexique — Vocabulaire par thème v3
 ═══════════════════════════════════════════════════════════════════════ */
 .vc-wrap { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
@@ -806,6 +806,27 @@ input  { font: inherit; }
 .vc-tn--dim           { color: var(--muted); }
 .vc-tab--on .vc-tn    { color: var(--primary); }
 
+/* Search */
+.vc-search-wrap {
+  display: flex; align-items: center; gap: .5rem;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: .55rem; padding: .38rem .65rem;
+}
+.vc-search-ico { font-size: .8rem; flex-shrink: 0; opacity: .5; }
+.vc-search {
+  flex: 1; background: none; border: none; color: var(--text);
+  font-size: .85rem; outline: none; min-width: 0;
+}
+.vc-search::placeholder { color: var(--muted); }
+.vc-search::-webkit-search-cancel-button { display: none; }
+.vc-search-clr {
+  flex-shrink: 0; color: var(--muted); font-size: .75rem;
+  padding: .1rem .3rem; border-radius: .3rem;
+  cursor: pointer; transition: color .12s;
+}
+.vc-search-clr:hover { color: var(--text); }
+.vc-search-info { font-size: .68rem; color: var(--muted); text-align: right; margin-top: -.2rem; }
+
 /* ── Scrollable list ─────────────────────────────────────────────── */
 .vc-list {
   flex: 1; overflow-y: auto;
@@ -826,7 +847,8 @@ input  { font: inherit; }
 }
 .vc-grp-pip  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .vc-grp-lv   { font-size: .68rem; font-weight: 900; letter-spacing: .06em; }
-.vc-grp-desc { font-size: .66rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.vc-grp-desc { flex: 1; font-size: .66rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.vc-grp-stat { font-size: .68rem; font-weight: 800; opacity: .8; }
 
 /* ── Unit card ───────────────────────────────────────────────────── */
 .vc-unit {
@@ -848,7 +870,9 @@ input  { font: inherit; }
 
 .vc-ico   { font-size: 1.2rem; flex-shrink: 0; line-height: 1; }
 .vc-meta  { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
-.vc-uname { font-size: .84rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vc-name-row { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.vc-uname    { font-size: .84rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; }
+.vc-cur-tag  { flex-shrink: 0; font-size: .55rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--primary); background: var(--primary-g); border: 1px solid rgba(67,97,238,.3); border-radius: .3rem; padding: .1rem .35rem; }
 .vc-pbar  { height: 3px; background: var(--muted2); border-radius: 2px; overflow: hidden; }
 .vc-pfill { height: 100%; background: var(--primary); border-radius: 2px; transition: width .4s; }
 .vc-pfill--done { background: var(--green2); }
@@ -859,7 +883,7 @@ input  { font: inherit; }
 /* Play (réviser) button — beside toggle */
 .vc-play-btn {
   flex-shrink: 0;
-  width: 2.4rem; display: flex; align-items: center; justify-content: center;
+  width: 2.75rem; display: flex; align-items: center; justify-content: center;
   background: var(--primary-g);
   border-left: 1px solid var(--border);
   color: var(--primary);
@@ -918,3 +942,13 @@ input  { font: inherit; }
 }
 .vc-wex-s { font-size: .78rem; color: var(--muted); font-style: italic; line-height: 1.45; }
 .vc-wex-t { font-size: .78rem; color: rgba(123,159,255,.8); line-height: 1.45; }
+
+/* ── Legend ──────────────────────────────────────────────────────── */
+.vc-legend {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; gap: 1.1rem;
+  padding: .55rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.vc-leg-item { display: flex; align-items: center; gap: .3rem; font-size: .65rem; color: var(--muted); font-weight: 600; }

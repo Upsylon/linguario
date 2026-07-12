@@ -1,15 +1,16 @@
-/* ===== vocab.js — Lexique : révision vocabulaire par thème v2 ===== */
+/* ===== vocab.js — Lexique : révision vocabulaire par thème v3 ===== */
 const Vocab = (() => {
 
   let _el        = null;
   let _filter    = 'all';
+  let _search    = '';
   let _openUnits = new Set();
   let _inited    = false;
 
   const GROUPS = [
-    { key: 'a1', label: 'A1', desc: 'Débutant',      color: '#6ee7b7' },
-    { key: 'a2', label: 'A2', desc: 'Intermédiaire', color: '#60a5fa' },
-    { key: 'b1', label: 'B1', desc: 'Avancé',        color: '#c084fc' },
+    { key: 'a1', label: 'A1', descFr: 'Débutant',      descEs: 'Principiante', color: '#6ee7b7' },
+    { key: 'a2', label: 'A2', descFr: 'Intermédiaire', descEs: 'Intermedio',   color: '#60a5fa' },
+    { key: 'b1', label: 'B1', descFr: 'Avancé',        descEs: 'Avanzado',     color: '#c084fc' },
   ];
 
   // ── Public ────────────────────────────────────────────────────────────
@@ -31,7 +32,9 @@ const Vocab = (() => {
     const units  = window.CURRICULUM_B1 || [];
     const isFrEs = mode === 'fr-es';
     const curId  = XP.getCurrentUnitId();
+    const q      = _search.toLowerCase().trim();
 
+    // Enrich words with status
     const rich = units.map(unit => {
       const p = prog[unit.id] || { seen: [], mastered: [] };
       const seenSet     = new Set(p.seen);
@@ -47,23 +50,43 @@ const Vocab = (() => {
       };
     });
 
-    const total       = rich.reduce((s, u) => s + u.words.length, 0);
-    const seen        = rich.reduce((s, u) => s + u.seenCount, 0);
-    const pct         = total ? Math.round(seen / total * 100) : 0;
-    const toSeeCnt    = rich
+    // Apply search filter to words
+    const withSearch = q
+      ? rich.map(u => ({
+          ...u,
+          words: u.words.filter(w => {
+            const src = (isFrEs ? w.fr : w.es).toLowerCase();
+            const tgt = (isFrEs ? (w.esTarget || w.es) : w.fr).toLowerCase();
+            return src.includes(q) || tgt.includes(q);
+          }),
+        })).filter(u => u.words.length > 0)
+      : rich;
+
+    // Global stats (always based on full data)
+    const total    = rich.reduce((s, u) => s + u.words.length, 0);
+    const seen     = rich.reduce((s, u) => s + u.seenCount, 0);
+    const pct      = total ? Math.round(seen / total * 100) : 0;
+    const toSeeCnt = rich
       .filter(u => u.seenCount > 0)
       .reduce((s, u) => s + u.words.filter(w => !w.isSeen).length, 0);
 
-    const vis = rich.filter(({ seenCount, words }) => {
-      if (_filter === 'seen')   return seenCount > 0;
+    // Apply status filter
+    const vis = withSearch.filter(({ seenCount, words }) => {
+      if (_filter === 'seen')   return seenCount > 0 || words.some(w => w.isSeen);
       if (_filter === 'unseen') return seenCount > 0 && words.some(w => !w.isSeen);
       return true;
     });
 
+    // Group by level
     const groups = GROUPS.map(g => ({
       ...g,
+      desc: isFrEs ? g.descFr : g.descEs,
       items: vis.filter(u => u.unit.level === g.key),
+      seenInGroup:  rich.filter(u => u.unit.level === g.key).reduce((s, u) => s + u.seenCount, 0),
+      totalInGroup: rich.filter(u => u.unit.level === g.key).reduce((s, u) => s + u.words.length, 0),
     })).filter(g => g.items.length > 0);
+
+    const searchResultCount = vis.reduce((s, u) => s + u.words.length, 0);
 
     _el.innerHTML = `
       <div class="vc-wrap">
@@ -87,28 +110,54 @@ const Vocab = (() => {
               ${isFrEs ? 'À voir' : 'Por ver'}<span class="vc-tn vc-tn--dim">${toSeeCnt}</span>
             </button>
           </div>
+          <div class="vc-search-wrap">
+            <span class="vc-search-ico">🔍</span>
+            <input class="vc-search" type="search" id="vc-search"
+                   placeholder="${isFrEs ? 'Rechercher un mot…' : 'Buscar una palabra…'}"
+                   value="${esc(_search)}" autocomplete="off" />
+            ${q ? `<button class="vc-search-clr" id="vc-search-clr" aria-label="Effacer">✕</button>` : ''}
+          </div>
+          ${q ? `<div class="vc-search-info">${searchResultCount} ${isFrEs ? 'résultat' + (searchResultCount !== 1 ? 's' : '') : 'resultado' + (searchResultCount !== 1 ? 's' : '')}</div>` : ''}
         </div>
 
         <div class="vc-list">
           ${groups.length === 0
             ? `<div class="vc-empty">
-                 <div class="vc-empty-ico">📖</div>
-                 <p class="vc-empty-msg">${_emptyMsg(isFrEs)}</p>
+                 <div class="vc-empty-ico">${q ? '🔍' : '📖'}</div>
+                 <p class="vc-empty-msg">${q ? (isFrEs ? `Aucun mot trouvé pour « ${esc(q)} »` : `Sin resultados para « ${esc(q)} »`) : _emptyMsg(isFrEs)}</p>
                </div>`
-            : groups.map(g => _groupHtml(g, mode, curId)).join('')
+            : groups.map(g => _groupHtml(g, mode, curId, !!q)).join('')
           }
+        </div>
+
+        <div class="vc-legend">
+          <span class="vc-leg-item"><span class="vc-dot vc-dot--new"></span>${isFrEs ? 'Pas vu' : 'No visto'}</span>
+          <span class="vc-leg-item"><span class="vc-dot vc-dot--seen"></span>${isFrEs ? 'Vu' : 'Visto'}</span>
+          <span class="vc-leg-item"><span class="vc-dot vc-dot--done"></span>${isFrEs ? 'Maîtrisé' : 'Dominado'}</span>
         </div>
 
       </div>`;
 
+    // Filter tabs
     _el.querySelectorAll('.vc-tab').forEach(btn => {
       btn.addEventListener('click', () => { _filter = btn.dataset.f; _draw(); });
     });
 
+    // Search input — live filter
+    const inp = _el.querySelector('#vc-search');
+    if (inp) {
+      inp.focus();
+      inp.addEventListener('input', () => { _search = inp.value; _draw(); });
+    }
+    const clr = _el.querySelector('#vc-search-clr');
+    if (clr) clr.addEventListener('click', () => { _search = ''; _draw(); });
+
+    // Unit toggles
     _el.querySelectorAll('.vc-toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => _toggle(btn.dataset.unit));
     });
 
+    // Play buttons
     _el.querySelectorAll('.vc-play-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -118,11 +167,11 @@ const Vocab = (() => {
     });
   }
 
-  // ── Toggle unit open/close (no full redraw) ───────────────────────────
+  // ── Toggle (no full redraw) ───────────────────────────────────────────
   function _toggle(id) {
     const open   = _openUnits.has(id);
-    const unitEl = _el && _el.querySelector(`.vc-unit[data-id="${id}"]`);
     if (open) _openUnits.delete(id); else _openUnits.add(id);
+    const unitEl = _el && _el.querySelector(`.vc-unit[data-id="${id}"]`);
     if (!unitEl) return;
     const body  = unitEl.querySelector('.vc-body');
     const arrow = unitEl.querySelector('.vc-arrow');
@@ -148,25 +197,27 @@ const Vocab = (() => {
   }
 
   // ── Level group ───────────────────────────────────────────────────────
-  function _groupHtml({ key, label, desc, color, items }, mode, curId) {
-    const inner = items.map(u => _unitHtml(u, mode, curId)).filter(Boolean).join('');
+  function _groupHtml({ key, label, desc, color, items, seenInGroup, totalInGroup }, mode, curId, forceOpen) {
+    const inner = items.map(u => _unitHtml(u, mode, curId, forceOpen)).filter(Boolean).join('');
     if (!inner) return '';
+    const grpPct = totalInGroup ? Math.round(seenInGroup / totalInGroup * 100) : 0;
     return `
       <div class="vc-group">
         <div class="vc-grp-hd">
           <span class="vc-grp-pip" style="background:${color}"></span>
           <span class="vc-grp-lv" style="color:${color}">${label}</span>
           <span class="vc-grp-desc">${desc}</span>
+          <span class="vc-grp-stat" style="color:${color}">${seenInGroup}/${totalInGroup}</span>
         </div>
         ${inner}
       </div>`;
   }
 
   // ── Unit block ────────────────────────────────────────────────────────
-  function _unitHtml({ unit, words, seenCount }, mode, curId) {
+  function _unitHtml({ unit, words, seenCount }, mode, curId, forceOpen) {
     const isFrEs = mode === 'fr-es';
     const total  = words.length;
-    const isOpen = _openUnits.has(unit.id);
+    const isOpen = forceOpen || _openUnits.has(unit.id);
     const isCur  = unit.id === curId;
     const pct    = Math.round(seenCount / total * 100);
     const done   = seenCount === total;
@@ -179,6 +230,9 @@ const Vocab = (() => {
     const revLbl = isFrEs ? 'Réviser' : 'Repasar';
     const colA   = isFrEs ? '🇫🇷 Français' : '🇦🇷 Español';
     const colB   = isFrEs ? '🇦🇷 Español'  : '🇫🇷 Français';
+    const curTag = isCur
+      ? `<span class="vc-cur-tag">${isFrEs ? 'En cours' : 'En curso'}</span>`
+      : '';
 
     return `
       <div class="vc-unit${isOpen ? ' vc-unit--open' : ''}${isCur ? ' vc-unit--cur' : ''}" data-id="${unit.id}">
@@ -186,8 +240,13 @@ const Vocab = (() => {
           <button class="vc-toggle-btn" data-unit="${unit.id}">
             <span class="vc-ico">${unit.icon}</span>
             <div class="vc-meta">
-              <span class="vc-uname">${esc(unit.name)}</span>
-              <div class="vc-pbar"><div class="vc-pfill${done ? ' vc-pfill--done' : ''}" style="width:${pct}%"></div></div>
+              <div class="vc-name-row">
+                <span class="vc-uname">${esc(unit.name)}</span>
+                ${curTag}
+              </div>
+              <div class="vc-pbar">
+                <div class="vc-pfill${done ? ' vc-pfill--done' : ''}" style="width:${pct}%"></div>
+              </div>
             </div>
             <span class="vc-cnt">${seenCount}<span class="vc-ctot">/${total}</span></span>
             <span class="vc-arrow">${isOpen ? '▲' : '▼'}</span>
