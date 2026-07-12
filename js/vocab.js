@@ -121,14 +121,16 @@ const Vocab = (() => {
             </button>
           </div>
           <div class="vc-topbar-row2">
-            <div class="vc-search-wrap" style="flex:1">
+            <div class="vc-search-wrap">
             <span class="vc-search-ico">🔍</span>
             <input class="vc-search" type="search" id="vc-search"
                    placeholder="${isFrEs ? 'Rechercher un mot…' : 'Buscar una palabra…'}"
                    value="${esc(_search)}" autocomplete="off" />
             ${q ? `<button class="vc-search-clr" id="vc-search-clr" aria-label="Effacer">✕</button>` : ''}
             </div>
-            <button class="vc-expand-all" id="vc-expand-all" title="${isFrEs ? 'Tout ouvrir / fermer' : 'Abrir / cerrar todo'}">⊞</button>
+            ${groups.length > 0 && !q
+              ? `<button class="vc-expand-all" id="vc-expand-all" title="${isFrEs ? 'Tout ouvrir / fermer' : 'Abrir / cerrar todo'}">⊞</button>`
+              : ''}
           </div>
           ${q ? `<div class="vc-search-info">${searchCount} ${isFrEs ? `résultat${searchCount !== 1 ? 's' : ''}` : `resultado${searchCount !== 1 ? 's' : ''}`}</div>` : ''}
         </div>

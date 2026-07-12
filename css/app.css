@@ -816,7 +816,8 @@ input  { font: inherit; }
 .vc-tab--on .vc-tn    { color: var(--primary); }
 
 /* Search row */
-.vc-topbar-row2 { display: flex; gap: .4rem; align-items: center; }
+.vc-topbar-row2            { display: flex; gap: .4rem; align-items: center; }
+.vc-topbar-row2 .vc-search-wrap { flex: 1; }
 .vc-expand-all {
   flex-shrink: 0;
   padding: .38rem .55rem;
