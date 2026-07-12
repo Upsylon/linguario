@@ -120,12 +120,15 @@ const Vocab = (() => {
               ${isFrEs ? 'À voir' : 'Por ver'}<span class="vc-tn vc-tn--dim">${toSeeCnt}</span>
             </button>
           </div>
-          <div class="vc-search-wrap">
+          <div class="vc-topbar-row2">
+            <div class="vc-search-wrap" style="flex:1">
             <span class="vc-search-ico">🔍</span>
             <input class="vc-search" type="search" id="vc-search"
                    placeholder="${isFrEs ? 'Rechercher un mot…' : 'Buscar una palabra…'}"
                    value="${esc(_search)}" autocomplete="off" />
             ${q ? `<button class="vc-search-clr" id="vc-search-clr" aria-label="Effacer">✕</button>` : ''}
+            </div>
+            <button class="vc-expand-all" id="vc-expand-all" title="${isFrEs ? 'Tout ouvrir / fermer' : 'Abrir / cerrar todo'}">⊞</button>
           </div>
           ${q ? `<div class="vc-search-info">${searchCount} ${isFrEs ? `résultat${searchCount !== 1 ? 's' : ''}` : `resultado${searchCount !== 1 ? 's' : ''}`}</div>` : ''}
         </div>
@@ -159,24 +162,40 @@ const Vocab = (() => {
       btn.addEventListener('click', () => { _filter = btn.dataset.f; _draw(false); });
     });
 
-    // Bind search — restore focus & cursor after redraw
+    // Bind search — restore focus & cursor ONLY if user was already in the field
     const inp = _el.querySelector('#vc-search');
     if (inp) {
-      if (hadFocus || _search) {
+      if (hadFocus) {
         inp.focus();
-        if (savedCur !== null) {
-          try { inp.setSelectionRange(savedCur, savedCur); } catch (_) {}
-        } else {
-          // Move cursor to end
-          const l = inp.value.length;
-          try { inp.setSelectionRange(l, l); } catch (_) {}
-        }
+        const pos = savedCur !== null ? savedCur : inp.value.length;
+        try { inp.setSelectionRange(pos, pos); } catch (_) {}
       }
-      inp.addEventListener('input', () => { _search = inp.value; _draw(true); });
+      inp.addEventListener('input', () => {
+        const pos = inp.selectionStart;
+        _search = inp.value;
+        _draw(true);
+        const ni = _el.querySelector('#vc-search');
+        if (ni) { ni.focus(); try { ni.setSelectionRange(pos, pos); } catch(_) {} }
+      });
     }
 
     const clr = _el.querySelector('#vc-search-clr');
     if (clr) clr.addEventListener('click', () => { _search = ''; _draw(false); });
+
+    // Expand / collapse all
+    const expAll = _el.querySelector('#vc-expand-all');
+    if (expAll && !q) {
+      expAll.addEventListener('click', () => {
+        const allIds = (window.CURRICULUM_B1 || []).map(u => u.id);
+        const anyOpen = allIds.some(id => _openUnits.has(id));
+        if (anyOpen) {
+          _openUnits.clear();
+        } else {
+          allIds.forEach(id => _openUnits.add(id));
+        }
+        _draw(true);
+      });
+    }
 
     // Unit toggles (inline, no redraw)
     _el.querySelectorAll('.vc-toggle-btn').forEach(btn => {
