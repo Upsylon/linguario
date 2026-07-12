@@ -149,6 +149,7 @@ const LessonEngine = (() => {
       }
 
       const line = d.lines[lineIdx];
+      if (window.TTS) TTS.speak(_targetLine(line), _isEsMode(mode) ? 'fr' : 'es');
       const bubbles = d.lines.slice(0, lineIdx).map(_histBubble).join('');
 
       container.innerHTML = `
@@ -211,7 +212,7 @@ const LessonEngine = (() => {
     container.querySelectorAll('.le-opt').forEach(btn => {
       btn.addEventListener('click', () => {
         if (answered) return; answered = true;
-        const isCorrect = btn.textContent === correct;
+        const isCorrect = btn.textContent.trim() === correct;
         _flashOption(btn, isCorrect, container.querySelectorAll('.le-opt'), correct);
         setTimeout(() => onDone(isCorrect), 900);
       });
@@ -255,7 +256,7 @@ const LessonEngine = (() => {
     container.querySelectorAll('.le-opt').forEach(btn => {
       btn.addEventListener('click', () => {
         if (answered) return; answered = true;
-        const isCorrect = btn.textContent === targetWord;
+        const isCorrect = btn.textContent.trim() === targetWord;
         _flashOption(btn, isCorrect, container.querySelectorAll('.le-opt'), targetWord);
         setTimeout(() => onDone(isCorrect), 900);
       });
@@ -293,7 +294,7 @@ const LessonEngine = (() => {
     container.querySelectorAll('.le-opt').forEach(btn => {
       btn.addEventListener('click', () => {
         if (answered) return; answered = true;
-        const isCorrect = btn.textContent === correct;
+        const isCorrect = btn.textContent.trim() === correct;
         _flashOption(btn, isCorrect, container.querySelectorAll('.le-opt'), correct);
         setTimeout(() => onDone(isCorrect), 900);
       });
@@ -308,11 +309,12 @@ const LessonEngine = (() => {
     const g = unit.grammar;
     if (!g || !g.question) { onDone(false); return; }
 
-    // Pick ES overrides if es-fr mode
     const esOv = window.CURRICULUM_B1_ES && window.CURRICULUM_B1_ES[unit.id];
-    const note     = (_isEsMode(mode) && esOv?.grammarNote) ? esOv.grammarNote : g.note;
-    const question = (_isEsMode(mode) && esOv?.question)    ? esOv.question    : g.question;
-    const options  = (_isEsMode(mode) && esOv?.options)     ? esOv.options     : g.options;
+    const note       = (_isEsMode(mode) && esOv?.grammarNote) ? esOv.grammarNote : g.note;
+    const question   = (_isEsMode(mode) && esOv?.question)    ? esOv.question    : g.question;
+    const rawOptions = (_isEsMode(mode) && esOv?.options)     ? esOv.options     : g.options;
+    const correctText = rawOptions[g.answer];
+    const options    = _shuffle([...rawOptions]);
 
     container.innerHTML = `
       <div class="le-card le-card--grammar">
@@ -330,7 +332,7 @@ const LessonEngine = (() => {
         }).join('') : ''}
         <div class="le-gram-q">${question}</div>
         <div class="le-mc-options" id="le-opts">
-          ${options.map((o, i) => `<button class="le-opt" data-i="${i}">${o}</button>`).join('')}
+          ${options.map(o => `<button class="le-opt">${o}</button>`).join('')}
         </div>
       </div>`;
 
@@ -338,9 +340,8 @@ const LessonEngine = (() => {
     container.querySelectorAll('.le-opt').forEach(btn => {
       btn.addEventListener('click', () => {
         if (answered) return; answered = true;
-        const idx       = parseInt(btn.dataset.i);
-        const isCorrect = idx === g.answer;
-        _flashOption(btn, isCorrect, container.querySelectorAll('.le-opt'), options[g.answer]);
+        const isCorrect = btn.textContent.trim() === correctText;
+        _flashOption(btn, isCorrect, container.querySelectorAll('.le-opt'), correctText);
         setTimeout(() => onDone(isCorrect), 900);
       });
     });
@@ -366,6 +367,7 @@ const LessonEngine = (() => {
       <div class="le-card le-card--assess">
         <div class="le-assess-lang">${assessLabel}</div>
         <div class="le-assess-word">${nativeVal}</div>
+        <div class="le-assess-hint">${word.en}</div>
         <div class="le-assess-ans" id="le-ans" style="display:none">
           <div class="le-assess-divider"></div>
           <div class="le-assess-row le-assess-row--target"><span class="le-assess-flag">${targetFlag}</span><span>${targetVal}</span></div>
@@ -385,6 +387,7 @@ const LessonEngine = (() => {
     function reveal() {
       if (revealed) return;
       revealed = true;
+      if (window.TTS) TTS.speak(targetVal, _isEsMode(mode) ? 'fr' : 'es');
       document.getElementById('le-ans').style.display = 'block';
       document.getElementById('le-reveal-wrap').style.display = 'none';
       document.getElementById('le-vote').style.display = 'flex';
@@ -400,7 +403,7 @@ const LessonEngine = (() => {
   function _flashOption(chosen, isCorrect, allBtns, correctText) {
     allBtns.forEach(b => {
       b.disabled = true;
-      if (b.textContent === correctText) b.classList.add('le-opt--correct');
+      if (b.textContent.trim() === correctText) b.classList.add('le-opt--correct');
     });
     if (!isCorrect) chosen.classList.add('le-opt--wrong');
   }

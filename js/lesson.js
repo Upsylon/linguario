@@ -129,7 +129,7 @@ const Lesson = (() => {
   ══════════════════════════════════════════════════════════════ */
   function _lesson(container, unit) {
     const mode   = _getMode();
-    let ok = 0, xpEarned = 0;
+    let ok = 0, xpEarned = 0, scored = 0;
     const missed = new Set();
 
     // Optimal sequence (Schmidt noticing hypothesis): dialogue → grammar → exercises (ALL 10) → self-assess
@@ -146,13 +146,14 @@ const Lesson = (() => {
         const repass = [...missed].map(en => ({ type: 'self-assess', word: unit.words.find(x => x.en === en), repass: true }));
         if (repass.length) { steps.push(...repass); missed.clear(); }
       }
-      if (si >= steps.length) { _end(container, steps.length, ok, xpEarned, false, mode); return; }
+      if (si >= steps.length) { _end(container, scored, ok, xpEarned, false, mode); return; }
       const step = steps[si];
       _bar(container, si, steps.length, `${unit.icon} ${unit.name}`, mode);
       const body = _body(container);
 
       function done(isOk) {
         if (typeof isOk === 'boolean') {
+          scored++;
           let e = 0;
           if (isOk) { e = XP.REWARDS.correct; ok++; }
           xpEarned += e; if (e) XP.addXP(e);
@@ -191,7 +192,6 @@ const Lesson = (() => {
           </div>
           <div class="le-topbar-right">
             <div class="le-counter">${idx + 1}/${total}</div>
-            <button class="le-home-btn" id="le-home-btn">🏠</button>
           </div>
         </div>
         <div class="le-unit-label">${label}</div>
@@ -200,10 +200,6 @@ const Lesson = (() => {
     container.querySelector('#le-exit').addEventListener('click', () => {
       if (!confirm(_ui('Quitter la leçon ? Ta progression sera perdue.', '¿Salir de la lección? Tu progreso se perderá.', mode))) return;
       (_onExit || (() => App.showHome()))();
-    });
-    container.querySelector('#le-home-btn').addEventListener('click', () => {
-      if (!confirm(_ui('Retourner à l\'accueil ? Ta progression sera perdue.', '¿Volver al inicio? Tu progreso se perderá.', mode))) return;
-      App.showHome();
     });
   }
 

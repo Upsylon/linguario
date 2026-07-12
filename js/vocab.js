@@ -6,6 +6,7 @@ const Vocab = (() => {
   let _search    = '';
   let _openUnits = new Set();
   let _inited    = false;
+  let _lastMode  = null;
 
   const GROUPS = [
     { key: 'a1', label: 'A1', descFr: 'Débutant',      descEs: 'Principiante', color: '#6ee7b7' },
@@ -16,6 +17,14 @@ const Vocab = (() => {
   // ── Public ────────────────────────────────────────────────────────────
   function render(el) {
     _el = el;
+    const mode = Storage.getProfile().mode || 'fr-es';
+    if (mode !== _lastMode) {
+      _lastMode = mode;
+      _filter = 'all';
+      _search = '';
+      _openUnits = new Set();
+      _inited = false;
+    }
     if (!_inited) {
       _inited = true;
       const cur = XP.getCurrentUnitId();
