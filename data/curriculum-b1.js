@@ -7,7 +7,7 @@ const CURRICULUM_B1 = [
   {
     id:'u01', level:'a1', icon:'👋', xp:50, name:'Salutations & politesse',
     dialogue:{
-      note:'En Argentine on dit "buen día" (singulier) et "chau" à la place de "adiós".',
+      note:'En Argentine on dit "buen día" (singulier, pas "buenos días") et "chau" (de l\'it. "ciao") à la place de "adiós". "Che" sert d\'interpellation universelle — appeler quelqu\'un, exprimer la surprise, ou simplement souligner ce qu\'on dit.',
       lines:[
         {es:'— ¡Buen día! ¿Cómo estás, che?', fr:'— Bonjour ! Comment vas-tu ?'},
         {es:'— ¡Muy bien! ¿Y vos?',            fr:'— Très bien ! Et toi ?'},
@@ -17,7 +17,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Voseo argentin',
-      note:'En Argentine "vos" remplace "tú". Conjugaison : hablás, tenés, sos — accent sur la dernière syllabe.',
+      note:'En Argentine "vos" remplace "tú". Conjugaison : hablás (tú hablas), tenés (tienes), sos (eres). L\'accent tombe sur la dernière syllabe — sans accent, la forme sonne castillan et non argentin.',
       examples:[
         {fr:'Tu veux du café ?', es:'¿Querés café?'},
         {fr:'Tu es argentin ?',  es:'¿Sos argentino?'},
@@ -44,7 +44,7 @@ const CURRICULUM_B1 = [
   {
     id:'u02', level:'a1', icon:'🔢', xp:50, name:'Nombres & temps',
     dialogue:{
-      note:'"Mañana" signifie à la fois "demain" et "matin" — le contexte clarifie le sens.',
+      note:'"Mañana" = demain ET matin — le contexte clarifie. Pour l\'heure : "son las" (toutes les heures au pluriel) sauf 1h : "es la una". On précise "de la mañana/tarde/noche" plutôt que AM/PM.',
       lines:[
         {es:'— ¿Qué día es hoy?',              fr:'— Quel jour sommes-nous ?'},
         {es:'— Hoy es lunes, tres de marzo.',   fr:'— Aujourd\'hui c\'est lundi, le 3 mars.'},
@@ -54,7 +54,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Les nombres cardinaux',
-      note:'uno/una s\'accorde : un libro, una mesa. 16-19 s\'écrivent en un mot : dieciséis, diecisiete…',
+      note:'uno/una s\'accorde avec le nom : un libro, una mesa. Devant masculin : un (pas uno). 16-29 s\'écrivent en un mot : dieciséis, veintiuno. Heure : son las tres (3h), es la una (1h — singulier seulement pour 1h).',
       examples:[
         {fr:'J\'ai deux sœurs.',      es:'Tengo dos hermanas.'},
         {fr:'Il est dix heures.',     es:'Son las diez.'},
@@ -91,7 +91,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Adjectifs possessifs',
-      note:'mi/mis (mon/mes), tu/tus (ton/tes), su/sus (son/ses), nuestro/a (notre). Pas d\'accord avec le possesseur : mi madre, mis padres.',
+      note:'mi/mis, tu/tus, su/sus, nuestro/a/os/as — s\'accordent avec la chose possédée, pas le possesseur : mi madre ET mi padre. Attention : su puede signifier son, sa, leur ou votre — le contexte clarifie toujours.',
       examples:[
         {fr:'Mon frère est médecin.',   es:'Mi hermano es médico.'},
         {fr:'Nos parents arrivent.',    es:'Nuestros padres llegan.'},
@@ -128,7 +128,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Articles définis et indéfinis',
-      note:'el/la (le/la), los/las (les). un/una (un/une). Au restaurant : "Quisiera un café" — plus poli que "quiero".',
+      note:'el/la/los/las (défini) — un/una/unos/unas (indéfini). Contractions obligatoires : a + el = al (voy al mercado), de + el = del (vengo del trabajo). Piège : "el agua" est féminin — l\'article masc. protège la prononciation.',
       examples:[
         {fr:'Je veux de l\'eau.',     es:'Quiero agua.'},
         {fr:'Le pain est bon.',       es:'El pan está bueno.'},
@@ -165,7 +165,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Hay — il y a',
-      note:'"Hay" est invariable (singulier et pluriel). Hay una cocina. Hay tres sillas. Ne jamais utiliser "es" ou "está" pour "il y a".',
+      note:'"Hay" est invariable : Hay una mesa / Hay dos mesas. Question : ¿Hay baño? Ne pas confondre avec "está" (se trouve) : el banco está a dos cuadras. "Hay que + infinitif" = il faut faire quelque chose : Hay que estudiar.',
       examples:[
         {fr:'Il y a une fenêtre.',     es:'Hay una ventana.'},
         {fr:'Il y a deux portes.',     es:'Hay dos puertas.'},
@@ -202,7 +202,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Accord des adjectifs',
-      note:'Les adjectifs s\'accordent en genre et nombre : rojo/roja/rojos/rojas. Exceptions : azul, verde, feliz — pas de changement au féminin.',
+      note:'Les adjectifs s\'accordent avec le nom : auto rojo, remera roja, ojos rojos. Invariables au féminin : azul, verde, gris, feliz. Position : en général après le nom (remera roja). Avant le nom, l\'adjectif devient expressif : una hermosa ciudad.',
       examples:[
         {fr:'Une voiture rouge.',    es:'Un auto rojo.'},
         {fr:'Des yeux bleus.',       es:'Ojos azules.'},
@@ -239,7 +239,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Présent de l\'indicatif — voseo',
-      note:'-ar : yo hablo / vos hablás. -er : yo como / vos comés. -ir : yo vivo / vos vivís. L\'accent est toujours sur la dernière syllabe avec le voseo.',
+      note:'-ar : yo hablo / vos hablás. -er : yo como / vos comés. -ir : yo vivo / vos vivís. Irréguliers fréquents : yo tengo / vos tenés, yo soy / vos sos, yo hago / vos hacés, yo voy / vos vas. L\'accent TOUJOURS sur la dernière syllabe.',
       examples:[
         {fr:'Tu manges à quelle heure ?', es:'¿A qué hora comés?'},
         {fr:'Tu vis à Buenos Aires ?',    es:'¿Vivís en Buenos Aires?'},
@@ -266,7 +266,7 @@ const CURRICULUM_B1 = [
   {
     id:'u08', level:'a1', icon:'🌿', xp:50, name:'Nature & animaux',
     dialogue:{
-      note:'La Patagonie argentine abrite des condors, guanacos et baleines — une nature extraordinaire.',
+      note:'L\'Argentine couvre 5 biomes : les pampas fertiles, la Patagonie australe (glaciers, condors), les Andes de Cuyo (vignobles), le Litoral (chutes d\'Iguazú), et le Noroeste (désert de Quebrada). "El campo" désigne toute zone hors Buenos Aires.',
       lines:[
         {es:'— ¿Qué animal te gusta más?',        fr:'— Quel animal tu aimes le plus ?'},
         {es:'— Me encantan los perros. Tengo uno que se llama Coco.', fr:'— J\'adore les chiens. J\'en ai un qui s\'appelle Coco.'},
@@ -276,7 +276,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Le genre des noms',
-      note:'Généralement -o = masculin, -a = féminin. Exceptions : el agua (fém.), la mano (fém.), el día (masc.). Toujours apprendre le mot avec son article.',
+      note:'Généralement -o = masculin, -a = féminin. Mais el mapa, el idioma, el tema sont masculins en -a. "el agua" est féminin — l\'article masc. évite deux voyelles consécutives. Règle d\'or : toujours mémoriser chaque mot avec son article.',
       examples:[
         {fr:'Le chat est sur le toit.',    es:'El gato está en el techo.'},
         {fr:'La fleur est belle.',         es:'La flor es hermosa.'},
@@ -313,7 +313,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Prépositions de lieu',
-      note:'cerca de (près de), lejos de (loin de), al lado de (à côté de), enfrente de (en face de), entre (entre). Estar + préposition pour la localisation.',
+      note:'Localisation → estar + préposition : El mercado está cerca de acá. Déplacement → ir a/hacia. "Acá" (ici) remplace souvent "aquí" en argentin. "A la vuelta" = au coin de la rue — expression très porteña.',
       examples:[
         {fr:'La banque est en face.',         es:'El banco está enfrente.'},
         {fr:'L\'école est loin d\'ici.',      es:'La escuela está lejos de acá.'},
@@ -340,7 +340,7 @@ const CURRICULUM_B1 = [
   {
     id:'u10', level:'a1', icon:'😊', xp:50, name:'Émotions de base',
     dialogue:{
-      note:'"Estar" exprime les états temporaires — les émotions changent, donc on utilise toujours "estar" et jamais "ser" pour les sentiments.',
+      note:'Les Argentins expriment les émotions sans retenue. "Recontra" et "re" intensifient tout : estoy recontra cansado, re contento. "¿Cómo estás?" demande réellement comment tu vas — une réponse développée est normale et appréciée.',
       lines:[
         {es:'— ¿Cómo estás hoy?',                fr:'— Comment tu vas aujourd\'hui ?'},
         {es:'— Estoy un poco cansada, pero contenta.', fr:'— Je suis un peu fatiguée, mais contente.'},
@@ -350,7 +350,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Ser vs Estar',
-      note:'"Ser" = identité permanente (soy francés, es médico). "Estar" = état temporaire (estoy cansado, está enojado). Les émotions → TOUJOURS "estar".',
+      note:'"Ser" : identité, origine, profession (soy francés, soy médico). "Estar" : état, émotion, localisation (estoy cansado, está en BA). Piège : "ser rico" = être riche ; "estar rico" = être délicieux. Les émotions → TOUJOURS "estar".',
       examples:[
         {fr:'Je suis fatigué.',      es:'Estoy cansado.'},
         {fr:'Elle est française.',   es:'Ella es francesa.'},
@@ -388,7 +388,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Passé simple — Pretérito indefinido',
-      note:'En Argentine, le passé s\'exprime avec le pretérito indefinido, même pour des actions récentes. -ar : viajé, viajaste, viajó. -er/-ir : tomé, tomaste, tomó. (Le perfecto "he tomado" est rare en argentin parlé.)',
+      note:'En Argentine, le passé récent s\'exprime avec l\'indéfini : Hoy comí empanadas (jamais "he comido"). -ar : viajé/viajaste/viajó/viajamos/viajaron. -er/-ir : comí/comiste/comió. Irréguliers clés : fui (ir/ser), vine (venir), dije (decir).',
       examples:[
         {fr:'J\'ai pris le bus ce matin.',   es:'Tomé el colectivo esta mañana.'},
         {fr:'Tu as vu le train ?',           es:'¿Viste el tren?'},
@@ -425,7 +425,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Expressions météo — verbes impersonnels',
-      note:'Hace calor/frío/viento. Hay sol/niebla/nubes. Llueve (il pleut). Nieva (il neige). Ces verbes n\'ont pas de sujet — jamais "él hace calor".',
+      note:'Hace calor/frío/viento/buen tiempo. Hay sol/niebla/nubes/humedad. Llueve, nieva, truena — toujours à la 3e pers. impersonnelle, sans sujet. Futur : va a llover. Buenos Aires est connue pour sa "sudestada" : vent du sud-est et pluie froide.',
       examples:[
         {fr:'Il fait très chaud.',    es:'Hace mucho calor.'},
         {fr:'Il va pleuvoir.',        es:'Va a llover.'},
@@ -462,7 +462,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Comparatifs',
-      note:'más + adj + que (plus que). menos + adj + que (moins que). tan + adj + como (aussi que). Exceptions : bueno → mejor, malo → peor, grande → mayor.',
+      note:'más … que / menos … que / tan … como. Superlatif : el/la más + adj. Irréguliers : bueno → mejor, malo → peor, grande → mayor, pequeño → menor. Erreur fréquente : "más mejor" est incorrect — dites toujours "mejor".',
       examples:[
         {fr:'C\'est moins cher que ça.',  es:'Es más barato que eso.'},
         {fr:'Ce magasin est meilleur.',   es:'Este negocio es mejor.'},
@@ -499,7 +499,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Futur proche — Ir + a + infinitif',
-      note:'Voy a trabajar (je vais travailler). Vas a estudiar (tu vas étudier). Vamos a reunirnos (on va se réunir). C\'est le futur le plus courant en argentin parlé.',
+      note:'Ir + a + infinitif : voy a trabajar, vas a estudiar, va a llover. Futur quotidien en Argentine — le futur synthétique (trabajaré) sonne formel. Pronoms : vamos a reunirnos = nos vamos a reunir — les deux ordres sont corrects.',
       examples:[
         {fr:'Je vais travailler demain.',    es:'Voy a trabajar mañana.'},
         {fr:'On va avoir une réunion.',     es:'Vamos a tener una reunión.'},
@@ -536,7 +536,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Doler — exprimer la douleur',
-      note:'Me duele la cabeza (j\'ai mal à la tête). Me duelen los pies (j\'ai mal aux pieds). Doler fonctionne comme gustar : singulier ou pluriel selon la partie du corps.',
+      note:'Doler fonctionne comme gustar — le sujet est la partie du corps : me duele la cabeza (sing.) / me duelen las muelas (plur.). Jamais "yo duelo" — toujours avec pronom indirect : me/te/le/nos. Intensité : me duele un poco / mucho / horrible.',
       examples:[
         {fr:'J\'ai mal au dos.',        es:'Me duele la espalda.'},
         {fr:'J\'ai mal aux dents.',     es:'Me duelen los dientes.'},
@@ -563,7 +563,7 @@ const CURRICULUM_B1 = [
   {
     id:'u16', level:'a2', icon:'🍳', xp:75, name:'Cuisine & recettes',
     dialogue:{
-      note:'L\'impératif voseo supprime le -s final : hablás → hablá, cortás → cortá. Très naturel dans les recettes et instructions.',
+      note:'Les empanadas sont la fierté culinaire : tucumanas (bœuf, œuf dur, olive), porteñas (viande hachée), salteñas (caldo juteux). Les préparer ensemble est un rituel social. "Bodegón" = restaurant populaire argentin, simple, généreux et sans chichi.',
       lines:[
         {es:'— ¿Me enseñás a hacer empanadas?',   fr:'— Tu m\'apprends à faire des empanadas ?'},
         {es:'— Claro. Primero cortá la cebolla bien chiquita.', fr:'— Bien sûr. D\'abord coupe l\'oignon très fin.'},
@@ -573,7 +573,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Impératif voseo',
-      note:'Pour donner des instructions avec "vos" : enlever le -s du présent. hablás → hablá. comés → comé. La forme est toujours accentuée sur la dernière syllabe.',
+      note:'Impératif voseo : enlever le -s du présent. hablás → hablá, comés → comé, escribís → escribí. Irréguliers utiles : andá (aller), vení (venir), hacé (faire), ponete (mets-toi), salí (sortir). L\'accent final se conserve toujours.',
       examples:[
         {fr:'Coupe les légumes.',     es:'Cortá las verduras.'},
         {fr:'Mélange bien.',          es:'Mezclá bien.'},
@@ -610,7 +610,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Passé simple — Pretérito indefinido',
-      note:'Actions terminées dans le passé : mandé (j\'ai envoyé), llamé (j\'ai appelé), descargué (j\'ai téléchargé). -ar : yo -é / él -ó. -er/-ir : yo -í / él -ió.',
+      note:'Passé simple : -ar → yo -é, él -ó (mandé, mandó). -er/-ir → yo -í, él -ió (recibí, recibió). Orthographe : -car → -qué (busqué), -gar → -gué (llegué), -zar → -cé (empecé). "Recién" (à l\'instant) se combine avec l\'indéfini : te llamé recién.',
       examples:[
         {fr:'J\'ai appelé hier.',       es:'Llamé ayer.'},
         {fr:'Il a téléchargé l\'app.', es:'Descargó la aplicación.'},
@@ -637,7 +637,7 @@ const CURRICULUM_B1 = [
   {
     id:'u18', level:'a2', icon:'🏃', xp:75, name:'Sport & loisirs',
     dialogue:{
-      note:'Le football est une religion en Argentine — "la cancha" (le stade/terrain) est un mot très courant.',
+      note:'Le football est une religion : River Plate vs Boca Juniors forment le "Superclásico", l\'un des matchs les plus passionnés du monde. En Argentine, la fidélité à son club est à vie — changer de club est presque impensable socialement.',
       lines:[
         {es:'— ¿Fuiste a la cancha el domingo?',  fr:'— Tu es allé au stade dimanche ?'},
         {es:'— Sí, fui a ver a San Lorenzo. Ganamos dos a uno.', fr:'— Oui, je suis allé voir San Lorenzo. On a gagné deux à un.'},
@@ -647,7 +647,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Imparfait — Pretérito imperfecto',
-      note:'Habitudes passées : cuando era chico, jugaba al fútbol todos los días (quand j\'étais petit, je jouais au foot tous les jours). -ar : -aba. -er/-ir : -ía.',
+      note:'Imparfait (-ar : -aba, -er/-ir : -ía) pour habitudes et descriptions. Contraste : jugaba todos los días (habitude) vs jugué ayer (action ponctuelle). Seulement 3 irréguliers : era (ser), iba (ir), veía (ver) — tout le reste est régulier !',
       examples:[
         {fr:'Quand j\'étais petit, je nageais.',  es:'Cuando era chico, nadaba.'},
         {fr:'Il jouait au foot chaque samedi.',    es:'Jugaba al fútbol cada sábado.'},
@@ -674,7 +674,7 @@ const CURRICULUM_B1 = [
   {
     id:'u19', level:'a2', icon:'✈️', xp:75, name:'Voyages',
     dialogue:{
-      note:'Ezeiza (EZE) est l\'aéroport international de Buenos Aires — le plus grand d\'Argentine.',
+      note:'Buenos Aires a deux aéroports : Ezeiza (EZE) pour les vols internationaux (à 35 km du centre), et Aeroparque Jorge Newbery (AEP) pour les vols intérieurs. "Hacer la valija" est l\'expression fixe — pas "hacer la maleta" en Argentine.',
       lines:[
         {es:'— ¿Cuándo viajás a Europa?',          fr:'— Quand tu voyages en Europe ?'},
         {es:'— El mes que viene. Primero París, después Barcelona.', fr:'— Le mois prochain. D\'abord Paris, ensuite Barcelone.'},
@@ -684,7 +684,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Conditionnel — Me gustaría',
-      note:'"Me gustaría" (j\'aimerais) + infinitif. Podría (je pourrais). Querría (je voudrais). Terminaison -ía pour tous les sujets. Très utile et poli.',
+      note:'Conditionnel = base du futur + terminaison -ía (même pour tous les sujets). gustar → me gustaría, poder → podría, querer → querría. Bases irrégulières : tendr- (tendría), habr- (habría), vendr- (vendría). Poli et formel en tout contexte.',
       examples:[
         {fr:'J\'aimerais aller en Argentine.',   es:'Me gustaría ir a Argentina.'},
         {fr:'Je pourrais réserver l\'hôtel.',    es:'Podría reservar el hotel.'},
@@ -721,7 +721,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Subjonctif — introduction',
-      note:'Après esperar que, querer que, desear que → subjonctif obligatoire. Espero que vengas (j\'espère que tu viendras). Le subjonctif exprime le souhait ou l\'incertitude.',
+      note:'Subjonctif présent après verbes de volonté et souhait : espero que vengas, quiero que ayudes, ojalá llegue. Formation : 1re pers. indicatif → changer la voyelle : hablo→hable, como→coma, vivo→viva. Ojalá prend TOUJOURS le subjonctif.',
       examples:[
         {fr:'J\'espère que tu viens.',       es:'Espero que vengas.'},
         {fr:'Je veux que tu m\'aides.',      es:'Quiero que me ayudes.'},
@@ -749,7 +749,7 @@ const CURRICULUM_B1 = [
   {
     id:'u21', level:'b1', icon:'🌿', xp:100, name:'Environnement',
     dialogue:{
-      note:'L\'Argentine est le 8e pays au monde par superficie — sa biodiversité (Patagonie, Pampa, jungle subtropicale) est exceptionnelle.',
+      note:'L\'Argentine est le 8e pays du monde. Le fleuve Paraná (l\'un des plus grands) et les forêts de Misiones (biodiversité proche d\'Amazonie) sont des enjeux environnementaux majeurs. Buenos Aires progresse en vélo, marchés bio et tri sélectif.',
       lines:[
         {es:'— ¿Qué hacés vos para cuidar el medioambiente?', fr:'— Qu\'est-ce que toi tu fais pour protéger l\'environnement ?'},
         {es:'— Reciclo, no uso auto y compro local.',         fr:'— Je recycle, je n\'utilise pas de voiture et j\'achète local.'},
@@ -759,7 +759,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Subjonctif — doute et nécessité',
-      note:'No creo que sea (je ne pense pas que ce soit). Es importante que reciclemos (il est important que nous recyclions). Le subjonctif suit les expressions de doute et de nécessité.',
+      note:'Subjonctif après es importante/necesario/bueno/urgente que. Après négation et doute : no creo que sea verdad, dudo que venga. Règle : deux sujets différents + que → subjonctif. Exception : creer que affirmatif → indicatif (creo que es verdad).',
       examples:[
         {fr:'Il est nécessaire qu\'on agisse.',        es:'Es necesario que actuemos.'},
         {fr:'Je ne crois pas que ce soit vrai.',      es:'No creo que sea verdad.'},
@@ -786,7 +786,7 @@ const CURRICULUM_B1 = [
   {
     id:'u22', level:'b1', icon:'🎭', xp:100, name:'Culture & arts',
     dialogue:{
-      note:'Jorge Luis Borges, Astor Piazzolla, Mercedes Sosa — l\'Argentine est une puissance culturelle mondiale.',
+      note:'L\'Argentine a produit des géants : Borges (littérature labyrinthique), Piazzolla (tango nuevo), Mercedes Sosa (nueva canción), Campanella (Oscar pour "El secreto de sus ojos"). Buenos Aires compte plus de théâtres par habitant que Londres.',
       lines:[
         {es:'— ¿Fuiste a ver la exposición de Xul Solar?',   fr:'— Tu es allé voir l\'expo de Xul Solar ?'},
         {es:'— Sí, fue filmado un documental sobre él también.', fr:'— Oui, un documentaire a aussi été tourné sur lui.'},
@@ -796,7 +796,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'La voix passive — ser + participe',
-      note:'La película fue dirigida por Campanella (le film a été réalisé par Campanella). Ser + participe passé accordé. Très utilisé dans les médias et la critique d\'art.',
+      note:'Passif : ser + participe accordé avec le sujet. La novela fue escrita por Borges (fém. parce que "novela"). Alternative fréquente à l\'oral : "se filmó una película" — le se passif est plus naturel en argentin que la construction avec ser.',
       examples:[
         {fr:'Le roman a été écrit par Borges.',   es:'La novela fue escrita por Borges.'},
         {fr:'Le musée a été inauguré hier.',      es:'El museo fue inaugurado ayer.'},
@@ -823,7 +823,7 @@ const CURRICULUM_B1 = [
   {
     id:'u23', level:'b1', icon:'💭', xp:100, name:'Opinions & débat',
     dialogue:{
-      note:'"A mí me parece que" (à mon avis) et "no estoy de acuerdo" (je ne suis pas d\'accord) sont essentiels pour tout débat.',
+      note:'Les Argentins sont passionnés de débat — politique, économie, culture, tout se discute ouvertement. "¿Y vos qué pensás?" invite chacun à s\'exprimer. Le débat n\'est pas perçu comme agressif mais comme une marque d\'intelligence et d\'engagement.',
       lines:[
         {es:'— A mí me parece que hay demasiada desigualdad.', fr:'— À mon avis il y a trop d\'inégalité.'},
         {es:'— Entiendo lo que decís, aunque no estoy del todo de acuerdo.', fr:'— Je comprends ce que tu dis, même si je ne suis pas tout à fait d\'accord.'},
@@ -833,7 +833,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Connecteurs d\'opinion',
-      note:'A mí modo de ver / A mí me parece (à mon avis). Sin embargo (cependant). Aunque (bien que/même si). Por un lado… por otro (d\'un côté… de l\'autre). Hay que reconocer que (il faut reconnaître que).',
+      note:'Bien articuler : A mí me parece que (opinion), por un lado…por otro (deux aspects), sin embargo (opposition). Nuance : aunque + indicatif = même si (fait réel) / aunque + subjonctif = bien que (hypothèse). Hay que reconocer que = concession forte.',
       examples:[
         {fr:'D\'un côté c\'est bien, de l\'autre non.', es:'Por un lado está bien, por otro no.'},
         {fr:'Cependant, la situation s\'améliore.',     es:'Sin embargo, la situación mejora.'},
@@ -870,7 +870,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Conditionnel passé — irréel du passé',
-      note:'Habría podido (j\'aurais pu). Hubiera ido (je serais allé). Pour les regrets : Si hubiera estudiado más, habría aprobado (si j\'avais plus étudié, j\'aurais réussi).',
+      note:'Irréel du passé : Si hubiera + participio + habría + infinitif. Si hubiera estudiado más, habría aprobado. "Hubiera" est l\'imparfait du subjonctif de haber. En argentin familier, "hubiese" est interchangeable — les deux formes sont acceptées.',
       examples:[
         {fr:'J\'aurais pu faire mieux.',         es:'Hubiera podido hacerlo mejor.'},
         {fr:'Si j\'avais su, je serais venu.',   es:'Si lo hubiera sabido, habría venido.'},
@@ -897,7 +897,7 @@ const CURRICULUM_B1 = [
   {
     id:'u25', level:'b1', icon:'🧠', xp:100, name:'Psychologie & émotions',
     dialogue:{
-      note:'"Ponerse" (devenir/se mettre à) et "quedarse" (rester dans un état) sont des verbes pronominaux très expressifs en argentin.',
+      note:'Buenos Aires a le plus grand nombre de psychanalystes par habitant au monde. "Ir al psicólogo" ou "hacer terapia" est banal à tous les niveaux sociaux et sans stigmatisation. Les Argentins parlent ouvertement de leur vie intérieure.',
       lines:[
         {es:'— Últimamente me siento muy ansioso.',           fr:'— Dernièrement je me sens très anxieux.'},
         {es:'— ¿Qué te pasa? ¿Hablaste con alguien?',        fr:'— Qu\'est-ce qui se passe ? Tu en as parlé avec quelqu\'un ?'},
@@ -907,7 +907,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Verbes pronominaux complexes',
-      note:'sentirse (se sentir) : Me siento ansioso. ponerse (devenir) : Se puso triste. quedarse (rester dans un état) : Se quedó sorprendido. Ces verbes expriment des changements d\'état.',
+      note:'Gradations de changement : ponerse (rapide/émotionnel : se puso nervioso), quedarse (rester dans cet état : se quedó callado), volverse (transformation progressive : se volvió pesimista). Sentirse exprime l\'état ressenti : me siento bien/mal/ansioso.',
       examples:[
         {fr:'Je me sens plus confiant.',     es:'Me siento más seguro.'},
         {fr:'Il est devenu triste.',         es:'Se puso triste.'},
@@ -944,7 +944,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Discours indirect — Estilo indirecto',
-      note:'Dijo que iba a subir los precios (il a dit qu\'il allait augmenter les prix). Dijeron que la economía mejoraba. Le temps verbal recule d\'un cran dans le discours rapporté.',
+      note:'Discours indirect : le temps recule d\'un cran. Présent → imparfait : "voy" → dijo que iba. Passé simple → plus-que-parf. : "fui" → dijo que había ido. Introducteurs courants : dijo que, contó que, explicó que, aclaró que, reconoció que.',
       examples:[
         {fr:'Il a dit qu\'il allait partir.',       es:'Dijo que se iba a ir.'},
         {fr:'Elle a dit que c\'était difficile.',   es:'Dijo que era difícil.'},
@@ -981,7 +981,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Pronoms relatifs — lo que, cuyo',
-      note:'Lo que (ce qui/ce que) : No entiendo lo que dice. El cual / la cual (lequel/laquelle). Cuyo/cuya (dont) : El periodista cuyo artículo leí (le journaliste dont j\'ai lu l\'article).',
+      note:'"Que" est le relatif le plus fréquent : el artículo que leí. "Lo que" = ce que/ce qui : lo que dice es importante. "Cuyo/cuya" s\'accorde avec le nom suivant : el autor cuya novela admiro. Après prépositions : la razón por la cual vine.',
       examples:[
         {fr:'Ce qu\'il dit est faux.',           es:'Lo que dice es falso.'},
         {fr:'Le journaliste dont j\'ai lu l\'article.', es:'El periodista cuyo artículo leí.'},
@@ -1018,7 +1018,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Le Lunfardo — argot porteño',
-      note:'Mots clés : che (hé/dis donc), re (très/super), copado (cool), quilombo (désordre), morfar (manger), plata (argent), pibe/mina (mec/fille), bárbaro (génial), laburo (travail), fiaca (flemme).',
+      note:'Argot né avec l\'immigration européenne : laburo (it. lavoro), fiaca (it. fiacca). "Re" est un intensificateur universel : re copado, re difícil, re loco. Le vesre (verlan porteño) inverse les syllabes : tango → gotan, café → feca, zapato → patosa.',
       examples:[
         {fr:'C\'est super cool !',       es:'¡Qué re copado!'},
         {fr:'J\'ai la flemme de bosser.', es:'Tengo fiaca de laburar.'},
@@ -1055,7 +1055,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Hypothèses — Si + imparfait subjonctif + conditionnel',
-      note:'Si tuviera tiempo, estudiaría más (si j\'avais le temps, j\'étudierais plus). L\'imparfait du subjonctif (-ra) + conditionnel (-ría) pour les hypothèses non réalisées au présent.',
+      note:'Hypothèse irréelle au présent : Si + imparfait subj. (-ra) + conditionnel (-ría). Si tuviera plata, viajaría. Irréguliers clés : fuera (si j\'étais), tuviera (si j\'avais), pudiera (si je pouvais), quisiera (si je voulais). Contraste : si tengo → futur (réalisable).',
       examples:[
         {fr:'Si j\'avais de l\'argent, je voyagerais.',   es:'Si tuviera plata, viajaría.'},
         {fr:'Si tu voulais, tu pourrais.',                es:'Si quisieras, podrías.'},
@@ -1082,7 +1082,7 @@ const CURRICULUM_B1 = [
   {
     id:'u30', level:'b1', icon:'🗣️', xp:120, name:'Expression avancée — B1 ✓',
     dialogue:{
-      note:'Maîtriser les connecteurs de discours te permettra de t\'exprimer avec fluidité et sophistication en espagnol argentin.',
+      note:'¡Felicitaciones — llegaste al nivel B1! En Argentine, argumenter avec précision est très apprécié. Les Argentins valorisent les interlocuteurs qui structurent leurs idées. Avec ces connecteurs, tu peux participer à n\'importe quelle conversation.',
       lines:[
         {es:'— En conclusión, creo que aprender un idioma cambia la vida.', fr:'— En conclusion, je pense qu\'apprendre une langue change la vie.'},
         {es:'— Además, abre puertas que de otra forma estarían cerradas.', fr:'— De plus, ça ouvre des portes qui autrement seraient fermées.'},
@@ -1092,7 +1092,7 @@ const CURRICULUM_B1 = [
     },
     grammar:{
       title:'Connecteurs de discours avancés',
-      note:'En conclusión (en conclusion). Cabe destacar que (il convient de souligner). A pesar de que (bien que). En cuanto a (en ce qui concerne). Siempre y cuando (à condition que). Por lo tanto (par conséquent).',
+      note:'Pour structurer votre discours : en cuanto a + nom (en ce qui concerne), cabe destacar que (il convient de noter), a pesar de que + indicatif (malgré le fait que), siempre y cuando + subjonctif (à condition que), por lo tanto (par conséquent).',
       examples:[
         {fr:'En ce qui concerne la culture…',  es:'En cuanto a la cultura…'},
         {fr:'À condition que tu pratiques…',   es:'Siempre y cuando practiques…'},
