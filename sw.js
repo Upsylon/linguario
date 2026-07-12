@@ -1,5 +1,5 @@
 /* ===== sw.js — Service Worker LinguaRío ===== */
-const CACHE = 'linguario-v52';
+const CACHE = 'linguario-v53';
 const URLS  = [
   './', './index.html', './css/app.css',
   './js/storage.js', './js/srs.js', './js/i18n.js', './js/audio.js',

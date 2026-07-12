@@ -1,4 +1,4 @@
-/* ===== vocab.js — Lexique : révision vocabulaire par thème v3 ===== */
+/* ===== vocab.js — Lexique : révision vocabulaire par thème v4 ===== */
 const Vocab = (() => {
 
   let _el        = null;
@@ -25,8 +25,16 @@ const Vocab = (() => {
   }
 
   // ── Main render ───────────────────────────────────────────────────────
-  function _draw() {
+  function _draw(preserveScroll) {
     if (!_el) return;
+
+    // Save scroll and search focus before DOM replacement
+    const list       = _el.querySelector('.vc-list');
+    const savedScroll = (preserveScroll && list) ? list.scrollTop : 0;
+    const prevInp    = _el.querySelector('#vc-search');
+    const hadFocus   = prevInp && prevInp === document.activeElement;
+    const savedCur   = hadFocus ? prevInp.selectionStart : null;
+
     const mode   = Storage.getProfile().mode || 'fr-es';
     const prog   = XP.getUnitProgress();
     const units  = window.CURRICULUM_B1 || [];
@@ -34,7 +42,7 @@ const Vocab = (() => {
     const curId  = XP.getCurrentUnitId();
     const q      = _search.toLowerCase().trim();
 
-    // Enrich words with status
+    // Enrich words with seen/mastered status
     const rich = units.map(unit => {
       const p = prog[unit.id] || { seen: [], mastered: [] };
       const seenSet     = new Set(p.seen);
@@ -50,19 +58,18 @@ const Vocab = (() => {
       };
     });
 
-    // Apply search filter to words
-    const withSearch = q
+    // Apply text search
+    const searched = q
       ? rich.map(u => ({
           ...u,
-          words: u.words.filter(w => {
-            const src = (isFrEs ? w.fr : w.es).toLowerCase();
-            const tgt = (isFrEs ? (w.esTarget || w.es) : w.fr).toLowerCase();
-            return src.includes(q) || tgt.includes(q);
-          }),
+          words: u.words.filter(w =>
+            (isFrEs ? w.fr : w.es).toLowerCase().includes(q) ||
+            (isFrEs ? (w.esTarget || w.es) : w.fr).toLowerCase().includes(q)
+          ),
         })).filter(u => u.words.length > 0)
       : rich;
 
-    // Global stats (always based on full data)
+    // Global stats (always from full data)
     const total    = rich.reduce((s, u) => s + u.words.length, 0);
     const seen     = rich.reduce((s, u) => s + u.seenCount, 0);
     const pct      = total ? Math.round(seen / total * 100) : 0;
@@ -71,22 +78,25 @@ const Vocab = (() => {
       .reduce((s, u) => s + u.words.filter(w => !w.isSeen).length, 0);
 
     // Apply status filter
-    const vis = withSearch.filter(({ seenCount, words }) => {
+    const vis = searched.filter(({ seenCount, words }) => {
       if (_filter === 'seen')   return seenCount > 0 || words.some(w => w.isSeen);
       if (_filter === 'unseen') return seenCount > 0 && words.some(w => !w.isSeen);
       return true;
     });
 
-    // Group by level
-    const groups = GROUPS.map(g => ({
-      ...g,
-      desc: isFrEs ? g.descFr : g.descEs,
-      items: vis.filter(u => u.unit.level === g.key),
-      seenInGroup:  rich.filter(u => u.unit.level === g.key).reduce((s, u) => s + u.seenCount, 0),
-      totalInGroup: rich.filter(u => u.unit.level === g.key).reduce((s, u) => s + u.words.length, 0),
-    })).filter(g => g.items.length > 0);
+    const searchCount = vis.reduce((s, u) => s + u.words.length, 0);
 
-    const searchResultCount = vis.reduce((s, u) => s + u.words.length, 0);
+    // Groups with stats from full data
+    const groups = GROUPS.map(g => {
+      const groupAll = rich.filter(u => u.unit.level === g.key);
+      return {
+        ...g,
+        desc:         isFrEs ? g.descFr : g.descEs,
+        items:        vis.filter(u => u.unit.level === g.key),
+        seenInGroup:  groupAll.reduce((s, u) => s + u.seenCount, 0),
+        totalInGroup: groupAll.reduce((s, u) => s + u.words.length, 0),
+      };
+    }).filter(g => g.items.length > 0);
 
     _el.innerHTML = `
       <div class="vc-wrap">
@@ -117,14 +127,16 @@ const Vocab = (() => {
                    value="${esc(_search)}" autocomplete="off" />
             ${q ? `<button class="vc-search-clr" id="vc-search-clr" aria-label="Effacer">✕</button>` : ''}
           </div>
-          ${q ? `<div class="vc-search-info">${searchResultCount} ${isFrEs ? 'résultat' + (searchResultCount !== 1 ? 's' : '') : 'resultado' + (searchResultCount !== 1 ? 's' : '')}</div>` : ''}
+          ${q ? `<div class="vc-search-info">${searchCount} ${isFrEs ? `résultat${searchCount !== 1 ? 's' : ''}` : `resultado${searchCount !== 1 ? 's' : ''}`}</div>` : ''}
         </div>
 
         <div class="vc-list">
           ${groups.length === 0
             ? `<div class="vc-empty">
                  <div class="vc-empty-ico">${q ? '🔍' : '📖'}</div>
-                 <p class="vc-empty-msg">${q ? (isFrEs ? `Aucun mot trouvé pour « ${esc(q)} »` : `Sin resultados para « ${esc(q)} »`) : _emptyMsg(isFrEs)}</p>
+                 <p class="vc-empty-msg">${q
+                   ? (isFrEs ? `Aucun résultat pour « ${esc(q)} »` : `Sin resultados para « ${esc(q)} »`)
+                   : _emptyMsg(isFrEs)}</p>
                </div>`
             : groups.map(g => _groupHtml(g, mode, curId, !!q)).join('')
           }
@@ -138,22 +150,38 @@ const Vocab = (() => {
 
       </div>`;
 
-    // Filter tabs
+    // Restore scroll position
+    const newList = _el.querySelector('.vc-list');
+    if (newList && savedScroll > 0) newList.scrollTop = savedScroll;
+
+    // Bind filter tabs
     _el.querySelectorAll('.vc-tab').forEach(btn => {
-      btn.addEventListener('click', () => { _filter = btn.dataset.f; _draw(); });
+      btn.addEventListener('click', () => { _filter = btn.dataset.f; _draw(false); });
     });
 
-    // Search input — live filter
+    // Bind search — restore focus & cursor after redraw
     const inp = _el.querySelector('#vc-search');
     if (inp) {
-      inp.focus();
-      inp.addEventListener('input', () => { _search = inp.value; _draw(); });
+      if (hadFocus || _search) {
+        inp.focus();
+        if (savedCur !== null) {
+          try { inp.setSelectionRange(savedCur, savedCur); } catch (_) {}
+        } else {
+          // Move cursor to end
+          const l = inp.value.length;
+          try { inp.setSelectionRange(l, l); } catch (_) {}
+        }
+      }
+      inp.addEventListener('input', () => { _search = inp.value; _draw(true); });
     }
-    const clr = _el.querySelector('#vc-search-clr');
-    if (clr) clr.addEventListener('click', () => { _search = ''; _draw(); });
 
-    // Unit toggles
+    const clr = _el.querySelector('#vc-search-clr');
+    if (clr) clr.addEventListener('click', () => { _search = ''; _draw(false); });
+
+    // Unit toggles (inline, no redraw)
     _el.querySelectorAll('.vc-toggle-btn').forEach(btn => {
+      // While searching, toggles are disabled (units forced open)
+      if (q) return;
       btn.addEventListener('click', () => _toggle(btn.dataset.unit));
     });
 
@@ -167,7 +195,7 @@ const Vocab = (() => {
     });
   }
 
-  // ── Toggle (no full redraw) ───────────────────────────────────────────
+  // ── Toggle unit (no full redraw) ──────────────────────────────────────
   function _toggle(id) {
     const open   = _openUnits.has(id);
     if (open) _openUnits.delete(id); else _openUnits.add(id);
@@ -200,7 +228,8 @@ const Vocab = (() => {
   function _groupHtml({ key, label, desc, color, items, seenInGroup, totalInGroup }, mode, curId, forceOpen) {
     const inner = items.map(u => _unitHtml(u, mode, curId, forceOpen)).filter(Boolean).join('');
     if (!inner) return '';
-    const grpPct = totalInGroup ? Math.round(seenInGroup / totalInGroup * 100) : 0;
+    const grpPct   = totalInGroup ? Math.round(seenInGroup / totalInGroup * 100) : 0;
+    const grpDone  = seenInGroup === totalInGroup && totalInGroup > 0;
     return `
       <div class="vc-group">
         <div class="vc-grp-hd">
@@ -227,17 +256,17 @@ const Vocab = (() => {
     if (_filter === 'unseen') shown = words.filter(w => !w.isSeen);
     if (shown.length === 0)   return '';
 
-    const revLbl = isFrEs ? 'Réviser' : 'Repasar';
-    const colA   = isFrEs ? '🇫🇷 Français' : '🇦🇷 Español';
-    const colB   = isFrEs ? '🇦🇷 Español'  : '🇫🇷 Français';
-    const curTag = isCur
+    const revLbl  = isFrEs ? 'Réviser' : 'Repasar';
+    const colA    = isFrEs ? '🇫🇷 Français' : '🇦🇷 Español';
+    const colB    = isFrEs ? '🇦🇷 Español'  : '🇫🇷 Français';
+    const curTag  = isCur
       ? `<span class="vc-cur-tag">${isFrEs ? 'En cours' : 'En curso'}</span>`
       : '';
 
     return `
       <div class="vc-unit${isOpen ? ' vc-unit--open' : ''}${isCur ? ' vc-unit--cur' : ''}" data-id="${unit.id}">
         <div class="vc-unit-hd">
-          <button class="vc-toggle-btn" data-unit="${unit.id}">
+          <button class="vc-toggle-btn" data-unit="${unit.id}" ${forceOpen ? 'disabled' : ''}>
             <span class="vc-ico">${unit.icon}</span>
             <div class="vc-meta">
               <div class="vc-name-row">
@@ -253,7 +282,6 @@ const Vocab = (() => {
           </button>
           <button class="vc-play-btn" data-unit="${unit.id}" title="${revLbl}">▶</button>
         </div>
-
         <div class="vc-body"${isOpen ? '' : ' hidden'}>
           <div class="vc-col-hd">
             <span>${colA}</span>
