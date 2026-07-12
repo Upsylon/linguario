@@ -35,7 +35,7 @@ const Parcours = (() => {
         <div class="pa-header">
           <div class="pa-hd-left">
             <div class="pa-hd-level" style="color:${level.color}">${level.name}</div>
-            <div class="pa-hd-label">${level.label}</div>
+            <div class="pa-hd-label">${mode === 'es-fr' ? (level.labelEs || level.label) : level.label}</div>
           </div>
           <div class="pa-hd-right">
             <div class="pa-hd-xp">${currentXp.toLocaleString()} XP</div>
@@ -184,7 +184,7 @@ const Parcours = (() => {
           }).join('')}
         </div>
 
-        <button class="pa-start-btn" id="pa-start-unit">▶ ${_ui('Réviser cette unité', 'Repasar esta unidad', mode)}</button>
+        <button class="pa-start-btn" id="pa-start-unit">▶ ${stats.seen > 0 ? _ui('Réviser cette unité', 'Repasar esta unidad', mode) : _ui('Commencer la leçon', 'Empezar la lección', mode)}</button>
       </div>`;
 
     container.querySelector('#pa-back').addEventListener('click', () => render(container));

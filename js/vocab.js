@@ -168,6 +168,14 @@ const Vocab = (() => {
     const newList = _el.querySelector('.vc-list');
     if (newList && savedScroll > 0) newList.scrollTop = savedScroll;
 
+    // TTS delegation — play target word when 🔊 button is clicked in expanded detail
+    if (newList && window.TTS && TTS.supported()) {
+      newList.addEventListener('click', e => {
+        const btn = e.target.closest('.vc-tts-btn');
+        if (btn) { e.stopPropagation(); TTS.speak(btn.dataset.tts, btn.dataset.lang); }
+      });
+    }
+
     // Bind filter tabs
     _el.querySelectorAll('.vc-tab').forEach(btn => {
       btn.addEventListener('click', () => { _filter = btn.dataset.f; _draw(false); });
@@ -324,13 +332,15 @@ const Vocab = (() => {
 
   // ── Word row ──────────────────────────────────────────────────────────
   function _wordHtml(w, mode) {
-    const isFrEs = mode === 'fr-es';
-    const src    = isFrEs ? w.fr : w.es;
-    const tgt    = isFrEs ? (w.esTarget || w.es) : w.fr;
-    const exSrc  = isFrEs ? w.example.fr : w.example.es;
-    const exTgt  = isFrEs ? w.example.es : w.example.fr;
-    const dotCls = w.isMastered ? 'vc-dot--done' : w.isSeen ? 'vc-dot--seen' : 'vc-dot--new';
-    const dotLbl = w.isMastered ? 'Maîtrisé' : w.isSeen ? 'Vu' : 'Pas encore vu';
+    const isFrEs  = mode === 'fr-es';
+    const src     = isFrEs ? w.fr : w.es;
+    const tgt     = isFrEs ? (w.esTarget || w.es) : w.fr;
+    const exSrc   = isFrEs ? w.example.fr : w.example.es;
+    const exTgt   = isFrEs ? w.example.es : w.example.fr;
+    const tgtLang = isFrEs ? 'es' : 'fr';
+    const dotCls  = w.isMastered ? 'vc-dot--done' : w.isSeen ? 'vc-dot--seen' : 'vc-dot--new';
+    const dotLbl  = w.isMastered ? 'Maîtrisé' : w.isSeen ? 'Vu' : 'Pas encore vu';
+    const hasTTS  = window.TTS && TTS.supported();
 
     return `
       <details class="vc-word">
@@ -342,6 +352,7 @@ const Vocab = (() => {
           <span class="vc-wchev">›</span>
         </summary>
         <div class="vc-wex">
+          ${hasTTS ? `<button class="vc-tts-btn" data-tts="${esc(tgt)}" data-lang="${tgtLang}" title="Écouter">🔊 ${esc(tgt)}</button>` : ''}
           <div class="vc-wex-s">${esc(exSrc)}</div>
           <div class="vc-wex-t">${esc(exTgt)}</div>
         </div>

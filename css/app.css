@@ -965,8 +965,10 @@ input  { font: inherit; }
   background: rgba(0,0,0,.18);
   border-top: 1px solid var(--border);
 }
-.vc-wex-s { font-size: .78rem; color: var(--muted); font-style: italic; line-height: 1.45; }
-.vc-wex-t { font-size: .78rem; color: rgba(123,159,255,.8); line-height: 1.45; }
+.vc-wex-s   { font-size: .78rem; color: var(--muted); font-style: italic; line-height: 1.45; }
+.vc-wex-t   { font-size: .78rem; color: rgba(123,159,255,.8); line-height: 1.45; }
+.vc-tts-btn { background: none; border: 1px solid var(--border2); border-radius: .4rem; cursor: pointer; font-size: .75rem; padding: .15rem .45rem; color: var(--muted); opacity: .7; margin-bottom: .2rem; }
+.vc-tts-btn:hover { opacity: 1; color: var(--text); }
 
 /* ── Legend ──────────────────────────────────────────────────────── */
 .vc-legend {

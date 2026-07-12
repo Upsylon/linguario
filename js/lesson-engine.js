@@ -208,6 +208,8 @@ const LessonEngine = (() => {
         </div>
       </div>`;
 
+    if (window.TTS) TTS.speak(sentence, _isEsMode(mode) ? 'fr' : 'es');
+
     let answered = false;
     container.querySelectorAll('.le-opt').forEach(btn => {
       btn.addEventListener('click', () => {

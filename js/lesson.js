@@ -134,8 +134,9 @@ const Lesson = (() => {
 
     // Optimal sequence (Schmidt noticing hypothesis): dialogue → grammar → exercises (ALL 10) → self-assess
     const steps = [{ type: 'dialogue' }, { type: 'grammar' }];
+    const typeOffset = Math.floor(Math.random() * 3);
     unit.words.forEach((w, i) => {
-      steps.push({ type: ['meaning-mc', 'gap-fill', 'translate-mc'][i % 3], word: w });
+      steps.push({ type: ['meaning-mc', 'gap-fill', 'translate-mc'][(i + typeOffset) % 3], word: w });
     });
     unit.words.forEach(w => steps.push({ type: 'self-assess', word: w }));
 

@@ -11,12 +11,12 @@ const XP = (() => {
 
   /* ── Levels ────────────────────────────────────────────────────────── */
   const LEVELS = [
-    { id: 'a1',  name: 'A1',    label: 'Débutant',        min: 0,     max: 800,      color: '#6ee7b7' },
-    { id: 'a2',  name: 'A2',    label: 'Intermédiaire',   min: 800,   max: 2500,     color: '#60a5fa' },
-    { id: 'b1',  name: 'B1 ⟶', label: 'En cours…',       min: 2500,  max: 6000,     color: '#c084fc' },
-    { id: 'b1c', name: 'B1 ✓', label: 'B1 accompli !',   min: 6000,  max: 10000,    color: '#f59e0b' },
-    { id: 'b2',  name: 'B2 ⟶', label: 'Avancé',          min: 10000, max: 18000,    color: '#f472b6' },
-    { id: 'b2c', name: 'B2 ✓', label: 'Objectif atteint!',min: 18000, max: Infinity, color: '#e879f9' },
+    { id: 'a1',  name: 'A1',    label: 'Débutant',         labelEs: 'Principiante',       min: 0,     max: 800,      color: '#6ee7b7' },
+    { id: 'a2',  name: 'A2',    label: 'Intermédiaire',    labelEs: 'Intermedio',          min: 800,   max: 2500,     color: '#60a5fa' },
+    { id: 'b1',  name: 'B1 ⟶', label: 'En cours…',        labelEs: 'En progreso…',        min: 2500,  max: 6000,     color: '#c084fc' },
+    { id: 'b1c', name: 'B1 ✓', label: 'B1 accompli !',    labelEs: '¡B1 logrado!',        min: 6000,  max: 10000,    color: '#f59e0b' },
+    { id: 'b2',  name: 'B2 ⟶', label: 'Avancé',           labelEs: 'Avanzado',            min: 10000, max: 18000,    color: '#f472b6' },
+    { id: 'b2c', name: 'B2 ✓', label: 'Objectif atteint!', labelEs: '¡Objetivo logrado!', min: 18000, max: Infinity, color: '#e879f9' },
   ];
 
   /* ── XP crud ───────────────────────────────────────────────────────── */
