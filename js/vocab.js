@@ -243,7 +243,7 @@ const Vocab = (() => {
     if (globalBtn) {
       globalBtn.addEventListener('click', () => {
         const mode = Storage.getProfile().mode || 'fr-es';
-        if (window.VocabPractice) VocabPractice.start(_el, null, mode);
+        if (window.VocabPractice) VocabPractice.startWithPicker(_el, mode);
       });
     }
 

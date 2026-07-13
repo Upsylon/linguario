@@ -1,22 +1,16 @@
-/* ===== vocab-practice.js — Drill SRS pour le Lexique ===== */
+/* ===== vocab-practice.js — Drill SRS boucle infinie ===== */
 /*
   Statuts par mot (clés voc:mode:uid:en) :
     new      → jamais vu
     learning → a commis des erreurs (ou vu une seule fois correctement)
     known    → 2 réponses correctes consécutives
 
-  Si faux à n'importe quel moment → retour à 'learning', streak = 0.
-
-  Composition de session (10 mots), PROBABILISTE PAR CATÉGORIE :
-    Slot 1-10 : pour chaque slot, on choisit d'abord la catégorie par dé :
-      - P=65% → piocher dans 'learning' (faux)   — fallback : known, puis new
-      - P=30% → piocher dans 'known'   (correct) — fallback : learning, puis new
-      - P=5%  → piocher dans 'new'     (jamais vu) — fallback : learning, puis known
-    Ce procédé maintient les ratios même si le pool est déséquilibré
-    (ex. : 200 mots appris, 0 faux → les 65% tombent sur 'known' ou 'new').
-
-  Pool de mots : global (tous les thèmes) ou restreint à une unité.
-  Repasses intra-session : jusqu'à 2 passes pour les mots manqués.
+  Session = boucle infinie.
+    - Correct → known (dès 2 bons d'affilée), mot avance dans la queue
+    - Faux    → learning + réinsertion ~5 positions plus loin
+    - Queue épuisée → refill automatique (learning > new > known)
+    - Bouton Stop → écran de fin avec totaux de session
+    - Filtre par thème via le sélecteur de thèmes
 */
 const VocabPractice = (() => {
 
@@ -31,79 +25,40 @@ const VocabPractice = (() => {
   }
 
   function _markResult(mode, word, isCorrect) {
-    const uid = word._uid;
-    const k   = _k(mode, uid, word.en);
-    const d   = _load(k) || { status: 'new', streak: 0, wrongCount: 0 };
+    const k = _k(mode, word._uid, word.en);
+    const d = _load(k) || { status: 'new', streak: 0, wrongCount: 0 };
     if (isCorrect) {
       d.streak = (d.streak || 0) + 1;
-      if      (d.status === 'new')                       d.status = 'learning';
-      else if (d.status === 'learning' && d.streak >= 2) d.status = 'known';
-      // known + correct → stays known
+      if      (d.status === 'new')                           d.status = 'learning';
+      else if (d.status === 'learning' && d.streak >= 2)    d.status = 'known';
     } else {
-      d.status    = 'learning';
-      d.streak    = 0;
+      d.status     = 'learning';
+      d.streak     = 0;
       d.wrongCount = (d.wrongCount || 0) + 1;
     }
     d.lastSeen = Date.now();
     _save(k, d);
-    // Synchronise la progression unité (barre Lexique/Parcours)
     if (window.XP) {
-      XP.markWordSeen(uid, word.en);
-      if (d.status === 'known') XP.markWordMastered(uid, word.en);
+      XP.markWordSeen(word._uid, word.en);
+      if (d.status === 'known') XP.markWordMastered(word._uid, word.en);
     }
   }
 
-  /* ── Session builder ─────────────────────────────────────────────── */
-  /*
-    unitOrNull : unit object si pratique par thème, null si session globale.
-    Chaque mot du pool porte ._uid (identifiant d'unité) pour le stockage.
-  */
-  function _buildSession(unitOrNull, mode) {
-    const TARGET   = 10;
+  /* ── Queue builder — learning > new > known ───────────────────────── */
+  function _buildQueue(unitOrNull, mode) {
     const allUnits = window.CURRICULUM_B1 || [];
-
-    // Pool source : unité seule ou toutes les unités
     const source = unitOrNull
       ? unitOrNull.words.map(w => ({ ...w, _uid: unitOrNull.id }))
       : allUnits.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id })));
 
-    if (!source.length) return [];
-
-    // Répartir dans 3 catégories, chacune mélangée
-    const catMap = { learning: [], known: [], new: [] };
+    const learning = [], newWords = [], known = [];
     for (const w of source) {
       const s = _getStatus(mode, w._uid, w.en);
-      catMap[s === 'learning' ? 'learning' : s === 'known' ? 'known' : 'new'].push(w);
+      if (s === 'learning')    learning.push(w);
+      else if (s === 'new')    newWords.push(w);
+      else                     known.push(w);
     }
-    const pools = {
-      learning: _shuffle(catMap.learning),
-      known:    _shuffle(catMap.known),
-      new:      catMap.new, // nouveaux mots : on garde l'ordre curriculum
-    };
-
-    // Déduplication (clé = uid:en) — évite les doublons si deux unités partagent un mot
-    const picked = new Set();
-    const result  = [];
-
-    // Prend le premier mot disponible d'un pool
-    function take(pool) {
-      for (const w of pool) {
-        const key = `${w._uid}:${w.en}`;
-        if (!picked.has(key)) { picked.add(key); result.push(w); return true; }
-      }
-      return false;
-    }
-
-    // Sélection probabiliste par catégorie pour chaque slot
-    const LIMIT = Math.min(TARGET, source.length);
-    for (let i = 0; i < LIMIT; i++) {
-      const r = Math.random();
-      if      (r < 0.65) { if (!take(pools.learning) && !take(pools.known) && !take(pools.new)) break; }
-      else if (r < 0.95) { if (!take(pools.known)    && !take(pools.learning) && !take(pools.new)) break; }
-      else               { if (!take(pools.new)      && !take(pools.learning) && !take(pools.known)) break; }
-    }
-
-    return _shuffle(result);
+    return [..._shuffle(learning), ...newWords, ..._shuffle(known)];
   }
 
   /* ── Helpers ──────────────────────────────────────────────────────── */
@@ -120,103 +75,144 @@ const VocabPractice = (() => {
 
   function _sessionLabel(unitOrNull, mode) {
     if (unitOrNull) return `${unitOrNull.icon} ${unitOrNull.name}`;
-    return _ui('🌍 Pratique globale', '🌍 Práctica global', mode);
+    return _ui('Tous les thèmes', 'Todos los temas', mode);
   }
 
-  /* ── Barre de progression ────────────────────────────────────────── */
-  function _renderBar(container, qi, total, pass, unitOrNull, mode) {
-    const pct = Math.round(((qi + 1) / total) * 100);
-    const passLabel = pass > 0
-      ? ` <span class="vp-pass-tag">${_ui('Repasse', 'Repaso', mode)} ${pass}</span>`
-      : '';
+  /* ── Theme picker ─────────────────────────────────────────────────── */
+  function _renderPicker(container, mode) {
+    const units = window.CURRICULUM_B1 || [];
+
+    function badges(u) {
+      const total    = u.words.length;
+      const learning = u.words.filter(w => _getStatus(mode, u.id, w.en) === 'learning').length;
+      const newW     = u.words.filter(w => _getStatus(mode, u.id, w.en) === 'new').length;
+      const known    = total - learning - newW;
+      return [
+        learning > 0 ? `<span class="vpp-badge vpp-fail">${learning}</span>` : '',
+        newW > 0     ? `<span class="vpp-badge vpp-new">${newW}</span>`     : '',
+        known  > 0   ? `<span class="vpp-badge vpp-ok">${known}</span>`     : '',
+      ].join('');
+    }
+
+    const totalWords = units.reduce((s, u) => s + u.words.length, 0);
+
+    container.innerHTML = `
+      <div class="vpp-wrap">
+        <div class="vpp-header">
+          <button class="vp-close" id="vp-close">✕</button>
+          <h2 class="vpp-title">${_ui('Choisir un thème', 'Elegir un tema', mode)}</h2>
+        </div>
+        <div class="vpp-list">
+          <button class="vpp-all" data-unit="">
+            <span class="vpp-icon">🌍</span>
+            <span class="vpp-name">${_ui('Tous les thèmes', 'Todos los temas', mode)}</span>
+            <span class="vpp-badges"><span class="vpp-badge vpp-total">${totalWords}</span></span>
+          </button>
+          ${units.map(u => `
+            <button class="vpp-unit" data-unit="${u.id}">
+              <span class="vpp-icon">${u.icon}</span>
+              <span class="vpp-name">${u.name}</span>
+              <span class="vpp-badges">${badges(u)}</span>
+            </button>`).join('')}
+        </div>
+      </div>`;
+
+    container.querySelector('#vp-close').addEventListener('click', () => _goVocab());
+
+    container.querySelectorAll('.vpp-all, .vpp-unit').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const uid  = btn.dataset.unit;
+        const unit = uid ? (units.find(u => u.id === uid) || null) : null;
+        _runInfinite(container, unit, mode);
+      });
+    });
+  }
+
+  /* ── Infinite runner ──────────────────────────────────────────────── */
+  function _runInfinite(container, unitOrNull, mode) {
+    let queue = _buildQueue(unitOrNull, mode);
+    if (!queue.length) { _renderEmpty(container, unitOrNull, mode); return; }
+
+    let correct = 0, wrong = 0, stopped = false, qi = 0;
+
+    // Render shell once
+    container.innerHTML = `
+      <div class="vp-wrap">
+        <div class="vp-topbar">
+          <button class="vp-close" id="vp-stop">${_ui('⏹ Stop', '⏹ Parar', mode)}</button>
+          <div class="vp-unit-lbl">${_sessionLabel(unitOrNull, mode)}</div>
+          <div class="vp-score">
+            <span class="vp-score-ok">✓ 0</span>
+            <span class="vp-score-fail">✗ 0</span>
+          </div>
+        </div>
+        <div id="vp-body" class="vp-body"></div>
+      </div>`;
+
+    container.querySelector('#vp-stop').addEventListener('click', () => {
+      stopped = true;
+      _renderEnd(container, unitOrNull, mode, correct, wrong);
+    });
+
+    function updateScore() {
+      const el = container.querySelector('.vp-score');
+      if (el) el.innerHTML =
+        `<span class="vp-score-ok">✓ ${correct}</span><span class="vp-score-fail">✗ ${wrong}</span>`;
+    }
+
+    function next() {
+      if (stopped) return;
+
+      if (qi >= queue.length) {
+        queue = _buildQueue(unitOrNull, mode);
+        qi    = 0;
+        if (!queue.length) { _renderEnd(container, unitOrNull, mode, correct, wrong); return; }
+      }
+
+      const word = queue[qi];
+      const body = container.querySelector('#vp-body');
+      if (!body) return;
+
+      LessonEngine.renderSelfAssess(body, word, (isCorrect) => {
+        if (stopped) return;
+        _markResult(mode, word, isCorrect);
+        if (isCorrect) {
+          correct++;
+        } else {
+          wrong++;
+          // Réinsère le mot ~5 positions plus loin pour revoir bientôt
+          const insertAt = Math.min(qi + 5, queue.length);
+          queue.splice(insertAt, 0, { ...word });
+        }
+        qi++;
+        updateScore();
+        next();
+      }, mode);
+    }
+
+    next();
+  }
+
+  /* ── Empty state ──────────────────────────────────────────────────── */
+  function _renderEmpty(container, unitOrNull, mode) {
     container.innerHTML = `
       <div class="vp-wrap">
         <div class="vp-topbar">
           <button class="vp-close" id="vp-close">✕</button>
-          <div class="vp-progwrap">
-            <div class="vp-progbar"><div class="vp-progfill" style="width:${pct}%"></div></div>
-          </div>
-          <div class="vp-counter">${qi + 1} / ${total}</div>
+          <div class="vp-unit-lbl">${_sessionLabel(unitOrNull, mode)}</div>
         </div>
-        <div class="vp-unit-lbl">${_sessionLabel(unitOrNull, mode)}${passLabel}</div>
-        <div id="vp-body" class="vp-body"></div>
+        <div class="vp-empty">
+          <div class="vp-empty-ico">📭</div>
+          <p>${_ui('Aucun mot à pratiquer.', 'Sin palabras para practicar.', mode)}</p>
+        </div>
       </div>`;
     container.querySelector('#vp-close').addEventListener('click', () => _goVocab());
   }
 
-  /* ── Clé de mot (uid + en, séparateur non-ambigu) ───────────────── */
-  function _wordKey(word) { return `${word._uid}\x00${word.en}`; }
-
-  function _keyToWord(key) {
-    const sep = key.indexOf('\x00');
-    return { uid: key.slice(0, sep), en: key.slice(sep + 1) };
-  }
-
-  /* ── Runner de session ───────────────────────────────────────────── */
-  function _runSession(container, session, unitOrNull, mode) {
-    /*
-      finalResults : Map wordKey → true/false
-      Enregistre le DERNIER résultat de chaque mot unique.
-      Si faux en passe 0 puis vrai en passe 1 → true.
-      Si faux dans toutes les passes → false.
-      Taille = nombre de mots uniques vus (= taille session initiale).
-    */
-    const finalResults = new Map();
-
-    function runPass(queue, pass) {
-      const missedKeys = new Set();
-      let qi = 0;
-
-      function next() {
-        if (qi >= queue.length) {
-          if (missedKeys.size > 0 && pass < 2) {
-            // Reconstruit la file des mots ratés
-            const allWords = (window.CURRICULUM_B1 || []).flatMap(u =>
-              u.words.map(w => ({ ...w, _uid: u.id }))
-            );
-            const requeue = _shuffle(
-              [...missedKeys].map(k => {
-                const { uid, en } = _keyToWord(k);
-                return allWords.find(w => w._uid === uid && w.en === en);
-              }).filter(Boolean)
-            );
-            runPass(requeue, pass + 1);
-          } else {
-            _renderEnd(container, unitOrNull, mode, finalResults);
-          }
-          return;
-        }
-
-        const word = queue[qi];
-        const wk   = _wordKey(word);
-        _renderBar(container, qi, queue.length, pass, unitOrNull, mode);
-        const body = container.querySelector('#vp-body');
-
-        LessonEngine.renderSelfAssess(body, word, (isCorrect) => {
-          _markResult(mode, word, isCorrect);
-          finalResults.set(wk, isCorrect); // écrase → toujours le dernier résultat
-          if (isCorrect) {
-            missedKeys.delete(wk);
-          } else {
-            missedKeys.add(wk);
-          }
-          qi++;
-          next();
-        }, mode);
-      }
-
-      next();
-    }
-
-    runPass(session, 0);
-  }
-
-  /* ── Écran de fin ────────────────────────────────────────────────── */
-  function _renderEnd(container, unitOrNull, mode, finalResults) {
-    // finalResults : Map wordKey → bool (état final de chaque mot unique)
-    const correct  = [...finalResults.values()].filter(v => v).length;
-    const wrong    = finalResults.size - correct;
-    const accuracy = finalResults.size > 0 ? Math.round(correct / finalResults.size * 100) : 0;
+  /* ── End screen ───────────────────────────────────────────────────── */
+  function _renderEnd(container, unitOrNull, mode, correct, wrong) {
+    const total    = correct + wrong;
+    const accuracy = total > 0 ? Math.round(correct / total * 100) : 0;
     const xpGain   = correct * 5;
     if (xpGain > 0 && window.XP) XP.addXP(xpGain);
 
@@ -249,48 +245,32 @@ const VocabPractice = (() => {
         ${xpGain > 0 ? `<div class="vp-end-xp">+${xpGain} XP</div>` : ''}
 
         <div class="vp-end-btns">
-          <button class="vp-btn-again" id="vp-again">↩ ${_ui('Recommencer', 'Repetir', mode)}</button>
+          <button class="vp-btn-again" id="vp-again">↩ ${_ui('Continuer', 'Continuar', mode)}</button>
           <button class="vp-btn-back"  id="vp-back">‹ ${_ui('Retour au Lexique', 'Volver al Léxico', mode)}</button>
         </div>
       </div>`;
 
     container.querySelector('#vp-close').addEventListener('click', () => _goVocab());
     container.querySelector('#vp-back').addEventListener('click',  () => _goVocab());
-    container.querySelector('#vp-again').addEventListener('click', () => start(container, unitOrNull, mode));
+    container.querySelector('#vp-again').addEventListener('click', () => _runInfinite(container, unitOrNull, mode));
   }
 
-  /* ── État vide ───────────────────────────────────────────────────── */
-  function _renderEmpty(container, unitOrNull, mode) {
-    container.innerHTML = `
-      <div class="vp-wrap">
-        <div class="vp-topbar">
-          <button class="vp-close" id="vp-close">✕</button>
-          <span class="vp-unit-lbl">${_sessionLabel(unitOrNull, mode)}</span>
-        </div>
-        <div class="vp-empty">
-          <div class="vp-empty-ico">📭</div>
-          <p>${_ui('Aucun mot à pratiquer.', 'Sin palabras para practicar.', mode)}</p>
-        </div>
-      </div>`;
-    container.querySelector('#vp-close').addEventListener('click', () => _goVocab());
-  }
-
-  /* ── API publique ────────────────────────────────────────────────── */
-  /*
-    container   : élément DOM dans lequel afficher la session
-    unitOrNull  : objet unité pour pratique ciblée, ou null pour session globale
-    mode        : 'fr-es' | 'es-fr'
-  */
+  /* ── API publique ─────────────────────────────────────────────────── */
+  // start(container, unit, mode) : lancé depuis vocab.js sur les boutons par unité
+  // startWithPicker(container, mode) : affiche le sélecteur de thème d'abord
   function start(container, unitOrNull, mode) {
     if (!window.LessonEngine) { console.warn('VocabPractice: LessonEngine non chargé'); return; }
-    const session = _buildSession(unitOrNull, mode);
-    if (!session.length) { _renderEmpty(container, unitOrNull, mode); return; }
-    _runSession(container, session, unitOrNull, mode);
+    _runInfinite(container, unitOrNull, mode);
+  }
+
+  function startWithPicker(container, mode) {
+    if (!window.LessonEngine) { console.warn('VocabPractice: LessonEngine non chargé'); return; }
+    _renderPicker(container, mode);
   }
 
   function getWordStatus(mode, uid, en) { return _getStatus(mode, uid, en); }
 
-  return { start, getWordStatus };
+  return { start, startWithPicker, getWordStatus };
 })();
 
 window.VocabPractice = VocabPractice;
