@@ -195,12 +195,22 @@ const Lesson = (() => {
             <div class="le-counter">${idx + 1}/${total}</div>
           </div>
         </div>
+        <div class="le-exit-banner" id="le-exit-banner">
+          <span class="le-exit-q">${_ui('Quitter la leçon ?', '¿Salir de la lección?', mode)}</span>
+          <button class="le-exit-yes" id="le-exit-yes">${_ui('Oui', 'Sí', mode)}</button>
+          <button class="le-exit-no"  id="le-exit-no">${_ui('Non', 'No', mode)}</button>
+        </div>
         <div class="le-unit-label">${label}</div>
         <div id="le-body" class="le-body"></div>
       </div>`;
     container.querySelector('#le-exit').addEventListener('click', () => {
-      if (!confirm(_ui('Quitter la leçon ? Ta progression sera perdue.', '¿Salir de la lección? Tu progreso se perderá.', mode))) return;
+      container.querySelector('#le-exit-banner').classList.toggle('le-exit-banner--open');
+    });
+    container.querySelector('#le-exit-yes').addEventListener('click', () => {
       (_onExit || (() => App.showHome()))();
+    });
+    container.querySelector('#le-exit-no').addEventListener('click', () => {
+      container.querySelector('#le-exit-banner').classList.remove('le-exit-banner--open');
     });
   }
 

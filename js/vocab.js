@@ -144,6 +144,12 @@ const Vocab = (() => {
           ${q ? `<div class="vc-search-info">${searchCount} ${isFrEs ? `résultat${searchCount !== 1 ? 's' : ''}` : `resultado${searchCount !== 1 ? 's' : ''}`}</div>` : ''}
         </div>
 
+        ${!q ? `<div class="vc-practice-global">
+          <button class="vc-practice-global-btn" id="vc-practice-global">
+            🃏 ${isFrEs ? 'Pratiquer le Lexique' : 'Practicar el Léxico'}
+          </button>
+        </div>` : ''}
+
         <div class="vc-list">
           ${groups.length === 0
             ? `<div class="vc-empty">
@@ -223,12 +229,31 @@ const Vocab = (() => {
       btn.addEventListener('click', () => _toggle(btn.dataset.unit));
     });
 
-    // Play buttons
+    // Play buttons (lesson)
     _el.querySelectorAll('.vc-play-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
         const unit = (window.CURRICULUM_B1 || []).find(u => u.id === btn.dataset.unit);
         if (unit && window.App) App.showLessonForUnit(unit);
+      });
+    });
+
+    // Global practice button (top of Lexique)
+    const globalBtn = _el.querySelector('#vc-practice-global');
+    if (globalBtn) {
+      globalBtn.addEventListener('click', () => {
+        const mode = Storage.getProfile().mode || 'fr-es';
+        if (window.VocabPractice) VocabPractice.start(_el, null, mode);
+      });
+    }
+
+    // Per-unit practice buttons (inside each unit body)
+    _el.querySelectorAll('.vc-practice-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const mode = Storage.getProfile().mode || 'fr-es';
+        const unit = (window.CURRICULUM_B1 || []).find(u => u.id === btn.dataset.unit);
+        if (unit && window.VocabPractice) VocabPractice.start(_el, unit, mode);
       });
     });
   }
@@ -321,6 +346,11 @@ const Vocab = (() => {
           <button class="vc-play-btn" data-unit="${unit.id}" title="${revLbl}">▶</button>
         </div>
         <div class="vc-body"${isOpen ? '' : ' hidden'}>
+          <div class="vc-practice-cta">
+            <button class="vc-practice-btn" data-unit="${unit.id}">
+              🃏 ${isFrEs ? 'Pratiquer ce thème' : 'Practicar este tema'}
+            </button>
+          </div>
           <div class="vc-col-hd">
             <span>${colA}</span>
             <span>${colB}</span>
@@ -339,8 +369,13 @@ const Vocab = (() => {
     const exTgt   = isFrEs ? w.example.es : w.example.fr;
     const tgtLang = isFrEs ? 'es' : 'fr';
     const dotCls  = w.isMastered ? 'vc-dot--done' : w.isSeen ? 'vc-dot--seen' : 'vc-dot--new';
-    const dotLbl  = w.isMastered ? 'Maîtrisé' : w.isSeen ? 'Vu' : 'Pas encore vu';
+    const dotLbl  = w.isMastered
+      ? (isFrEs ? 'Maîtrisé' : 'Dominado')
+      : w.isSeen
+        ? (isFrEs ? 'Vu' : 'Visto')
+        : (isFrEs ? 'Pas encore vu' : 'No visto');
     const hasTTS  = window.TTS && TTS.supported();
+    const listenLbl = isFrEs ? 'Écouter' : 'Escuchar';
 
     return `
       <details class="vc-word">
@@ -352,7 +387,7 @@ const Vocab = (() => {
           <span class="vc-wchev">›</span>
         </summary>
         <div class="vc-wex">
-          ${hasTTS ? `<button class="vc-tts-btn" data-tts="${esc(tgt)}" data-lang="${tgtLang}" title="Écouter">🔊 ${esc(tgt)}</button>` : ''}
+          ${hasTTS ? `<button class="vc-tts-btn" data-tts="${esc(tgt)}" data-lang="${tgtLang}" title="${listenLbl}">🔊 ${esc(tgt)}</button>` : ''}
           <div class="vc-wex-s">${esc(exSrc)}</div>
           <div class="vc-wex-t">${esc(exTgt)}</div>
         </div>

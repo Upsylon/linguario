@@ -6,11 +6,11 @@ const DUEL = (() => {
   /* ── Word themes ────────────────────────────────────────────────────── */
   const THEMES = [
     {
-      id: 'all', icon: '🎲', label: 'Tout mélangé',
+      id: 'all', icon: '🎲', label: 'Tout mélangé',    labelEs: 'Todo mezclado',
       words: null, // filled after WORDS defined
     },
     {
-      id: 'food', icon: '🍽️', label: 'Nourriture',
+      id: 'food', icon: '🍽️', label: 'Nourriture',          labelEs: 'Alimentos',
       words: [
         { en: 'water',     fr: 'eau',        es: 'agua'      },
         { en: 'bread',     fr: 'pain',       es: 'pan'       },
@@ -35,7 +35,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'animals', icon: '🐾', label: 'Animaux',
+      id: 'animals', icon: '🐾', label: 'Animaux',           labelEs: 'Animales',
       words: [
         { en: 'cat',       fr: 'chat',       es: 'gato'      },
         { en: 'dog',       fr: 'chien',      es: 'perro'     },
@@ -55,7 +55,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'family', icon: '👨‍👩‍👧', label: 'Famille & corps',
+      id: 'family', icon: '👨‍👩‍👧', label: 'Famille & corps',    labelEs: 'Familia & cuerpo',
       words: [
         { en: 'mother',    fr: 'mère',       es: 'madre'     },
         { en: 'father',    fr: 'père',       es: 'padre'     },
@@ -75,7 +75,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'places', icon: '🏙️', label: 'Ville & lieux',
+      id: 'places', icon: '🏙️', label: 'Ville & lieux',      labelEs: 'Ciudad & lugares',
       words: [
         { en: 'house',      fr: 'maison',     es: 'casa'        },
         { en: 'city',       fr: 'ville',      es: 'ciudad'      },
@@ -95,7 +95,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'verbs', icon: '⚡', label: 'Verbes',
+      id: 'verbs', icon: '⚡', label: 'Verbes',              labelEs: 'Verbos',
       words: [
         { en: 'to eat',    fr: 'manger',      es: 'comer'     },
         { en: 'to drink',  fr: 'boire',       es: 'beber'     },
@@ -120,7 +120,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'nature', icon: '🌿', label: 'Nature',
+      id: 'nature', icon: '🌿', label: 'Nature',              labelEs: 'Naturaleza',
       words: [
         { en: 'sun',       fr: 'soleil',      es: 'sol'       },
         { en: 'moon',      fr: 'lune',        es: 'luna'      },
@@ -145,7 +145,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'adjectives', icon: '🎨', label: 'Couleurs & adjectifs',
+      id: 'adjectives', icon: '🎨', label: 'Couleurs & adjectifs', labelEs: 'Colores & adjetivos',
       words: [
         { en: 'red',       fr: 'rouge',       es: 'rojo'      },
         { en: 'blue',      fr: 'bleu',        es: 'azul'      },
@@ -170,7 +170,7 @@ const DUEL = (() => {
       ],
     },
     {
-      id: 'argentina', icon: '🧉', label: 'Argentine',
+      id: 'argentina', icon: '🧉', label: 'Argentine',          labelEs: 'Argentina',
       words: [
         { en: 'work (lunf.)',   fr: 'boulot',         es: 'laburo'     },
         { en: 'mate (drink)',   fr: 'maté',           es: 'mate'       },
@@ -204,6 +204,12 @@ const DUEL = (() => {
   }));
   THEMES[0].words = ALL_WORDS;
 
+  /* ── Mode helpers ──────────────────────────────────────────────────── */
+  function _getMode() {
+    try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; }
+  }
+  function _ui(fr, es, mode) { return mode === 'es-fr' ? es : fr; }
+
   /* ── State ─────────────────────────────────────────────────────────── */
   let _st     = null;
   let _theme  = null;  // selected theme object
@@ -231,18 +237,19 @@ const DUEL = (() => {
   /* ── Theme picker ───────────────────────────────────────────────────── */
 
   function renderThemePicker(container) {
+    const mode = _getMode();
     container.innerHTML = `
       <div class="du-picker">
         <div class="du-picker-hd">
           <div class="du-start-badge">⚔️ DUEL</div>
-          <div class="du-picker-title">Choisis un thème</div>
+          <div class="du-picker-title">${_ui('Choisis un thème', 'Elige un tema', mode)}</div>
         </div>
         <div class="du-picker-grid">
           ${THEMES.map(t => `
             <button class="du-theme-card" data-tid="${t.id}">
               <span class="du-theme-ic">${t.icon}</span>
-              <span class="du-theme-lbl">${t.label}</span>
-              <span class="du-theme-cnt">${t.words.length} mots</span>
+              <span class="du-theme-lbl">${mode === 'es-fr' ? (t.labelEs || t.label) : t.label}</span>
+              <span class="du-theme-cnt">${t.words.length} ${_ui('mots', 'palabras', mode)}</span>
             </button>`).join('')}
         </div>
       </div>`;
@@ -258,15 +265,20 @@ const DUEL = (() => {
   /* ── Start screen ───────────────────────────────────────────────────── */
 
   function renderStart(container) {
+    const mode = _getMode();
+    const themeLabel = mode === 'es-fr' ? (_theme.labelEs || _theme.label) : _theme.label;
     container.innerHTML = `
       <div class="du-start">
         <div class="du-start-top">
-          <button class="du-back-btn" id="du-back">‹ Thèmes</button>
-          <div class="du-start-badge">${_theme.icon} ${_theme.label}</div>
-          <h2 class="du-start-title">Qui est le plus rapide ?</h2>
+          <button class="du-back-btn" id="du-back">‹ ${_ui('Thèmes', 'Temas', mode)}</button>
+          <div class="du-start-badge">${_theme.icon} ${themeLabel}</div>
+          <h2 class="du-start-title">${_ui('Qui est le plus rapide ?', '¿Quién es más rápido?', mode)}</h2>
           <p class="du-start-sub">
-            Un mot apparaît en anglais. Chaque joueur le traduit dans sa langue.
-            On révèle, puis chaque joueur tape <strong>son propre côté</strong> s'il a répondu en premier.
+            ${_ui(
+              'Un mot apparaît en anglais. Chaque joueur le traduit dans sa langue. On révèle, puis chaque joueur tape <strong>son propre côté</strong> s\'il a répondu en premier.',
+              'Aparece una palabra en inglés. Cada jugador la traduce a su idioma. Se revela, y cada jugador toca <strong>su propio lado</strong> si respondió primero.',
+              mode
+            )}
           </p>
         </div>
         <div class="du-start-vs">
@@ -283,7 +295,7 @@ const DUEL = (() => {
           </div>
         </div>
         <button class="du-start-btn" id="du-begin">
-          ▶ Commencer · ${ROUNDS} manches
+          ▶ ${_ui('Commencer', 'Empezar', mode)} · ${ROUNDS} ${_ui('manches', 'rondas', mode)}
         </button>
       </div>`;
 
@@ -299,8 +311,10 @@ const DUEL = (() => {
   /* ── Game round ─────────────────────────────────────────────────────── */
 
   function renderRound(container) {
-    const word = _st.words[_st.round];
-    const pct  = (_st.round / ROUNDS) * 100;
+    const mode  = _getMode();
+    const word  = _st.words[_st.round];
+    const pct   = (_st.round / ROUNDS) * 100;
+    const themeLabel = mode === 'es-fr' ? (_theme.labelEs || _theme.label) : _theme.label;
 
     container.innerHTML = `
       <div class="du-game">
@@ -308,12 +322,12 @@ const DUEL = (() => {
         <div class="du-word-area">
           <div class="du-prog-track"><div class="du-prog-fill" style="width:${pct}%"></div></div>
           <div class="du-word-meta">
-            <span>${_theme.icon} ${_theme.label}</span>
+            <span>${_theme.icon} ${themeLabel}</span>
             <span class="du-manche">${_st.round + 1} / ${ROUNDS}</span>
           </div>
           <div class="du-en-word">${word.en}</div>
           <div id="du-action">
-            <button class="du-reveal-btn" id="du-reveal">Révéler</button>
+            <button class="du-reveal-btn" id="du-reveal">${_ui('Révéler', 'Revelar', mode)}</button>
           </div>
         </div>
 
@@ -341,13 +355,13 @@ const DUEL = (() => {
     function reveal() {
       document.getElementById('du-bfr').innerHTML = `
         <div class="du-half-answer">${word.fr}</div>
-        <div class="du-half-cue">← TAP si premier</div>`;
+        <div class="du-half-cue">← TAP ${_ui('si premier', 'si primero', mode)}</div>`;
       document.getElementById('du-bar').innerHTML = `
         <div class="du-half-answer">${word.es}</div>
-        <div class="du-half-cue">TAP si primero →</div>`;
+        <div class="du-half-cue">TAP ${_ui('si premier', 'si primero', mode)} →</div>`;
 
       const action = document.getElementById('du-action');
-      action.innerHTML = `<button class="du-tie-btn" id="du-tie">⚖️ Égalité</button>`;
+      action.innerHTML = `<button class="du-tie-btn" id="du-tie">⚖️ ${_ui('Égalité', 'Empate', mode)}</button>`;
       document.getElementById('du-tie').addEventListener('click', e => {
         e.stopPropagation(); claim(-1);
       });
@@ -384,21 +398,22 @@ const DUEL = (() => {
   /* ── End screen ─────────────────────────────────────────────────────── */
 
   function renderEnd(container) {
+    const mode     = _getMode();
     const [s0, s1] = _st.scores;
     let trophy, line1, line2;
 
     if (s0 > s1) {
       trophy = '🏆';
-      line1  = 'Celui qui apprend le 🇫🇷 français';
-      line2  = 'gagne le duel !';
+      line1  = _ui('Celui qui apprend le 🇫🇷 français', 'El que aprende el 🇫🇷 francés', mode);
+      line2  = _ui('gagne le duel !', '¡gana el duelo!', mode);
     } else if (s1 > s0) {
       trophy = '🏆';
-      line1  = 'Celui qui apprend l\'🇦🇷 espagnol';
-      line2  = 'gagne le duel !';
+      line1  = _ui('Celui qui apprend l\'🇦🇷 espagnol', 'El que aprende el 🇦🇷 español', mode);
+      line2  = _ui('gagne le duel !', '¡gana el duelo!', mode);
     } else {
       trophy = '🤝';
-      line1  = 'Égalité !';
-      line2  = 'Match nul';
+      line1  = _ui('Égalité !', '¡Empate!', mode);
+      line2  = _ui('Match nul', 'Sin ganador', mode);
     }
 
     container.innerHTML = `
@@ -420,8 +435,8 @@ const DUEL = (() => {
           </div>
         </div>
         <div class="du-end-btns">
-          <button class="du-replay-btn" id="du-replay">⚔️ Rejouer</button>
-          <button class="du-theme-btn"  id="du-newtheme">🎲 Changer de thème</button>
+          <button class="du-replay-btn" id="du-replay">⚔️ ${_ui('Rejouer', 'Repetir', mode)}</button>
+          <button class="du-theme-btn"  id="du-newtheme">🎲 ${_ui('Changer de thème', 'Cambiar tema', mode)}</button>
         </div>
       </div>`;
 

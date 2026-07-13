@@ -242,7 +242,7 @@ const LessonEngine = (() => {
     if (wrongs.length < 2) { onDone(false); return; }
 
     const options = _shuffle([targetWord, ..._pick(wrongs, Math.min(3, wrongs.length))]);
-    const label = _isEsMode(mode) ? '🇫🇷 Complétez la phrase' : '🇦🇷 Complète la phrase';
+    const label = _isEsMode(mode) ? '🇫🇷 Completá la frase' : '🇦🇷 Complète la phrase';
 
     container.innerHTML = `
       <div class="le-card le-card--mc">
@@ -281,7 +281,7 @@ const LessonEngine = (() => {
     if (wrongs.length < 1) { onDone(false); return; }
 
     const options = _shuffle([correct, ..._pick(wrongs, Math.min(3, wrongs.length))]);
-    const label = _isEsMode(mode) ? '🇦🇷→🇫🇷 Traduis la phrase' : '🇫🇷→🇦🇷 Traduis la phrase';
+    const label = _isEsMode(mode) ? '🇦🇷→🇫🇷 Traducí la oración' : '🇫🇷→🇦🇷 Traduis la phrase';
 
     container.innerHTML = `
       <div class="le-card le-card--mc">

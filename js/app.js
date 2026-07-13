@@ -28,12 +28,9 @@ const App = (() => {
     // Header logo always navigates home — confirm only if mid-lesson
     const hdr = document.querySelector('.app-header');
     if (hdr) {
-      hdr.addEventListener('click', () => {
-        if (_currentScreen === 'quick-session') {
-          const mode = (() => { try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; } })();
-          const msg  = _ui('Retourner à l\'accueil ? Ta progression sera perdue.', '¿Volver al inicio? Tu progreso se perderá.', mode);
-          if (!confirm(msg)) return;
-        }
+      hdr.addEventListener('click', e => {
+        if (e.target.closest('#sync-btn') || e.target.closest('#audio-toggle')) return;
+        if (_currentScreen === 'quick-session') return; // ✕ in lesson handles exit
         showHome();
       });
     }
@@ -72,7 +69,8 @@ const App = (() => {
     if (!btn) return;
     if (!window.TTS || !TTS.supported()) { btn.style.display = 'none'; return; }
     btn.classList.toggle('off', !TTS.isOn());
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
       const on = TTS.toggle();
       btn.classList.toggle('off', !on);
       toast(on ? I18N.t('toast.ttsOn') : I18N.t('toast.ttsOff'));
@@ -175,6 +173,7 @@ const App = (() => {
     const el = document.getElementById('screen-home');
     if (!el) return;
     const p = Storage.getProfile();
+    document.documentElement.lang = (p.mode === 'es-fr') ? 'es' : 'fr';
     _showHomeXP(el, p);
   }
 
@@ -243,11 +242,12 @@ const App = (() => {
     setActiveTab('duel');
     const el = document.getElementById('screen-duel');
     if (!el) return;
+    const _dMode = (() => { try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; } })();
     el.innerHTML = `
       <div class="du-tab-wrap">
         <div class="du-tab-bar">
-          <span class="du-tab-title">⚔️ Mode Duel</span>
-          <button class="du-reset-btn" id="du-reset">🔄 Réinitialiser</button>
+          <span class="du-tab-title">⚔️ ${_dMode === 'es-fr' ? 'Modo Duelo' : 'Mode Duel'}</span>
+          <button class="du-reset-btn" id="du-reset">🔄 ${_dMode === 'es-fr' ? 'Reiniciar' : 'Réinitialiser'}</button>
         </div>
         <div id="du-content" class="du-content"></div>
       </div>`;

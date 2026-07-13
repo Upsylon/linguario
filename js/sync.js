@@ -1,7 +1,7 @@
 /* ===== sync.js — Firebase Auth + Firestore sync ===== */
 const Sync = (() => {
 
-  const PREFIXES = ['langapp:', 'lrio:', 'qs:'];
+  const PREFIXES = ['langapp:', 'lrio:', 'qs:', 'voc:'];
   let _auth = null;
   let _db   = null;
   let _user = null;
@@ -36,9 +36,7 @@ const Sync = (() => {
 
   function signOut() {
     if (!_auth) return;
-    const mode = (() => { try { return Storage.getProfile().mode || 'fr-es'; } catch { return 'fr-es'; } })();
-    const msg  = mode === 'es-fr' ? '¿Desconectarse?' : 'Se déconnecter ?';
-    if (!confirm(msg)) return;
+    // confirm() est silencieusement bloqué en PWA standalone (iOS) → on déconnecte directement
     push().then(() => _auth.signOut());
   }
 
