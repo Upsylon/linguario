@@ -611,6 +611,46 @@ input  { font: inherit; }
 .du-replay-btn:hover  { opacity: .9; }
 .du-replay-btn:active { transform: scale(.97); }
 
+/* ── Mode picker ─────────────────────────────────────────────────────── */
+.du-modepick { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; padding: 2rem 1.5rem; }
+.du-modepick-badge { font-size: .85rem; font-weight: 700; color: rgba(255,255,255,.45); letter-spacing: .04em; }
+.du-modepick-title { font-size: 1.5rem; font-weight: 900; color: #fff; letter-spacing: -.03em; }
+.du-modepick-cards { display: flex; flex-direction: column; gap: .75rem; width: 100%; max-width: 300px; }
+.du-modecard { background: var(--surface2); border: 1.5px solid var(--border2); border-radius: var(--radius); padding: 1.25rem 1.5rem; cursor: pointer; display: flex; flex-direction: column; gap: .2rem; text-align: left; transition: background .15s, border-color .15s; }
+.du-modecard:hover  { background: var(--surface3); border-color: rgba(255,255,255,.2); }
+.du-modecard:active { transform: scale(.98); }
+.du-modecard-ic   { font-size: 1.75rem; }
+.du-modecard-name { font-size: 1rem; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+.du-modecard-sub  { font-size: .75rem; color: rgba(255,255,255,.35); }
+
+/* ── Sprint ──────────────────────────────────────────────────────────── */
+.du-sprint { flex: 1; display: flex; flex-direction: column; gap: 0; }
+.du-sprint-hd { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem; }
+.du-sp-timer { font-size: 1.4rem; font-weight: 900; letter-spacing: -.04em; color: rgba(255,255,255,.7); }
+.du-sp-timer--urgent { color: var(--red2); animation: du-pulse 1s ease-in-out infinite; }
+.du-sp-score { font-size: .85rem; font-weight: 700; color: rgba(255,255,255,.35); }
+.du-sp-bar  { height: 3px; background: rgba(255,255,255,.08); }
+.du-sp-fill { height: 100%; background: var(--primary); transition: width 1s linear; }
+.du-sprint-card { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2rem 1.5rem; }
+.du-sp-flag   { font-size: 2rem; }
+.du-sp-word   { font-size: 2.75rem; font-weight: 900; letter-spacing: -.05em; color: #fff; text-align: center; animation: du-pop .18s ease; }
+.du-sp-word--sm { font-size: 1.1rem; font-weight: 600; color: rgba(255,255,255,.35); }
+.du-sp-pair   { display: flex; align-items: center; gap: .75rem; }
+.du-sp-pair--target { animation: du-pop .2s ease; }
+.du-sp-target { font-size: 2.4rem; font-weight: 900; letter-spacing: -.05em; color: #fff; }
+.du-sp-assess { display: flex; gap: .75rem; margin-top: .5rem; }
+.du-sp-btn    { flex: 1; border: none; border-radius: 1rem; padding: .85rem 1rem; font-size: .9rem; font-weight: 800; cursor: pointer; min-height: 52px; transition: opacity .1s, transform .1s; }
+.du-sp-btn:active { transform: scale(.96); }
+.du-sp-btn--wrong { background: rgba(239,68,68,.18); color: var(--red2); border: 1.5px solid rgba(239,68,68,.3); }
+.du-sp-btn--right { background: rgba(34,197,94,.18); color: var(--green2); border: 1.5px solid rgba(34,197,94,.3); }
+.du-sprint-end { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; padding: 2.5rem 1.5rem; text-align: center; }
+.du-sprint-end-medal  { font-size: 4rem; }
+.du-sprint-end-msg    { font-size: 1.2rem; font-weight: 800; color: #fff; }
+.du-sprint-end-score  { display: flex; align-items: baseline; gap: .25rem; }
+.du-sprint-end-n      { font-size: 4.5rem; font-weight: 900; letter-spacing: -.07em; color: var(--green2); line-height: 1; }
+.du-sprint-end-sep    { font-size: 1.5rem; color: rgba(255,255,255,.35); }
+.du-sprint-end-pct    { font-size: .9rem; color: rgba(255,255,255,.4); }
+
 /* ── Animation utilities ─────────────────────────────────────────────── */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes popIn  { from { opacity: 0; transform: scale(.95) translateY(8px); } to { opacity: 1; transform: none; } }

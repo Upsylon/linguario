@@ -212,7 +212,9 @@ const DUEL = (() => {
 
   /* ── State ─────────────────────────────────────────────────────────── */
   let _st     = null;
-  let _theme  = null;  // selected theme object
+  let _theme  = null;
+  let _mode   = null;  // 'duel' | 'sprint'
+  let _timer  = null;
 
   function shuffle(arr) {
     const a = [...arr];
@@ -226,13 +228,17 @@ const DUEL = (() => {
   /* ── Public API ─────────────────────────────────────────────────────── */
 
   function render(container) {
-    if (!_theme)        renderThemePicker(container);
-    else if (!_st)      renderStart(container);
-    else if (_st.done)  renderEnd(container);
-    else                renderRound(container);
+    if (!_theme)                        { renderThemePicker(container); return; }
+    if (!_mode)                         { renderModePicker(container); return; }
+    if (_mode === 'sprint') { _st?.done ? renderSprintEnd(container) : renderSprintRound(container); return; }
+    if (!_st)                           { renderDuelStart(container); return; }
+    if (_st.done)                       { renderEnd(container); return; }
+    renderRound(container);
   }
 
-  function reset(container) { _st = null; _theme = null; render(container); }
+  function reset(container) { _clearTimer(); _st = null; _theme = null; _mode = null; render(container); }
+
+  function _clearTimer() { if (_timer) { clearInterval(_timer); _timer = null; } }
 
   /* ── Theme picker ───────────────────────────────────────────────────── */
 
@@ -257,20 +263,54 @@ const DUEL = (() => {
     container.querySelectorAll('.du-theme-card').forEach(btn => {
       btn.addEventListener('click', () => {
         _theme = THEMES.find(t => t.id === btn.dataset.tid);
-        renderStart(container);
+        renderModePicker(container);
       });
     });
   }
 
-  /* ── Start screen ───────────────────────────────────────────────────── */
+  /* ── Mode picker ────────────────────────────────────────────────────── */
 
-  function renderStart(container) {
+  function renderModePicker(container) {
+    const mode = _getMode();
+    const themeLabel = mode === 'es-fr' ? (_theme.labelEs || _theme.label) : _theme.label;
+    container.innerHTML = `
+      <div class="du-modepick">
+        <button class="du-back-btn" id="du-back">‹ ${_ui('Thèmes', 'Temas', mode)}</button>
+        <div class="du-modepick-badge">${_theme.icon} ${themeLabel}</div>
+        <div class="du-modepick-title">${_ui('Quel mode ?', '¿Qué modo?', mode)}</div>
+        <div class="du-modepick-cards">
+          <button class="du-modecard" id="du-pick-duel">
+            <div class="du-modecard-ic">⚔️</div>
+            <div class="du-modecard-name">${_ui('Duel', 'Duelo', mode)}</div>
+            <div class="du-modecard-sub">${_ui('2 joueurs · côte à côte', '2 jugadores · lado a lado', mode)}</div>
+          </button>
+          <button class="du-modecard" id="du-pick-sprint">
+            <div class="du-modecard-ic">⚡</div>
+            <div class="du-modecard-name">Sprint</div>
+            <div class="du-modecard-sub">${_ui('Solo · 60 secondes', 'Solo · 60 segundos', mode)}</div>
+          </button>
+        </div>
+      </div>`;
+    container.querySelector('#du-back').addEventListener('click', () => { _theme = null; renderThemePicker(container); });
+    container.querySelector('#du-pick-duel').addEventListener('click', () => { _mode = 'duel'; renderDuelStart(container); });
+    container.querySelector('#du-pick-sprint').addEventListener('click', () => {
+      _mode = 'sprint';
+      const words = shuffle(_theme.words);
+      _st = { words, idx: 0, correct: 0, total: 0, timeLeft: 60, done: false };
+      renderSprintRound(container);
+      _startSprintTimer(container);
+    });
+  }
+
+  /* ── Duel start screen ──────────────────────────────────────────────── */
+
+  function renderDuelStart(container) {
     const mode = _getMode();
     const themeLabel = mode === 'es-fr' ? (_theme.labelEs || _theme.label) : _theme.label;
     container.innerHTML = `
       <div class="du-start">
         <div class="du-start-top">
-          <button class="du-back-btn" id="du-back">‹ ${_ui('Thèmes', 'Temas', mode)}</button>
+          <button class="du-back-btn" id="du-back">‹ ${_ui('Mode', 'Modo', mode)}</button>
           <div class="du-start-badge">${_theme.icon} ${themeLabel}</div>
           <h2 class="du-start-title">${_ui('Qui est le plus rapide ?', '¿Quién es más rápido?', mode)}</h2>
           <p class="du-start-sub">
@@ -300,7 +340,7 @@ const DUEL = (() => {
       </div>`;
 
     container.querySelector('#du-back').addEventListener('click', () => {
-      _theme = null; renderThemePicker(container);
+      _mode = null; renderModePicker(container);
     });
     container.querySelector('#du-begin').addEventListener('click', () => {
       _st = { words: shuffle(_theme.words).slice(0, ROUNDS), round: 0, scores: [0, 0], done: false, locked: false };
@@ -445,6 +485,119 @@ const DUEL = (() => {
     });
     container.querySelector('#du-newtheme').addEventListener('click', () => {
       _st = null; _theme = null; renderThemePicker(container);
+    });
+  }
+
+  /* ── Sprint mode ────────────────────────────────────────────────────── */
+
+  function _startSprintTimer(container) {
+    _clearTimer();
+    _timer = setInterval(() => {
+      _st.timeLeft--;
+      const timerEl = container.querySelector('.du-sp-timer');
+      if (timerEl) {
+        timerEl.textContent = `${_st.timeLeft}s`;
+        if (_st.timeLeft <= 10) timerEl.classList.add('du-sp-timer--urgent');
+      }
+      if (_st.timeLeft <= 0) {
+        _clearTimer();
+        _st.done = true;
+        renderSprintEnd(container);
+      }
+    }, 1000);
+  }
+
+  function renderSprintRound(container) {
+    const mode  = _getMode();
+    const word  = _st.words[_st.idx % _st.words.length];
+    const native = (mode === 'es-fr') ? word.es : word.fr;
+    const target = (mode === 'es-fr') ? word.fr : word.es;
+    const nFlag  = (mode === 'es-fr') ? '🇦🇷' : '🇫🇷';
+    const tFlag  = (mode === 'es-fr') ? '🇫🇷' : '🇦🇷';
+    const pct    = (_st.timeLeft / 60) * 100;
+
+    container.innerHTML = `
+      <div class="du-sprint">
+        <div class="du-sprint-hd">
+          <button class="du-back-btn" id="sp-stop">✕ ${_ui('Stop', 'Parar', mode)}</button>
+          <div class="du-sp-timer${_st.timeLeft <= 10 ? ' du-sp-timer--urgent' : ''}">${_st.timeLeft}s</div>
+          <div class="du-sp-score">${_st.correct}/${_st.total}</div>
+        </div>
+        <div class="du-sp-bar"><div class="du-sp-fill" style="width:${pct}%"></div></div>
+        <div class="du-sprint-card" id="sp-card">
+          <div class="du-sp-flag">${nFlag}</div>
+          <div class="du-sp-word">${native}</div>
+          <button class="du-reveal-btn" id="sp-reveal">${_ui('Voir →', 'Ver →', mode)}</button>
+        </div>
+      </div>`;
+
+    if (window.TTS) TTS.speak(native, mode === 'es-fr' ? 'es' : 'fr');
+
+    document.getElementById('sp-stop').addEventListener('click', () => {
+      _clearTimer(); _st.done = true; renderSprintEnd(container);
+    });
+
+    document.getElementById('sp-reveal').addEventListener('click', () => {
+      const card = document.getElementById('sp-card');
+      if (!card) return;
+      card.innerHTML = `
+        <div class="du-sp-pair">
+          <span class="du-sp-flag">${nFlag}</span><span class="du-sp-word du-sp-word--sm">${native}</span>
+        </div>
+        <div class="du-sp-pair du-sp-pair--target">
+          <span class="du-sp-flag">${tFlag}</span><span class="du-sp-target">${target}</span>
+        </div>
+        <div class="du-sp-assess">
+          <button class="du-sp-btn du-sp-btn--wrong" id="sp-no">✗ ${_ui('Pas su', 'No sabía', mode)}</button>
+          <button class="du-sp-btn du-sp-btn--right" id="sp-yes">✓ ${_ui('Su !', '¡Sabía!', mode)}</button>
+        </div>`;
+      if (window.TTS) TTS.speak(target, mode === 'es-fr' ? 'fr' : 'es');
+      document.getElementById('sp-no').addEventListener('click',  () => _nextSprint(false, container));
+      document.getElementById('sp-yes').addEventListener('click', () => _nextSprint(true,  container));
+    });
+  }
+
+  function _nextSprint(correct, container) {
+    _st.total++;
+    if (correct) _st.correct++;
+    _st.idx++;
+    if (_st.timeLeft <= 0) { _clearTimer(); _st.done = true; renderSprintEnd(container); return; }
+    renderSprintRound(container);
+  }
+
+  function renderSprintEnd(container) {
+    const mode = _getMode();
+    const pct  = _st.total > 0 ? Math.round((_st.correct / _st.total) * 100) : 0;
+    const medal = pct >= 80 ? '🥇' : pct >= 50 ? '🥈' : '🎯';
+    const msg = pct >= 80
+      ? _ui('Excellent !', '¡Excelente!', mode)
+      : pct >= 50
+      ? _ui('Bien joué !', '¡Bien jugado!', mode)
+      : _ui('Continue à t\'entraîner !', '¡Seguí entrenando!', mode);
+
+    container.innerHTML = `
+      <div class="du-sprint-end">
+        <div class="du-sprint-end-medal">${medal}</div>
+        <div class="du-sprint-end-msg">${msg}</div>
+        <div class="du-sprint-end-score">
+          <span class="du-sprint-end-n">${_st.correct}</span>
+          <span class="du-sprint-end-sep">/ ${_st.total}</span>
+        </div>
+        <div class="du-sprint-end-pct">${pct}% ${_ui('corrects', 'correctos', mode)}</div>
+        <div class="du-end-btns">
+          <button class="du-replay-btn" id="sp-replay">⚡ ${_ui('Rejouer', 'Repetir', mode)}</button>
+          <button class="du-theme-btn" id="sp-theme">🎲 ${_ui('Autre thème', 'Otro tema', mode)}</button>
+        </div>
+      </div>`;
+
+    container.querySelector('#sp-replay').addEventListener('click', () => {
+      const words = shuffle(_theme.words);
+      _st = { words, idx: 0, correct: 0, total: 0, timeLeft: 60, done: false };
+      renderSprintRound(container);
+      _startSprintTimer(container);
+    });
+    container.querySelector('#sp-theme').addEventListener('click', () => {
+      _st = null; _mode = null; _theme = null; renderThemePicker(container);
     });
   }
 

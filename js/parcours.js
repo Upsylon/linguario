@@ -79,7 +79,7 @@ const Parcours = (() => {
 
     return `
       <div class="pa-unit${isCurrent ? ' pa-unit--current' : ''}${done ? ' pa-unit--done' : ''}${locked ? ' pa-unit--locked' : ''}"
-           ${locked ? '' : `data-uid="${unit.id}"`}>
+           data-uid="${unit.id}">
         <div class="pa-unit-ic">${unit.icon}</div>
         <div class="pa-unit-body">
           <div class="pa-unit-name">${unit.name}</div>
