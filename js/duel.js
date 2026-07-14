@@ -481,7 +481,7 @@ const DUEL = (() => {
       </div>`;
 
     container.querySelector('#du-replay').addEventListener('click', () => {
-      _st = null; renderStart(container);
+      _st = null; renderDuelStart(container);
     });
     container.querySelector('#du-newtheme').addEventListener('click', () => {
       _st = null; _theme = null; renderThemePicker(container);

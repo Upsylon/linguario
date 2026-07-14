@@ -321,7 +321,7 @@ const LessonEngine = (() => {
     container.innerHTML = `
       <div class="le-card le-card--grammar">
         <div class="le-gram-badge">📐 ${_isEsMode(mode) ? 'Gramática' : 'Grammaire'}</div>
-        <div class="le-gram-title">${g.title}</div>
+        ${!_isEsMode(mode) && g.title ? `<div class="le-gram-title">${g.title}</div>` : ''}
         <div class="le-gram-note">${note}</div>
         ${g.examples ? g.examples.map(ex => {
           const isEs = _isEsMode(mode);

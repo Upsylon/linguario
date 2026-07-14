@@ -141,7 +141,7 @@ const Parcours = (() => {
     const mode  = _getMode();
     const esData = (window.CURRICULUM_B1_ES || {})[unit.id] || {};
     const gramNote  = (mode === 'es-fr' && esData.grammarNote)  ? esData.grammarNote  : unit.grammar.note;
-    const gramTitle = unit.grammar.title;
+    const gramTitle = (mode === 'es-fr') ? '' : unit.grammar.title;
 
     const prog  = XP.getUnitProgress();
     const seen  = prog[unit.id]?.seen || [];
@@ -161,7 +161,7 @@ const Parcours = (() => {
         </div>
 
         <div class="pa-gram">
-          <div class="pa-gram-hd">📐 ${gramTitle}</div>
+          <div class="pa-gram-hd">📐 ${gramTitle || (mode === 'es-fr' ? 'Gramática' : 'Grammaire')}</div>
           <div class="pa-gram-body">${gramNote}</div>
           <div class="pa-gram-phrase">
             <span>${mode === 'es-fr' ? '🇫🇷' : '🇦🇷'} <em>${mode === 'es-fr' ? unit.phrase.fr : unit.phrase.es}</em></span>
