@@ -1,526 +1,188 @@
-/* ===== curriculum-b1-es.js — Overrides en español pour mode es-fr ===== */
-/* Notes culturelles sur la France + grammaire française expliquée en espagnol */
-/* pour apprenants hispanophones apprenant le français.                         */
+/* ===== curriculum-b1-es.js — Surcharges pour le mode es-fr ===== */
+/* Remplace dialogueNote, grammarNote, question et options pour les apprenants hispanophones */
+/* Chaque entrée correspond à une unité de curriculum-b1.js par son id */
+/* IMPORTANT : options[answer] doit correspondre à l'index g.answer du curriculum principal */
 
-const CURRICULUM_B1_ES = {
-  u01: {
-    dialogueNote: 'En Francia, "bonjour" se usa todo el día hasta las 18h, luego "bonsoir". El beso en la mejilla ("la bise") es el saludo habitual entre amigos — incluso entre hombres.',
-    grammarNote:  'En francés existe "tu" (familiar) y "vous" (formal/plural). No hay "vos". El "vous" es obligatorio con desconocidos, superiores y en contexto profesional — usarlo es señal de educación.',
-    question:     '¿Cómo se dice "¿cómo está usted?" (formal) en francés?',
-    options:      ['Comment tu vas ?', 'Comment allez-vous ?', 'Comment vas-tu ?'],
-  },
-  u02: {
-    dialogueNote: 'Los números franceses son únicos: 70 es "soixante-dix" (60+10), 80 es "quatre-vingts" (4×20), 90 es "quatre-vingt-dix" (4×20+10). ¡Un sistema matemático!',
-    grammarNote:  '70 = soixante-dix (60+10), 80 = quatre-vingts (4×20), 90 = quatre-vingt-dix (4×20+10). Los días y meses son masculinos y se escriben en minúscula: lundi, mardi, janvier, février.',
-    question:     '¿Cómo se dice 80 en francés?',
-    options:      ['huitante', 'quatre-vingts', 'octante'],
-  },
-  u03: {
-    dialogueNote: 'En Francia el "tutoiement" (tutear) se adopta rápido entre jóvenes. Con personas mayores o en contexto profesional, el "vouvoiement" (usted) es obligatorio.',
-    grammarNote:  'Los posesivos concuerdan con el objeto poseído, no con el poseedor. "Ma sœur" pero "mon amie" — delante de vocal femenina se usa mon/ton/son. Plural: mes/tes/ses.',
-    question:     '¿Cómo se dice "mi amiga" (amie empieza por vocal)?',
-    options:      ['ma amie', 'mon amie', 'mes amie'],
-  },
-  u04: {
-    dialogueNote: 'En los restaurantes franceses el servicio está siempre incluido ("service compris"). No es obligatorio dejar propina, pero se puede dejar algo en efectivo si el servicio fue excelente.',
-    grammarNote:  'El artículo partitivo expresa cantidad indeterminada: du pain, de la soupe, des fruits. En negación siempre se usa "de/d\'": Je ne mange pas DE pain. Je ne bois pas D\'eau.',
-    question:     '¿Cómo se dice "como pan" (sin cantidad específica)?',
-    options:      ['Je mange le pain', 'Je mange du pain', 'Je mange de pain'],
-  },
-  u05: {
-    dialogueNote: 'En Francia los apartamentos se llaman "appartements". La mayoría de los parisinos alquilan — comprar en París es muy caro. El "gardien" cuida el edificio y gestiona el correo.',
-    grammarNote:  '"Il y a" traduce "hay" en todos los casos. "Il y a une table." / "Il y a des chaises." En negación: "Il n\'y a pas de table." / "Il n\'y a pas de chaises." (nunca "des" en negación).',
-    question:     '¿Cómo se dice "no hay sillas" en francés?',
-    options:      ['Il y a pas des chaises', 'Il n\'y a pas des chaises', 'Il n\'y a pas de chaises'],
-  },
-  u06: {
-    dialogueNote: 'Los franceses son muy precisos para describir — colores, formas, estilos. El arte y el diseño son parte de la identidad francesa: de la moda parisina al Art Nouveau del metro de París.',
-    grammarNote:  'Los adjetivos concuerdan en género y número: un chat noir / une robe noire / des chats noirs. Van generalmente DESPUÉS del sustantivo. Excepción: grand, petit, beau, vieux van ANTES.',
-    question:     '¿Cómo se dice "una pelota roja" en francés?',
-    options:      ['une rouge balle', 'une balle rouge', 'un balle rouge'],
-  },
-  u07: {
-    dialogueNote: '"Ça va ?" es la pregunta y "ça va" es la respuesta — la misma frase sirve para preguntar y responder. Los franceses también usan "bof" para expresar indiferencia.',
-    grammarNote:  'Verbos -er: je parle, tu parles, il parle, nous parlons, vous parlez, ils parlent. La -s de "tu parles" es muda — suena igual que "il parle". Hay que acostumbrarse a la ortografía.',
-    question:     '¿Cuál es la conjugación correcta de "parler" en "vous" ?',
-    options:      ['vous parlons', 'vous parlez', 'vous parles'],
-  },
-  u08: {
-    dialogueNote: 'El gallo galo ("le coq gaulois") es el símbolo animal de Francia. El país tiene 11 parques nacionales y una biodiversidad excepcional, del Mediterráneo a los Alpes.',
-    grammarNote:  'El género de los sustantivos en francés no sigue reglas fijas — hay que aprenderlo con el artículo. Le soleil (masc.), la lune (fem.), le chien pero la chienne. Siempre aprende "le/la + sustantivo".',
-    question:     '¿Cuál es el artículo de "forêt" (bosque) en francés?',
-    options:      ['le forêt', 'la forêt', 'les forêt'],
-  },
-  u09: {
-    dialogueNote: 'El metro de París tiene 16 líneas y es uno de los más antiguos del mundo (1900). El pase "Navigo" es recargable y válido en toda la Île-de-France — metro, bus y tren.',
-    grammarNote:  '"À" + ville: je vais à Paris. "En" + pays féminin: en France, en Argentine. "Au" + pays masculin: au Maroc, au Brésil. "Aux" + pays pluriel: aux États-Unis.',
-    question:     '¿Cómo se dice "voy a Francia"?',
-    options:      ['Je vais à France', 'Je vais en France', 'Je vais au France'],
-  },
-  u10: {
-    dialogueNote: 'Los franceses expresan las emociones con mucha precisión. "J\'en ai marre" (estoy harto), "c\'est nul" (es una porquería), "c\'est top" (está genial) son expresiones muy cotidianas.',
-    grammarNote:  'En francés se usa "avoir" para estados físicos: j\'ai faim (tengo hambre), j\'ai soif (sed), j\'ai chaud (calor), j\'ai froid (frío), j\'ai peur (miedo). ¡Nunca "être" para estos estados!',
-    question:     '¿Cómo se dice "tengo sed" en francés?',
-    options:      ['Je suis soif', 'J\'ai soif', 'Je suis soifé'],
-  },
-  u11: {
-    dialogueNote: 'El TGV (Train à Grande Vitesse) une París con Lyon en 2h y con Marsella en 3h. La SNCF es la empresa ferroviaria nacional. Francia tiene la red de alta velocidad más extensa de Europa.',
-    grammarNote:  'El passé composé se forma con avoir/être + participio. Mayoría de verbos usan avoir: j\'ai pris, j\'ai voyagé. Verbos de movimiento usan être: je suis allé(e), je suis parti(e) — participio concuerda.',
-    question:     '¿Cuál es el passé composé de "voyager" en primera persona?',
-    options:      ['je suis voyagé', 'j\'ai voyagé', 'j\'avais voyagé'],
-  },
-  u12: {
-    dialogueNote: 'Francia tiene climas muy variados: mediterráneo en el sur, oceánico en el oeste, continental en el este. París recibe bastante lluvia — un paraguas es indispensable.',
-    grammarNote:  'Los verbos meteorológicos son impersonales: il fait chaud/froid/beau. Il y a du soleil/du vent. Il pleut. Il neige. Nunca hay sujeto personal para el tiempo — solo "il" impersonal.',
-    question:     '¿Cómo se dice "hay sol" (tiempo atmosférico) en francés?',
-    options:      ['Il fait soleil', 'Il y a du soleil', 'Il est soleil'],
-  },
-  u13: {
-    dialogueNote: 'París es la capital mundial de la moda: Chanel, Dior, Louis Vuitton, Hermès. Las rebajas ("les soldes") ocurren dos veces al año — en enero y en junio/julio — con descuentos reales.',
-    grammarNote:  'Comparativos: plus + adj + que (más que), moins + adj + que (menos que), aussi + adj + que (tan como). Irregulares: bon → meilleur (mejor), mauvais → pire (peor).',
-    question:     '¿Cómo se dice "más caro que" en francés?',
-    options:      ['plus cher à', 'plus cher que', 'plus que cher'],
-  },
-  u14: {
-    dialogueNote: 'La semana laboral francesa es de 35 horas — una de las más cortas del mundo. Los franceses tienen 5 semanas de vacaciones pagas. Las "Grandes Écoles" (HEC, Polytechnique) son más valoradas que las universidades.',
-    grammarNote:  'El futuro próximo "aller + infinitif" es el más usado en la lengua oral: je vais travailler (voy a trabajar). El futuro simple (-rai, -ras, -ra, -rons, -rez, -ront) es más formal y escrito.',
-    question:     '¿Cómo se dice "vas a estudiar" (futuro próximo) en francés?',
-    options:      ['Tu iras étudier', 'Tu vas étudier', 'Tu étudieras'],
-  },
-  u15: {
-    dialogueNote: 'La Sécurité Sociale francesa reembolsa gran parte de los gastos médicos. El "médecin traitant" (médico de cabecera) es el primer contacto obligatorio para acceder a los especialistas.',
-    grammarNote:  '"Avoir mal à" + partie du corps: j\'ai mal à la tête (me duele la cabeza), j\'ai mal au dos (espalda), j\'ai mal aux yeux (ojos). Contracción: à + le = au, à + les = aux.',
-    question:     '¿Cómo se dice "me duelen los ojos" en francés?',
-    options:      ['J\'ai mal des yeux', 'J\'ai mal aux yeux', 'J\'ai mal les yeux'],
-  },
-  u16: {
-    dialogueNote: 'La baguette se compra fresca cada día — los franceses van a la boulangerie a diario. Como decía de Gaulle: "Comment voulez-vous gouverner un pays qui a 246 variétés de fromage ?"',
-    grammarNote:  'Imperativo en francés: pour "vous" → Ajoutez ! Mélangez ! Pour "tu" → Ajoute ! Mélange ! (sin -s). En recetas siempre se usa "vous" por cortesía. Imperativo negativo: Ne mélangez pas !',
-    question:     '¿Cuál es el imperativo (vous) de "couper" (cortar)?',
-    options:      ['Coupe !', 'Coupez !', 'Coupons !'],
-  },
-  u17: {
-    dialogueNote: 'El email profesional en Francia siempre termina con "Cordialement" o "Bien cordialement". En contexto formal nunca se usa el primer nombre solo — siempre "Monsieur / Madame" + apellido.',
-    grammarNote:  'Los pronombres objeto directo van ANTES del verbo: Je le vois (lo veo), Je la connais (la conozco), Je les appelle (los llamo). En imperativo afirmativo van DESPUÉS: Appelle-les !',
-    question:     '¿Cómo se dice "lo llamo" (a él) en francés?',
-    options:      ['Je appelle lui', 'Je l\'appelle', 'Je lui appelle'],
-  },
-  u18: {
-    dialogueNote: 'El Tour de France (julio) es el evento deportivo más visto de Francia. Roland Garros en mayo es el único Grand Slam en tierra batida. El rugby es muy popular en el sur del país.',
-    grammarNote:  'El imperfecto (-ais, -ais, -ait, -ions, -iez, -aient) expresa hábitos pasados: "Quand j\'étais jeune, je jouais au foot." La raíz = nous del presente: nous jouons → je jou-ais.',
-    question:     '¿Cuál es el imperfecto de "jouer" en primera persona?',
-    options:      ['j\'ai joué', 'je jouais', 'je jouerais'],
-  },
-  u19: {
-    dialogueNote: 'Francia es el país más visitado del mundo: más de 100 millones de turistas al año. La Torre Eiffel, el Louvre y el Mont-Saint-Michel son los monumentos más visitados de Europa.',
-    grammarNote:  'El condicional expresa deseos y cortesía: je voudrais (quisiera), j\'aimerais (me gustaría), je pourrais (podría). Terminación -ais para todos — igual al imperfecto pero con raíz de futuro.',
-    question:     '¿Cómo se dice "me gustaría viajar" en francés?',
-    options:      ['Je veux voyager', 'J\'aimerais voyager', 'J\'aime voyager'],
-  },
-  u20: {
-    dialogueNote: 'Ser invitado a cenar en casa de un francés es un honor. Se lleva vino o flores (nunca crisantemos — son para funerales). Un retraso de 10-15 minutos es aceptable, llegar puntual puede sorprender.',
-    grammarNote:  'El subjonctif va después de il faut que, je veux que, je souhaite que: "Il faut que tu viennes." La forma es distinta al indicativo: venir → que je vienne, que tu viennes, qu\'il vienne.',
-    question:     '¿Qué modo sigue "il faut que" en francés?',
-    options:      ['indicatif', 'subjonctif', 'infinitif'],
-  },
-  u21: {
-    dialogueNote: 'Francia genera el 70% de su electricidad con energía nuclear — la tasa más alta del mundo. Al mismo tiempo tiene metas ambiciosas de energías renovables (eólica, solar) para 2035.',
-    grammarNote:  'Subjonctif après les expressions de nécessité et doute: "Il est important que nous recyclions." "Je ne crois pas qu\'il soit possible." La forma: que je sois, que tu sois, qu\'il soit (être).',
-    question:     '¿Después de "il est important que", qué modo se usa en francés?',
-    options:      ['indicatif', 'subjonctif', 'conditionnel'],
-  },
-  u22: {
-    dialogueNote: 'El Festival de Cannes (mayo) es el evento de cine más famoso del mundo. Francia tiene una política de "exception culturelle" que protege el cine, la música y los libros franceses.',
-    grammarNote:  'La voz pasiva: être + participio pasado concordado. "Le film a été réalisé par Godard." "La pièce a été écrite par Molière." El participio concuerda en género y número con el sujeto.',
-    question:     '¿Cómo se forma la voz pasiva en francés?',
-    options:      ['avoir + participio', 'être + participio', 'aller + participio'],
-  },
-  u23: {
-    dialogueNote: 'Los franceses aman el debate y la argumentación. "Le café du commerce" designa las discusiones de opinión entre ciudadanos — una tradición viva desde la Revolución Francesa.',
-    grammarNote:  'Conectores de oposición: cependant (sin embargo), néanmoins (no obstante), en revanche (en cambio), par contre (por otro lado), toutefois (sin embargo). Más formales y precisos que "mais".',
-    question:     '¿Cómo se dice "sin embargo" de manera formal en francés?',
-    options:      ['mais', 'cependant', 'alors'],
-  },
-  u24: {
-    dialogueNote: 'Francia es la 7ª economía mundial. El modelo social francés incluye salud gratuita, educación pública y 5 semanas de vacaciones. Este "modèle social" es un orgullo nacional muy debatido.',
-    grammarNote:  'El condicional pasado expresa arrepentimientos: j\'aurais pu (hubiera podido), tu aurais dû (deberías haber), il serait venu (hubiera venido). Se forma con avoir/être en condicional + participio.',
-    question:     '¿Cómo se dice "hubiera podido" en francés?',
-    options:      ['je pourrais', 'j\'aurais pu', 'j\'avais pu'],
-  },
-  u25: {
-    dialogueNote: 'El psicoanálisis es muy popular en Francia — hay más psicoanalistas per cápita que en cualquier otro país. "Être en analyse" (estar en análisis) es socialmente muy aceptado, incluso valorado.',
-    grammarNote:  'Verbos pronominales de estado: se sentir (sentirse), se mettre en colère (enojarse), s\'ennuyer (aburrirse). En passé composé se usan con être: je me suis senti(e), elle s\'est mise en colère.',
-    question:     '¿Cómo se dice "me sentí ansioso" (passé composé) en francés?',
-    options:      ['j\'ai senti anxieux', 'je me suis senti anxieux', 'je suis senti anxieux'],
-  },
-  u26: {
-    dialogueNote: 'El CAC 40 es el índice bursátil francés principal. Empresas como LVMH, TotalEnergies, Airbus y Carrefour son referentes mundiales. Francia tiene 25 empresas en el Fortune Global 500.',
-    grammarNote:  'Discurso indirecto: el tiempo verbal retrocede. "Je vais venir" → il a dit qu\'il allait venir. Présent → imparfait. Futur → conditionnel. Passé composé → plus-que-parfait.',
-    question:     '¿Cómo se convierte "je vais partir" en discurso indirecto (pasado)?',
-    options:      ['il a dit qu\'il va partir', 'il a dit qu\'il allait partir', 'il a dit qu\'il ira partir'],
-  },
-  u27: {
-    dialogueNote: 'Le Monde y Le Figaro son los periódicos de referencia. France Inter es la radio más escuchada. La ARCOM regula los medios audiovisuales y Francia tiene leyes estrictas contra la desinformación.',
-    grammarNote:  'Pronombres relativos: qui (sujeto), que (objeto), dont (cuyo/del que), où (donde/cuando). "Le journaliste qui écrit." "L\'article que je lis." "Le journal dont je parle." "Le jour où je suis arrivé."',
-    question:     '¿Cómo se dice "el periodista del que hablo"?',
-    options:      ['le journaliste qui je parle', 'le journaliste dont je parle', 'le journaliste que je parle'],
-  },
-  u28: {
-    dialogueNote: 'En el argot francés, el "verlan" invierte las sílabas: "l\'envers" → "verlan", "fou" → "ouf", "bizarre" → "zarbi". Nacido en las banlieues, hoy es parte del francés familiar de todos.',
-    grammarNote:  'El verlan francés invierte sílabas: fou → ouf, mec → keum, femme → meuf, l\'envers → verlan. También existen argots como "laisse tomber" → "laisse béton". Esencial para entender series y películas.',
-    question:     '¿Qué significa "ouf" en verlan francés?',
-    options:      ['bien', 'fou (loco/increíble)', 'non'],
-  },
-  u29: {
-    dialogueNote: 'Station F en París es el mayor campus de startups del mundo. Francia produce muchas "licornes" (startups valoradas en +1000M€): BlaBlaCar, Doctolib, Mistral AI. El ecosistema tech francés es el 2° de Europa.',
-    grammarNote:  'Hipótesis con "si": Si + imparfait + conditionnel: "Si j\'avais le temps, je voyagerais." Para el pasado: Si + plus-que-parfait + conditionnel passé: "Si j\'avais su, je serais venu."',
-    question:     '¿Qué estructura se usa para una hipótesis irreal en el presente?',
-    options:      ['si + présent + futur', 'si + imparfait + conditionnel', 'si + subjonctif + conditionnel'],
-  },
-  u30: {
-    dialogueNote: 'Francia tiene más premios Nobel de Literatura que cualquier otro país. Victor Hugo, Flaubert, Camus, Sartre, Simone de Beauvoir — dominar el francés te abre esta literatura directamente.',
-    grammarNote:  'Conectores avanzados: "Certes… mais" (es cierto… pero), "Quant à" (en cuanto a), "Dès lors que" (desde que), "À condition que" + subjonctif (a condición de que). La clave del discurso B1.',
-    question:     '¿Cómo se dice "a condición de que" en francés?',
-    options:      ['à condition de + infinitif', 'à condition que + subjonctif', 'à condition si'],
+const CURRICULUM_B1_ES = [
+
+  {
+    id:'u01',
+    dialogueNote:'En francés hay dos palabras para "hola": "bonjour" (de día) y "bonsoir" (de noche). "S\'il vous plaît" (formal) / "s\'il te plaît" (informal) = por favor. "Enchanté" se dice al presentarse, equivale a "mucho gusto".',
+    grammarNote:'En francés no existe el voseo. Solo hay "tu" (informal) y "vous" (formal o plural). La segunda persona del presente: tu parles, tu veux, tu es. La "s" final nunca se pronuncia. Para preguntas formales: "comment allez-vous ?" Para informales: "comment vas-tu ?" o simplemente "ça va ?".',
+    question:'¿Cómo se dice "¿Cómo estás?" en francés informal?',
+    options:['Comment vous allez ?','Comment vas-tu ?','Comment tu aller ?'],
+    answer:1,
   },
 
-  /* ── A1 complement u31–u40 ────────────────────────────────────── */
-  u31: {
-    dialogueNote: 'La moda francesa es mundialmente famosa: Chanel, Dior, Louis Vuitton, Hermès. Las "soldes" (rebajas) en enero y julio son eventos nacionales. Las "friperies" (tiendas de segunda mano) son cada vez más populares entre los jóvenes.',
-    grammarNote:  'Los adjetivos de color en francés concuerdan en género y número: "un pull noir" → "une veste noire". Los que terminan en -e son invariables: "rouge", "jaune", "rose". Irregulares importantes: "blanc/blanche", "beau/belle". Siempre van DESPUÉS del sustantivo.',
-    question:     '¿Cómo se dice "una falda azul" en francés?',
-    options:      ['une jupe bleu', 'une jupe bleue', 'un jupe bleue'],
-  },
-  u32: {
-    dialogueNote: 'En Francia los días y meses siempre se escriben en minúscula: lundi, mardi, janvier, février. El 14 juillet (Fête Nationale) celebra la Revolución Francesa. Los "jours fériés" (festivos) son 11 al año, menos que en muchos países europeos.',
-    grammarNote:  'Las fechas en francés: "le" + número + mois. "Le 14 juillet." Para el primer día del mes se usa "premier": "le premier mai." Los días de la semana sin artículo expresan recurrencia: "le lundi" (todos los lunes) vs "lundi" (este lunes).',
-    question:     '¿Cómo se dice "el 1° de enero" en francés?',
-    options:      ['le premier janvier', 'le un janvier', 'la première janvier'],
-  },
-  u33: {
-    dialogueNote: 'En francés la descripción con adjetivos es muy precisa. A diferencia del español, francés no distingue "ser/estar" — solo existe "être". El contexto determina si la cualidad es permanente o temporal: "il est fatigué" puede ser un estado pasajero o crónico.',
-    grammarNote:  'En francés "être" expresa tanto cualidades permanentes como estados temporales — no hay distinción ser/estar. "Il est grand" (permanente). "Il est malade" (temporal). Los adjetivos concuerdan en género y número: "elle est intelligente", "ils sont intelligents".',
-    question:     '¿Qué frase expresa una cualidad permanente en francés?',
-    options:      ['Il est fatigué.', 'Il est malade.', 'Il est intelligent.'],
-  },
-  u34: {
-    dialogueNote: 'La jornada francesa típica: desayuno ligero a las 7h, almuerzo a las 12h (pausa de 1 hora en muchas empresas), cena a las 19-20h. El "petit-déjeuner" incluye café y tartines (tostadas). El horario de comidas es más fijo que en Argentina.',
-    grammarNote:  'Los verbos pronominales (reflexivos) en francés se conjugan con me/te/se/nous/vous/se: "je me lève", "tu te couches", "il se réveille". Atención a los cambios de acento en se lever: je me lève, nous nous levons. En passé composé usan "être" como auxiliaire.',
-    question:     '¿Cuál es la forma correcta de "acostarse" en primera persona del presente?',
-    options:      ['je me couche', 'je couche me', 'je me couches'],
-  },
-  u35: {
-    dialogueNote: 'La escuela pública francesa es laica ("laïque") y gratuita hasta los 16 años. El "baccalauréat" (bac) es el examen nacional al final del lycée. Las "Grandes Écoles" (HEC, Polytechnique, Sciences Po) son la élite del sistema educativo.',
-    grammarNote:  '"Devoir" + infinitivo expresa obligación: "Je dois travailler." (tengo que trabajar). Conjugación: je dois, tu dois, il doit, nous devons, vous devez, ils doivent. Para expresar prohibición: "Tu ne dois pas partir." Para expresar probabilidad: "Il doit être en retard."',
-    question:     '¿Cómo se dice "tengo que ir a clase" en francés?',
-    options:      ['Je vais devoir aller en classe', 'Je dois aller en classe', 'Je dois à aller en classe'],
-  },
-  u36: {
-    dialogueNote: 'El café francés ("le café") es un espacio social fundamental. Napoleón afirmó que el Café de Flore era un "monumento nacional". El café se toma corto (espresso). El "service compris" (servicio incluido) está siempre incluido en la cuenta — la propina es opcional.',
-    grammarNote:  'Para pedir en un restaurante o café, el condicional es más educado que el presente: "Je voudrais un café, s\'il vous plaît." (quisiera). "Pourriez-vous m\'apporter l\'addition ?" (¿podría traerme la cuenta?). "Je veux" suena demasiado brusco en contexto de servicio.',
-    question:     '¿Cuál es la forma más educada para pedir en un café?',
-    options:      ['Je veux un café.', 'Je voudrais un café.', 'Donne-moi un café.'],
-  },
-  u37: {
-    dialogueNote: 'La Sécurité Sociale francesa cubre aproximadamente el 70% de los gastos médicos. El "médecin traitant" (médico de cabecera) es el primer paso obligatorio para acceder a especialistas. Las farmacias, señaladas con una cruz verde, son muy numerosas en Francia.',
-    grammarNote:  'Para expresar dolor en francés: "avoir mal à" + partie du corps. "J\'ai mal à la tête" (me duele la cabeza). Contracciones obligatorias: "à + le = au" → "j\'ai mal au dos", "à + les = aux" → "j\'ai mal aux yeux". Nunca "mon dos fait mal" en francés estándar.',
-    question:     '¿Cómo se dice "me duele la espalda" en francés?',
-    options:      ['Ma dos fait mal', 'J\'ai mal au dos', 'Je suis douleur au dos'],
-  },
-  u38: {
-    dialogueNote: 'Francia usa el euro desde 2002. Los precios incluyen siempre el IVA ("TVA"). Los mercados al aire libre ("marchés") son muy comunes los fines de semana — ideales para comprar directamente a productores. El pago en efectivo por encima de 1 000€ está restringido.',
-    grammarNote:  'Para preguntar precios en francés: "Combien ça coûte ?" o "C\'est combien ?" (informal). Para un artículo específico: "Combien coûte ce manteau ?" Para el total: "Ça fait combien en tout ?" El cajero se llama "la caisse", el ticket "le ticket de caisse" o "le reçu".',
-    question:     '¿Cómo se pregunta "¿cuánto cuesta?" de manera informal en francés?',
-    options:      ['Quel est le prix ?', 'C\'est combien ?', 'Combien tu coûtes ?'],
-  },
-  u39: {
-    dialogueNote: 'Los franceses valoran mucho el "temps libre". Las actividades culturales (museos, teatro, lecture) son muy valoradas. La pétanque (boules) es un hobby popular especialmente en el sur. Los musées nationaux (Louvre, Orsay, Pompidou) son gratuitos para menores de 26 años.',
-    grammarNote:  '"Aimer" + infinitif ou nom: "J\'aime lire." (me gusta leer) / "J\'aime la musique." (me gusta la música). Con nombres plurales: "J\'aime les films." Para intensidad: "J\'adore" (me encanta). Para lo que no gusta: "Je n\'aime pas" o "Je déteste". Sin preposición entre aimer y el infinitivo.',
-    question:     '¿Cómo se dice "me gusta la música" en francés?',
-    options:      ['J\'aime à la musique', 'J\'aime la musique', 'J\'aime de la musique'],
-  },
-  u40: {
-    dialogueNote: 'Los conectores del discurso son esenciales en francés, especialmente en el escrito. El DALF (Diplôme Approfondi de Langue Française) evalúa la capacidad de estructurar argumentos con conectores precisos. Un texto bien conectado es la señal de un nivel B1 real.',
-    grammarNote:  '"Pour" + infinitif expresa finalidad (para qué): "J\'étudie pour apprendre." "Parce que" + sujet + verbe expresa causa (porque): "J\'étudie parce que j\'aime ça." Regla: "pour" siempre seguido de infinitivo; "parce que" siempre seguido de sujeto + verbo conjugado.',
-    question:     '¿Cuál es la frase correcta para "estudio francés para aprender"?',
-    options:      ['J\'étudie le français parce qu\'apprendre.', 'J\'étudie le français pour apprendre.', 'J\'étudie le français à apprendre.'],
+  {
+    id:'u02',
+    dialogueNote:'Los números en francés tienen particularidades. Del 70 al 99 son compuestos: 70 = soixante-dix (60+10), 80 = quatre-vingts (4×20), 90 = quatre-vingt-dix (4×20+10). Esto sorprende a los hispanohablantes pero viene de un sistema vigesimal (base 20) de los galos.',
+    grammarNote:'En francés "un" y "une" se acuerdan con el género del sustantivo: un livre (m), une table (f). El artículo indefinido plural es "des" (unos/unas): des livres, des tables. No hay forma "uno" separada del artículo — solo "un" masculino y "une" femenino.',
+    question:'¿Cómo se escribe 80 en francés?',
+    options:['huitante','octante','quatre-vingts'],
+    answer:2,
   },
 
-  /* ── A2 complement u41–u55 ────────────────────────────────────── */
-  u41: {
-    dialogueNote: 'En Francia la mayoría alquila en ciudad. Un apartamento en París cuesta en promedio 30€/m² al mes. Las "charges" (gastos comunes) pueden estar incluidas o no. Los contratos de arrendamiento son de 1 a 3 años según el tipo de vivienda.',
-    grammarNote:  '"Il y a" expresa existencia: "Il y a une fenêtre." (hay una ventana). Negación: "Il n\'y a pas de fenêtre." (siempre sin artículo después de "de" en negación). Para preguntar: "Y a-t-il un balcon ?" o "Est-ce qu\'il y a un balcon ?" — las dos formas son correctas.',
-    question:     '¿Cómo se dice "no hay ascensor" en francés?',
-    options:      ['Il y a pas d\'ascenseur', 'Il n\'y a pas d\'ascenseur', 'Il n\'y a pas un ascenseur'],
-  },
-  u42: {
-    dialogueNote: 'El sistema bancario francés está muy desarrollado. La mayoría tiene cuenta en BNP Paribas, Crédit Agricole o La Banque Postale. El SMIC (salario mínimo) es de aproximadamente 1 766€ brutos/mes. Los "virements" (transferencias) son la forma de pago más frecuente.',
-    grammarNote:  'Vocabulario bancario clave en francés: "un virement" (transferencia), "un prélèvement automatique" (débito automático), "un relevé de compte" (extracto bancario), "un découvert" (descubierto/números rojos), "un crédit immobilier" (hipoteca). El verbo "recevoir" es irregular: je reçois, tu reçois, il reçoit.',
-    question:     '¿Cuál es la forma correcta de "recevoir" (recibir) en primera persona del presente?',
-    options:      ['je recevois', 'je reçois', 'je reçevis'],
-  },
-  u43: {
-    dialogueNote: 'Las fiestas principales francesas: el 14 juillet (Fête Nationale), Noël, le Jour de l\'An, la Fête du Travail (1er mai). El "réveillon" de Nochebuena y Nochevieja son las cenas más importantes. La "galette des rois" en enero celebra la Epifanía.',
-    grammarNote:  'El futuro próximo en francés: "aller" conjugado + infinitivo. "Je vais fêter mon anniversaire." (voy a celebrar). "On va faire la fête." (vamos a festejar). Es el futuro más frecuente en el habla cotidiana. El futur simple (-rai) se reserva para contextos más formales o distantes.',
-    question:     '¿Cómo se dice "voy a celebrar mi cumpleaños" en francés?',
-    options:      ['Je célébrerai mon anniversaire.', 'Je vais célébrer mon anniversaire.', 'Je célèbre mon anniversaire.'],
-  },
-  u44: {
-    dialogueNote: 'En Francia describir el carácter con precisión es muy valorado. Los franceses usan adjetivos de matiz: "nuancé" (matizado), "cartésien" (lógico/racional), "épicurien" (epicúreo). El psicoanálisis es muy popular — París tiene más psicoanalistas per cápita que cualquier otra ciudad.',
-    grammarNote:  'Para describir el carácter en francés: "être" + adjectif. Los adjetivos concuerdan: -eux/-euse (sérieux/sérieuse), -if/-ive (créatif/créative), -eur/-euse (travailleur/travailleuse). Invariables: "sympa", "cool". "Un homme généreux" → "une femme généreuse".',
-    question:     '¿Cómo se dice "ella es ambiciosa" en francés?',
-    options:      ['Elle est ambitieux', 'Elle est ambitieuse', 'Elle est ambitioused'],
-  },
-  u45: {
-    dialogueNote: 'Los hoteles franceses se clasifican de 1 a 5 estrellas. Los "palaces" (Le Ritz, Le Crillon en París) son la categoría suprema. Los pequeños "hôtels de charme" son muy apreciados por los viajeros. El "gîte rural" es el equivalente francés de una casa de campo para alquilar.',
-    grammarNote:  'Para peticiones corteses en un hotel, el condicional es esencial: "Je voudrais une chambre." "Auriez-vous une chambre disponible ?" "Pourriez-vous me donner un autre oreiller ?" El condicional de politesse diferencia el nivel A2 del B1 — es la marca del francés educado.',
-    question:     '¿Cuál es la petición más cortés en un hotel?',
-    options:      ['Je veux une chambre simple.', 'Je voudrais une chambre simple.', 'Donnez-moi une chambre simple.'],
-  },
-  u46: {
-    dialogueNote: 'La moda francesa marca tendencia mundial. El "vestiaire capsule" (armario cápsula) es una filosofía francesa: pocas piezas, alta calidad. El mercado de segunda mano ("les friperies") es muy popular entre los jóvenes. El "Vestiaire Collectif" es la plataforma francesa líder de reventa de moda de lujo.',
-    grammarNote:  'Los pronombres objeto directo van ANTES del verbo: le (lo/masc.), la (la/fem.), les (los/las). "J\'achète le manteau" → "Je l\'achète." "Je prends les chaussures" → "Je les prends." En imperativo afirmativo van DESPUÉS con guion: "Prends-le !" "Achetez-les !"',
-    question:     '¿Cómo se dice "lo compro" (el abrigo, masc.) en francés?',
-    options:      ['Je le achète', 'Je l\'achète', 'Je lui achète'],
-  },
-  u47: {
-    dialogueNote: 'Las profesiones más valoradas en Francia: médico, abogado, ingeniero. Las "Grandes Écoles" (HEC, Polytechnique, Sciences Po) forman las élites. El sistema de "concours" (oposición) selecciona a los mejores desde joven. La "reconversion professionnelle" está apoyada por el Estado.',
-    grammarNote:  'Con "être" + profesión NO se usa artículo en francés: "Je suis médecin." (NOT "Je suis un médecin"). Con "c\'est" SÍ: "C\'est un médecin." Con adjetivo también se añade artículo: "Je suis un bon médecin." Esta regla difiere del español y es uno de los errores más frecuentes.',
-    question:     '¿Cuál es la forma correcta en francés?',
-    options:      ['Je suis un professeur.', 'Je suis une professeur.', 'Je suis professeur.'],
-  },
-  u48: {
-    dialogueNote: 'Los hábitos cotidianos franceses: comprar la baguette fresca cada día, tomar café corto varias veces, ver las noticias a las 20h. El "journal télévisé" (JT) de France 2 o TF1 reúne millones de espectadores cada noche. Las "grandes vacances" (julio-agosto) son sagradas.',
-    grammarNote:  'Los adverbios de frecuencia en francés van DESPUÉS del verbo conjugado: "Je mange toujours à midi." "Il va souvent au cinéma." En passé composé van entre l\'auxiliaire y el participio: "J\'ai souvent mangé ici." "Toujours", "jamais", "souvent", "parfois", "rarement", "quelquefois".',
-    question:     '¿Dónde va el adverbio "toujours" en "je / rater / le petit-déjeuner"?',
-    options:      ['Toujours je rate le petit-déjeuner.', 'Je rate toujours le petit-déjeuner.', 'Je rate le petit-déjeuner toujours.'],
-  },
-  u49: {
-    dialogueNote: 'Los franceses son muy precisos en la comparación y valoración. Las guías Michelin califican restaurantes y hoteles — la estrella Michelin es la máxima distinción gastronómica mundial. El comparativo es esencial en el debate cotidiano: "c\'est mieux", "c\'est pire", "c\'est pareil".',
-    grammarNote:  'Comparativos en francés: plus + adjectif + que (más que), moins + adjectif + que (menos que), aussi + adjectif + que (tan...como). Irregulares: bon → meilleur (mejor), mauvais → pire (peor). "Ce restaurant est meilleur que l\'autre." "C\'est moins cher qu\'avant."',
-    question:     '¿Cómo se dice "menos caro que" en francés?',
-    options:      ['plus bon marché que', 'moins cher que', 'aussi cher que'],
-  },
-  u50: {
-    dialogueNote: 'Los medios de referencia franceses: Le Monde y Le Figaro (prensa), France Inter (radio más escuchada), BFM TV (noticias 24h). La ley francesa exige cuotas de música francófona en las radios (35% mínimo). El "droit à l\'oubli numérique" (derecho al olvido digital) está reconocido en Francia.',
-    grammarNote:  'En passé composé los verbos irregulares con "avoir" tienen participios propios: faire → fait, dire → dit, prendre → pris, mettre → mis, voir → vu, lire → lu, écrire → écrit, ouvrir → ouvert. El participio NO concuerda con el sujeto cuando el auxiliaire es "avoir".',
-    question:     '¿Cuál es el passé composé de "faire" en primera persona?',
-    options:      ['j\'ai faisé', 'j\'ai fait', 'je suis fait'],
-  },
-  u51: {
-    dialogueNote: 'La famille française contemporaine es muy diversa: familias monoparentales, recompuestas ("familles recomposées"), parejas PACS. Las "allocations familiales" son subsidios del Estado para familias con hijos — uno de los sistemas más generosos de Europa. El apellido puede ser del padre, de la madre o combinado.',
-    grammarNote:  'En francés NO existen diminutivos como en español (-ito, -ita). Se usa "petit/petite" o el sufijo "-ette": "une maison" → "une petite maison" o "une maisonnette". "Un chat" → "un petit chat". "Une fille" → "une fillette". El sufijo "-ot" existe pero suena arcaico.',
-    question:     '¿Cómo se dice "un gatito" en francés estándar?',
-    options:      ['un chatito', 'un petit chat', 'un chatín'],
-  },
-  u52: {
-    dialogueNote: 'La medicina en Francia es muy accesible: visitar al médico de cabecera cuesta 25€, reembolsados casi íntegramente por la Sécurité Sociale. La "carte Vitale" es la tarjeta de la Seguridad Social. La "ordonnance" (receta) es necesaria para muchos medicamentos.',
-    grammarNote:  'Los verbos pronominales de salud en francés: "se sentir" (sentirse), "se remettre de" (recuperarse de), "se blesser" (lastimarse), "se soigner" (cuidarse). "Je me sens mieux." En passé composé usan "être": "Elle s\'est remise de son opération." El participio concuerda con el sujeto.',
-    question:     '¿Cuál es la forma correcta de "sentirse mejor" en el presente?',
-    options:      ['je me sens mieux', 'je sens mieux moi', 'je suis sentant mieux'],
-  },
-  u53: {
-    dialogueNote: 'Los franceses tienen una cultura del "projet de vie": ideales profesionales, personales y ciudadanos. La mobilité sociale existe pero es más difícil que en otros países — las Grandes Écoles siguen siendo los principales ascensores sociales. El "rêve" (sueño) y las aspiraciones son muy presentes en la cultura.',
-    grammarNote:  'Para expresar sueños y aspiraciones en francés: "rêver de" + infinitif (soñar con hacer algo), "espérer" + infinitif (esperar hacer), "avoir l\'intention de" + infinitif (tener intención de). "Je rêve de voyager en Asie." "J\'espère réussir." Sin preposición después de "espérer".',
-    question:     '¿Cómo se dice "sueño con vivir en París" en francés?',
-    options:      ['Je rêve vivre à Paris', 'Je rêve de vivre à Paris', 'Je veux rêver à Paris'],
-  },
-  u54: {
-    dialogueNote: 'El argot francés ("le verlan") invierte las sílabas: "l\'envers" → "verlan", "fou" → "ouf", "bizarre" → "zarbi", "lourd" → "relou". También existe argot de origen árabe o africano: "kif-kif" (igual), "wesh" (ey/hola). Esencial para entender series y películas francesas contemporáneas.',
-    grammarNote:  'Argot francés cotidiano: "bouffer" (comer, como "morfar"), "bosser" (trabajar duro), "se barrer" (irse), "kiffer" (gustarle a alguien), "avoir la flemme" (tener pereza), "c\'est ouf" (es increíble/está loco). "Y\'a pas de souci" (no hay problema) = la versión oral de "il n\'y a pas de problème".',
-    question:     '¿Qué significa "c\'est ouf" en el argot francés?',
-    options:      ['c\'est incroyable / c\'est fou', 'c\'est fatigant', 'c\'est facile'],
-  },
-  u55: {
-    dialogueNote: 'El francés escrito requiere un buen dominio de los conectores del discurso. En el baccalauréat, los candidatos deben estructurar argumentos con conectores precisos. Un texto bien conectado es señal de nivel B1. La "dissertation" (ensayo filosófico) es el ejercicio reina de la enseñanza francesa.',
-    grammarNote:  'Conectores básicos en francés: "et" (y), "ou" (o), "mais" (pero), "donc" (entonces/por lo tanto), "car" (pues/ya que — más literario), "or" (ahora bien — introduce un elemento nuevo), "ni" (ni). "De plus" y "en plus" significan "además". "Or" es especialmente difícil — no confundir con el "or" inglés.',
-    question:     '¿Cómo se dice "además" en francés?',
-    options:      ['mais', 'de plus / en plus', 'donc'],
+  {
+    id:'u03',
+    dialogueNote:'En francés los días y los meses se escriben con minúscula. Para decir "el lunes" (específico) se usa "le lundi". Para "los lunes" (habitual) también se usa "le lundi" — el artículo no cambia, el contexto indica si es puntual o habitual.',
+    grammarNote:'Los meses en francés son masculinos: en janvier, en février. Para las fechas: le 14 juillet (sin repetir el artículo). Los días no llevan preposición: "lundi je travaille" (el lunes trabajo). La semana empieza en lunes en el calendario francés.',
+    question:'¿Cómo se dice "el lunes trabajo" en francés?',
+    options:['En lundi je travaille','Le lundi je travaille','Du lundi je travaille'],
+    answer:1,
   },
 
-  /* ── Connectors uc1–uc5 ───────────────────────────────────────── */
-  uc1: {
-    dialogueNote: 'Los conectores aditivos estructuran el razonamiento francés. "Non seulement… mais aussi" es una estructura de énfasis muy frecuente en la prensa y el ensayo. La retórica francesa valora la acumulación elegante de argumentos — una herencia de la formación clásica.',
-    grammarNote:  'Conectores aditivos avanzados en francés: "de plus" (además), "en outre" (por otra parte — formal), "qui plus est" (es más — muy formal), "non seulement… mais aussi/encore" (no sólo… sino también), "voire" (e incluso — marca un punto más fuerte). "Il est non seulement intelligent, mais aussi très travailleur."',
-    question:     '¿Cómo se dice "no solo... sino también" en francés?',
-    options:      ['ou bien… ou bien', 'non seulement… mais aussi', 'tant… que'],
-  },
-  uc2: {
-    dialogueNote: 'Los conectores adversativos son el sello del pensamiento crítico francés. La dialéctica (thèse/antithèse/synthèse) estructura toda la enseñanza desde el lycée. Un buen uso de "cependant", "néanmoins", "en revanche" es señal inequívoca de nivel avanzado.',
-    grammarNote:  'Conectores adversativos de menor a mayor formalidad: "mais" (pero), "pourtant" (sin embargo), "cependant" (sin embargo — formal), "néanmoins" (no obstante — muy formal), "en revanche / par contre" (en cambio). "Il a beaucoup travaillé. Pourtant, il n\'a pas réussi." "Par contre" es más oral.',
-    question:     '¿Cuál expresa "sin embargo" en un contexto formal en francés?',
-    options:      ['mais', 'cependant', 'donc'],
-  },
-  uc3: {
-    dialogueNote: 'Los conectores causales y consecutivos son esenciales en el argumentario francés. "Car" es más literario que "parce que". "Puisque" implica que la causa es conocida por ambos interlocutores. Dominar estas diferencias es la clave del francés escrito de nivel B1.',
-    grammarNote:  'Causa: "parce que" (porque — responde a ¿por qué?), "car" (pues/ya que — no al inicio de frase), "puisque" (ya que — causa conocida). Consecuencia: "donc" (entonces), "par conséquent" (por consiguiente — formal), "c\'est pourquoi" (es por eso que), "ainsi" (así/de este modo).',
-    question:     '¿Cuál expresa consecuencia en francés?',
-    options:      ['parce que', 'par conséquent', 'puisque'],
-  },
-  uc4: {
-    dialogueNote: 'Los conectores temporales permiten narrar con precisión en francés. En la prensa se usan constantemente: "alors que" (mientras que), "dès que" (tan pronto como), "au moment où" (en el momento en que). Dominarlos es esencial para narrar eventos con fluidez.',
-    grammarNote:  'Conectores temporales en francés: "quand / lorsque" (cuando), "dès que / aussitôt que" (tan pronto como), "avant que" + subjonctif (antes de que), "après que" + indicatif (después de que), "pendant que" (mientras), "jusqu\'à ce que" + subjonctif (hasta que). Atención al modo con "avant que".',
-    question:     '¿Qué conector significa "tan pronto como" en francés?',
-    options:      ['pendant que', 'dès que', 'avant que'],
-  },
-  uc5: {
-    dialogueNote: 'Los conectores concessivos son el punto más difícil del francés avanzado porque cambian el modo verbal. "Bien que" y "quoique" exigen el subjonctif. "Même si" y "malgré" son más sencillos. Dominar esta distinción diferencia el nivel B1 del B2.',
-    grammarNote:  'Concesión en francés: "même si" + indicatif (incluso si — hecho real o hipótesis), "bien que / quoique" + subjonctif (aunque — concesión con subjonctif obligatorio), "malgré" + nom (a pesar de). "Même si c\'est difficile, j\'essaie." vs "Bien qu\'il soit difficile, je réussis."',
-    question:     '¿Qué modo sigue "bien que" en francés?',
-    options:      ['l\'indicatif', 'le subjonctif', 'le conditionnel'],
+  {
+    id:'u04',
+    dialogueNote:'En francés los adjetivos posesivos concuerdan con el género del objeto poseído, no con el del poseedor. "Su madre" (de él o de ella) siempre es "sa mère" porque "mère" es femenino. Delante de vocal, ma/ta/sa se convierten en mon/ton/son: mon amie (mi amiga).',
+    grammarNote:'Los posesivos franceses: mon/ma/mes, ton/ta/tes, son/sa/ses. Delante de vocal o h muda, ma/ta/sa se convierten en mon/ton/son aunque el sustantivo sea femenino: mon amie (mi amiga). Esto es para evitar el hiato de pronunciación.',
+    question:'¿Cómo se dice "mi madre" en francés?',
+    options:['mia mère','mon mère','ma mère'],
+    answer:2,
   },
 
-  /* ── B1 complement u56–u80 ────────────────────────────────────── */
-  u56: {
-    dialogueNote: 'La Cinquième République française fue instaurada en 1958 por de Gaulle. El presidente se elige cada 5 años por sufragio universal. El Parlement incluye la Assemblée Nationale y el Sénat. El "millefeuille administratif" (muchas capas de burocracia) es una crítica recurrente al sistema francés.',
-    grammarNote:  'En francés "on" tiene múltiples usos: impersonal ("on dit que" = se dice que), equivalente de "nous" en oral ("on va au cinéma" = vamos al cine), indefinido ("on ne sait jamais" = nunca se sabe). En política "on" impersonal es muy frecuente: "on a besoin de changement".',
-    question:     '¿Cómo se dice "se necesita un cambio" con "on" en francés?',
-    options:      ['il se nécessite un changement', 'on a besoin de changement', 'on nécessite changement'],
+  {
+    id:'u05',
+    dialogueNote:'En francés "il y a" (equivalente a "hay") es invariable: il y a un livre / il y a des livres. La negación: il n\'y a pas de… (no hay…). No confundir con "c\'est" (es) o "il est/elle est" (está). "Il y a une table" = hay una mesa. "C\'est une table" = es una mesa.',
+    grammarNote:'"Il y a" expresa existencia; "c\'est" expresa identidad; "il est/elle est" describe. En preguntas: "est-ce qu\'il y a…?" (¿hay…?). En negación: "il n\'y a pas de pain" (no hay pan) — el artículo desaparece después de "pas de".',
+    question:'¿Cómo se dice "hay tres habitaciones"?',
+    options:['C\'est trois chambres','Il est trois chambres','Il y a trois chambres'],
+    answer:2,
   },
-  u57: {
-    dialogueNote: 'La historia francesa está marcada por momentos fundadores: la Révolution de 1789, el Imperio de Napoléon, la Résistance en la Segunda Guerra Mundial, Mai 68. El "devoir de mémoire" (deber de memoria) es un valor republicano fundamental. Los musées d\'histoire son muy visitados.',
-    grammarNote:  'En francés el passé composé expresa acciones puntuales terminadas: "La Révolution a éclaté en 1789." L\'imparfait expresa el contexto, la duración, los hábitos pasados: "Les paysans étaient pauvres." Los dos tiempos se combinan en la narración histórica — dominarlo es esencial para el nivel B1.',
-    question:     '¿Cuál se usa para una acción histórica puntual en francés?',
-    options:      ['l\'imparfait', 'le passé composé', 'le conditionnel'],
-  },
-  u58: {
-    dialogueNote: 'Francia tiene una tradición científica excepcional: Pasteur, Marie Curie, Louis de Broglie. El CNRS (Centre National de la Recherche Scientifique) financia la investigación pública. Francia invierte el 2,2% del PIB en I+D. El Institut Pasteur y el CEA (energía atómica) son centros de referencia mundial.',
-    grammarNote:  'La voz pasiva en francés: être + participe passé + (par + agent). "Le vaccin a été découvert par Pasteur." El participio concuerda con el sujeto: "La théorie a été publiée." "Les résultats ont été analysés." Alternativa: "on" impersonal: "On a analysé les données." — más frecuente en oral.',
-    question:     '¿Cómo se forma la voz pasiva en francés?',
-    options:      ['avoir + participe passé', 'être + participe passé', 'aller + participe passé'],
-  },
-  u59: {
-    dialogueNote: 'El sistema judicial francés es de derecho civil (droit civil). La "présomption d\'innocence" (presunción de inocencia) es un principio constitucional. El "Conseil d\'État" es el tribunal supremo de lo contencioso-administrativo. La justicia es teóricamente gratuita, aunque los abogados ("avocats") son caros.',
-    grammarNote:  '"Devoir" tiene varios sentidos según el contexto: 1) Obligación: "Tu dois obéir à la loi." (tienes que). 2) Probabilidad: "Il doit être en retard." (debe de estar). 3) Fatalidad: "Cela devait arriver." (tenía que pasar). El contexto — no la gramática — determina cuál sentido está activo.',
-    question:     '¿Qué sentido tiene "devoir" en "tout le monde doit payer ses impôts"?',
-    options:      ['probabilité', 'obligation', 'permission'],
-  },
-  u60: {
-    dialogueNote: 'La salud mental es cada vez más reconocida en Francia. El burnout ("épuisement professionnel") está reconocido como enfermedad profesional. El psicoanálisis es muy popular — París tiene más psicoanalistas per cápita que cualquier otra ciudad del mundo. La "pleine conscience" (mindfulness) está muy de moda.',
-    grammarNote:  'Para expresar duración de una acción en curso en francés: "ça fait + durée + que + présent". "Ça fait 3 mois que je travaille ici." (hace 3 meses que trabajo aquí). Equivalentes: "Il y a 3 mois que je travaille ici." o "Je travaille ici depuis 3 mois." Las tres formas son correctas.',
-    question:     '¿Cuál es la forma correcta de "hace 3 meses que trabajo aquí"?',
-    options:      ['Ça fait 3 mois que je travaille ici', 'Je travaille ici il y a 3 mois', 'Je suis travaillant ici pour 3 mois'],
-  },
-  u61: {
-    dialogueNote: 'La economía francesa es la 7ª del mundo. La inflation fue un tema político central en 2022-2024. El "bouclier tarifaire" protegió a los consumidores. Las "APL" (Aides Personnalisées au Logement) son ayudas al alquiler esenciales para estudiantes. El CAC 40 es el índice bursátil de referencia.',
-    grammarNote:  'Expresiones idiomáticas con precios y economía en francés: "c\'est hors de prix" (es carísimo), "ça coûte les yeux de la tête" (cuesta un ojo de la cara), "c\'est donné" (está regalado/muy barato), "les prix flambent" (los precios se disparan), "être dans le rouge" (estar en números rojos).',
-    question:     '¿Qué significa "les prix flambent" en francés?',
-    options:      ['los precios bajan', 'los precios se disparan', 'los precios se estabilizan'],
-  },
-  u62: {
-    dialogueNote: 'Francia se comprometió en el Acuerdo de París (2015) a la neutralidad carbono en 2050. El "Plan vélo" de 2021 invirtió 2 000 millones para promover la bicicleta. La "taxe carbone" desencadenó el movimiento de los "gilets jaunes" en 2018. Los franceses reciclan con el sistema "Tri sélectif".',
-    grammarNote:  'El subjonctif en francés es obligatorio después de expresiones de necesidad y opinión: "Il faut que nous réduisions nos émissions." "Il est important que tu tries tes déchets." Subjonctif de "réduire": je réduise, tu réduises, il réduise, nous réduisions, vous réduisiez, ils réduisent.',
-    question:     '¿Qué modo sigue "il faut que" en francés?',
-    options:      ['l\'indicatif', 'le subjonctif', 'le conditionnel'],
-  },
-  u63: {
-    dialogueNote: 'Francia es miembro fundador de la UE y del Consejo de Seguridad de la ONU. Tiene la 3ª mayor red diplomática del mundo. La "francophonie" conecta 88 países y 320 millones de hablantes de francés. El Quai d\'Orsay es la sede del Ministère des Affaires Étrangères.',
-    grammarNote:  'En el discurso diplomático francés se usan preposiciones formales: "face à" (frente a), "vis-à-vis de" (con respecto a), "à l\'égard de" (con respecto a — personas), "par rapport à" (en relación con), "quant à" (en cuanto a). "Face à la crise, la France a réagi rapidement."',
-    question:     '¿Cuál expresa "frente a" de manera formal en francés?',
-    options:      ['par rapport à', 'face à / vis-à-vis de', 'à cause de'],
-  },
-  u64: {
-    dialogueNote: 'El verlan avanzado: "laisse tomber" → "laisse béton", "tête" → "teubé", "vénère" (verlan de "énervé" = enojado), "chanmé" (verlan de "méchant" = increíble). Los raperos NTM, IAM, Booba, Damso consagraron el verlan en los 90-2000. Las series "Lupin" y "Engrenages" usan el verlan auténtico.',
-    grammarNote:  'Verlan avanzado: "lourd" (pesado/molesto) → "relou", "bizarre" → "zarbi", "tomber" → "béton" (en "laisse béton" = olvídalo), "vénère" (enojado), "chanmé" (increíble). El tono y el contexto son clave. Usar verlan sin dominar el nivel de familiaridad puede sonar forzado o inapropiado.',
-    question:     '¿Qué significa "c\'est relou" en el verlan francés?',
-    options:      ['c\'est génial', 'c\'est lourd / énervant', 'c\'est facile'],
-  },
-  u65: {
-    dialogueNote: 'Las "expressions figées" (expresiones hechas) son un desafío para hispanohablantes. "Avoir le cafard" (estar deprimido), "poser un lapin" (dejar plantado), "casser les pieds" (molestar/dar en los pies), "avoir le coup de foudre" (enamorarse a primera vista) no se pueden traducir literalmente.',
-    grammarNote:  'Expresiones pronominales esenciales de nivel B1: "se rendre compte de" (darse cuenta de), "s\'en sortir" (salir adelante), "s\'y retrouver" (orientarse), "se mettre d\'accord" (ponerse de acuerdo), "s\'en aller" (irse). "Je me rends compte que c\'est difficile." — "se rendre compte" siempre con "que".',
-    question:     '¿Qué significa "je me rends compte" en francés?',
-    options:      ['je réalise un projet', 'je me rends compte / je réalise que', 'je calcule quelque chose'],
-  },
-  u66: {
-    dialogueNote: 'La filosofía francesa es parte central de la identidad cultural. El baccalauréat incluye una prueba de philosophie para todos. Descartes, Pascal, Voltaire, Rousseau, Sartre, Simone de Beauvoir y Derrida son referentes mundiales. El "café philo" (debate filosófico en café) es una tradición parisina viva.',
-    grammarNote:  'El subjonctif es obligatorio después de verbos de duda y negación: "Je ne crois pas que ce soit vrai." "Je doute que tu viennes." "Je ne pense pas qu\'il puisse réussir." Con certeza se usa el indicatif: "Je crois que c\'est vrai." La duda activa el subjonctif — la certeza lo desactiva.',
-    question:     '¿Qué modo sigue "je ne crois pas que" en francés?',
-    options:      ['l\'indicatif', 'le subjonctif', 'le conditionnel'],
-  },
-  u67: {
-    dialogueNote: 'La "chanson française" (Édith Piaf, Jacques Brel, Barbara, Serge Gainsbourg) es un género cultural propio. Hoy convive con el rap: PNL, Orelsan, Aya Nakamura. Las radios tienen cuotas de música francófona (35% mínimo). Los "Victoires de la musique" son los premios nacionales más importantes.',
-    grammarNote:  '"Pour" + infinitif peut exprimer la cause (razón): "Je l\'aime pour sa voix." (la quiero por su voz). "Il a été renvoyé pour avoir menti." (por haber mentido). Esta construcción difiere de "parce que" (causa explicada con sujeto + verbo): "Je l\'aime parce qu\'elle chante bien."',
-    question:     '¿Cómo se expresa "por su voz" como causa en francés?',
-    options:      ['parce que sa voix', 'pour sa voix', 'à cause de sa mauvaise voix'],
-  },
-  u68: {
-    dialogueNote: 'El cine francés es uno de los más prestigiosos del mundo. La Palme d\'Or de Cannes es la distinción máxima. Los realizadores emblemáticos: Godard, Truffaut, Varda, Dolan. La "exception culturelle" francesa limita las cuotas de películas americanas. La Cinémathèque Française conserva miles de películas.',
-    grammarNote:  'El pronombre relativo "dont" en francés reemplaza "de + nom": "Je parle d\'un livre" → "Le livre dont je parle." "J\'ai besoin de ce film" → "Le film dont j\'ai besoin." Para posesión: "C\'est l\'acteur dont j\'ai vu le film." (cuyo). "Dont" nunca puede ir al inicio de frase.',
-    question:     '¿Cómo se dice "el escritor del que hablo" en francés?',
-    options:      ['l\'écrivain que je parle', 'l\'écrivain dont je parle', 'l\'écrivain de qui je parle'],
-  },
-  u69: {
-    dialogueNote: 'La gastronomía francesa es Patrimonio Inmaterial de la UNESCO desde 2010. El "repas gastronomique" incluye apéritif, entrée, plat, fromage, dessert y café. Francia tiene 632 restaurantes con estrellas Michelin y más de 1 000 variedades de queso. El vino y el pan son pilares de la identidad culinaire.',
-    grammarNote:  'Los pronombres "en" y "y" en francés: "en" reemplaza "de + nom/lieu": "Tu veux du fromage ? — Oui, j\'en veux." "Y" reemplaza "à/dans/en + lieu": "Tu vas au marché ? — Oui, j\'y vais." "Je m\'en occupe" (me encargo de eso). Ambos van siempre ANTES del verbo.',
-    question:     '¿Cómo se dice "me encargo de eso" en francés?',
-    options:      ['je m\'en occupe', 'je m\'y occupe', 'je l\'occupe'],
-  },
-  u70: {
-    dialogueNote: 'Francia tiene una de las mejores infraestructuras digitales de Europa. La "French Tech" con Station F en París es el mayor campus de startups del mundo. El "Plan France 2030" invierte 30 mil millones en tecnología. Las "licornes" francesas: Mistral AI, BlaBlaCar, Contentsquare, Ledger.',
-    grammarNote:  'Los anglicismos en francés se conjugan como verbos regulares del primer grupo (-er): "googler" → je google, "scroller" → je scrolle, "tweeter" → je tweete, "chatter" → je chatte, "streamer" → je streame. La terminación francesa -e/er reemplaza al infinitivo inglés. Uso muy extendido entre los jóvenes.',
-    question:     '¿Cómo se conjuga "googler" en primera persona del presente?',
-    options:      ['je googles', 'je google', 'je googlerai'],
-  },
-  u71: {
-    dialogueNote: 'Francia ganó el Mundial de Fútbol en 1998 (en casa) y en 2018. "Les Bleus" (el equipo nacional) son muy queridos. El rugby es muy popular en el sudoeste. Los JJ.OO. de París 2024 movilizaron al país. Roland Garros (mayo-junio) es el único Grand Slam en tierra batida del mundo.',
-    grammarNote:  'Vocabulario deportivo esencial en francés: "marquer un but" (anotar un gol), "rater une occasion" (fallar una oportunidad), "l\'emporter sur" (llevarse la victoria sobre), "faire match nul" (empatar), "subir une défaite" (sufrir una derrota), "battre" (vencer). "L\'équipe de France a battu l\'Argentine en finale."',
-    question:     '¿Cómo se dice "marcar un gol" en francés?',
-    options:      ['rater un but', 'marquer un but', 'faire un but'],
-  },
-  u72: {
-    dialogueNote: 'Francia es el país más grande de la UE occidental (547 000 km²) con paisajes extraordinariamente variados: los Alpes (Mont Blanc, 4 808m), los Pirineos, la Bretaña atlántica, la Côte d\'Azur. Los DROM-COM (Guadalupe, Martinica, Guyana Francesa) son territorio francés en ultramar.',
-    grammarNote:  'Preposiciones de lugar en francés: "à" + ville (à Paris, à Lyon), "en" + pays féminin o que empieza por vocal (en France, en Espagne), "au" + pays masculin (au Japon, au Maroc), "aux" + pays pluriel (aux États-Unis). Para regiones: "en" + region féminine (en Bretagne), "dans le" + region masculine (dans le Périgord).',
-    question:     '¿Cuál es la preposición correcta para "en el corazón de París"?',
-    options:      ['au cœur à Paris', 'au cœur de Paris', 'dans le cœur de Paris'],
-  },
-  u73: {
-    dialogueNote: 'Las ciudades francesas tienen barrios muy distintos: el "centre-ville" histórico, la "banlieue" (suburbios), los "HLM" (vivienda social). La "mixité sociale" (mezcla social en los barrios) es un objetivo político debatido. El "Grand Paris" es el proyecto de expansión del área metropolitana parisina.',
-    grammarNote:  '"Vouloir que" exige el subjonctif cuando hay dos sujetos distintos: "Je veux que tu viennes." Si es el mismo sujeto, infinitif: "Je veux venir." Igualmente: "il faut que", "souhaiter que", "avoir envie que". La distinción sujeto único / dos sujetos determina subjonctif vs infinitif.',
-    question:     '¿Cómo se completa "je veux que tu ___ (venir)" en francés?',
-    options:      ['venir', 'viens', 'viennes'],
-  },
-  u74: {
-    dialogueNote: 'L\'université pública francesa es asequible (≈170€/año para licenciatura). Las Grandes Écoles (HEC, Sciences Po, Polytechnique) son la élite. Las "classes préparatoires" (khâgne, taupe) preparan 2 años intensivos. El "master" dura 2 años post-licenciatura, el "doctorat" 3 años más.',
-    grammarNote:  '"Il me reste à" + infinitif o "il me reste" + nom expresa lo que queda por hacer: "Il me reste deux examens à passer." "Il me reste à finir mon mémoire." "Il nous reste encore beaucoup de travail." Muy frecuente en contexto académico y profesional en Francia.',
-    question:     '¿Cómo se dice "me queda un examen por pasar" en francés?',
-    options:      ['j\'ai encore un examen', 'il me reste un examen à passer', 'il reste pour moi un examen'],
-  },
-  u75: {
-    dialogueNote: 'El mercado laboral francés está muy regulado: el Code du Travail tiene más de 3 000 páginas. Las "35 heures" (semana de 35 horas) son una especificidad francesa. Las grandes vacances (julio-agosto) paralizan parcialmente la economía. La "reconversion professionnelle" está apoyada por el Estado (CPF — compte de formation).',
-    grammarNote:  'Para expresar dificultad en francés: "avoir du mal à" + infinitif (tener dificultad para), "peiner à" (costarle trabajo — más literario), "avoir des difficultés à" (tener dificultades para). "J\'ai du mal à parler en public." Más naturales que "c\'est difficile pour moi de" que suena calco del inglés.',
-    question:     '¿Cómo se dice "tengo dificultad para hablar en público" en francés?',
-    options:      ['c\'est difficile pour moi parler en public', 'j\'ai du mal à parler en public', 'je suis difficile à parler en public'],
-  },
-  u76: {
-    dialogueNote: 'La arquitectura francesa mezcla lo histórico y lo vanguardista: la pirámide del Louvre (I.M. Pei), el Centre Pompidou (Piano & Rogers), la Grande Arche de La Défense. Hay más de 43 000 "Monuments Historiques" en Francia. El "patrimoine" (patrimonio) es una obsesión nacional — más de 37 000 châteaux.',
-    grammarNote:  'El "se passif" en francés expresa acciones sin agente especificado: "Le bâtiment s\'est démoli en 2023." "Cette règle ne s\'applique plus." "Les nouvelles se répandent vite." Se diferencia del pasivo con "être" en que el agente nunca se menciona. Muy frecuente en el registro periodístico.',
-    question:     '¿Cuál es la estructura del pasivo con "se" en francés?',
-    options:      ['avoir + participe passé + se', 'se + verbe conjugué', 'être + se + participe'],
-  },
-  u77: {
-    dialogueNote: 'El paso de A2 a B1 en francés exige dominar el discours indirect. Los noticieros lo usan constantemente: "Le ministre a déclaré que…", "Le président a affirmé que…". Es una marca de dominio del idioma — esencial para leer prensa y ver series en francés con comprensión real.',
-    grammarNote:  'En el discours indirect en pasado, los tiempos cambian: présent → imparfait, futur simple → conditionnel, passé composé → plus-que-parfait. "Il a dit : \'Je vais partir.\'" → "Il a dit qu\'il allait partir." Solo se aplica este cambio si el verbo introducteur está en tiempo pasado.',
-    question:     '¿Cómo se pasa "je vais venir" al discours indirect en pasado?',
-    options:      ['il a dit qu\'il va venir', 'il a dit qu\'il allait venir', 'il a dit qu\'il viendrait venir'],
-  },
-  u78: {
-    dialogueNote: 'El bienestar ("le bien-être") está en el centro de la vida francesa contemporánea. El yoga, el running, el cyclisme y la natation son muy populares. Los "espaces verts" (parques) son muy apreciados. Francia tiene miles de kilómetros de "sentiers de randonnée" (senderos de senderismo) balizado.',
-    grammarNote:  'Para "conseguir/lograr hacer algo" en francés: "réussir à" + infinitif (conseguir), "parvenir à" + infinitif (lograr — más formal), "arriver à" + infinitif (llegar a). "J\'ai réussi à courir 10 km." "Il parvient à garder son calme." Sinónimos próximos — "parvenir" es el más formal.',
-    question:     '¿Qué expresión significa "conseguir/lograr hacer algo" en francés?',
-    options:      ['essayer de', 'réussir à', 'tenter de'],
-  },
-  u79: {
-    dialogueNote: 'El debate es una práctica central en la educación francesa: la "dissertation" y la "khôlle" (interrogación oral) entrenan a los estudiantes desde el lycée. Los grandes debates televisivos presidenciales son eventos nacionales. La cultura del "café philo" y el débat citoyen vienen de la Ilustración.',
-    grammarNote:  'Las locuciones condicionales en francés exigen el subjonctif: "à condition que tu viennes" (a condición de que vengas), "pourvu que" (con tal de que), "pour peu que" (con tal de que — condición mínima), "à moins que" + subjonctif (a menos que). "Je t\'aide à condition que tu fasses un effort."',
-    question:     '¿Qué modo sigue "à condition que" en francés?',
-    options:      ['l\'indicatif', 'le subjonctif', 'le conditionnel'],
-  },
-  u80: {
-    dialogueNote: 'La fluidité en francés implica dominar los "registres de langue": familier (entre amis), courant (quotidien), soutenu (formel/écrit). En Francia es esencial saber cambiar de registro: "bouffer" (familiar) vs "manger" (courant) vs "se sustenter" (soutenu). Esta conciencia lingüística distingue el B1 del A2.',
-    grammarNote:  'Registres en francés: "Y\'a pas de souci" (familiar), "Il n\'y a pas de problème" (courant), "Il n\'y a aucun inconvénient" (soutenu). "C\'est ouf" (familier/verlan) vs "C\'est incroyable" (courant) vs "C\'est remarquable" (soutenu). Reconocer estos registros es esencial para entender series, películas y conversaciones reales.',
-    question:     '¿A qué registro pertenece "c\'est ouf" en francés?',
-    options:      ['formel / soutenu', 'familier / argot', 'standard / courant'],
-  },
-};
 
-window.CURRICULUM_B1_ES = CURRICULUM_B1_ES;
+  {
+    id:'u06',
+    dialogueNote:'El francés usa artículos partitivos para cantidades indefinidas: du (de + le), de la, de l\'. "Je mange du pain" (como pan), "je bois de l\'eau" (bebo agua). En negación se usa "de/d\'" sin artículo: "je ne mange pas de pain" (no como pan).',
+    grammarNote:'Los artículos partitivos franceses: du (masculino), de la (femenino), de l\' (vocal/h muda). En negación siempre "de/d\'": je mange du fromage → je ne mange pas de fromage. El artículo partitivo no tiene equivalente directo en español — es uno de los aspectos más difíciles para hispanohablantes.',
+    question:'¿Cómo se dice "como carne" en francés?',
+    options:['Je mange de la carne','Je mange de la viande','Je mange la viande'],
+    answer:1,
+  },
+
+  {
+    id:'u07',
+    dialogueNote:'En francés los adjetivos van generalmente DESPUÉS del sustantivo: une robe rouge, un livre intéressant. Pero algunos adjetivos comunes van ANTES: grand, petit, beau, bon, mauvais, vieux, jeune, nouveau. Regla mnemotécnica BAGS: Beauty, Age, Goodness, Size → van antes.',
+    grammarNote:'Los adjetivos de color concuerdan en género y número: rouge/rouge/rouges, blanc/blanche/blancs/blanches. Invariables: orange, marron, beige (son sustantivos usados como adjetivos). Irregulares: beau → bel (delante de vocal), vieux → vieil, nouveau → nouvel.',
+    question:'¿Cómo se dice "una mesa blanca" en francés?',
+    options:['une table blanc','une table blanche','une table blanches'],
+    answer:1,
+  },
+
+  {
+    id:'u08',
+    dialogueNote:'En francés para expresar dolor: "avoir mal à" + artículo + parte del cuerpo. J\'ai mal à la tête, j\'ai mal au dos (au = à + le), j\'ai mal aux pieds (aux = à + les). A diferencia de "me duele", en francés el sujeto es "yo" y se usa el verbo "avoir" (tener).',
+    grammarNote:'"Avoir mal à" + article contracté: mal à la tête, mal au ventre (à + le = au), mal aux pieds (à + les = aux). Nunca se usa el posesivo: "j\'ai mal à ma tête" es incorrecto. También: "j\'ai de la fièvre" (tengo fiebre), "je tousse" (tengo tos — verbo, no sustantivo).',
+    question:'¿Cómo se dice "tengo dolor de cabeza" en francés?',
+    options:['J\'ai mal à ma tête','J\'ai mal à la tête','J\'ai le mal de tête'],
+    answer:1,
+  },
+
+  {
+    id:'u09',
+    dialogueNote:'Los verbos más importantes en francés tienen conjugaciones irregulares esenciales. "Être" (ser/estar) y "avoir" (tener/haber) son la base de todos los tiempos compuestos. "Aller" usa formas del latín "vadere": je vais, tu vas. "Faire" es irregular: je fais, tu fais, il fait.',
+    grammarNote:'En francés no hay distinción entre ser y estar — ambos se traducen con "être": je suis français (soy francés), je suis fatigué (estoy cansado). Para obligación: "devoir + infinitif": je dois partir (tengo que irme). "Il faut + infinitif" = hay que. "Avoir à + infinitif" = tener que.',
+    question:'¿Cómo se dice "tú puedes venir" en francés (informal)?',
+    options:['Tu peux pas venir','Tu peux venir','Vous pouvez venir'],
+    answer:1,
+  },
+
+  {
+    id:'u10',
+    dialogueNote:'Para pedir direcciones en francés: "Excusez-moi, où est la banque ?" o "Pour aller à la banque, s\'il vous plaît ?". Las preposiciones de lugar: en face de (enfrente de), à côté de (al lado de), près de (cerca de), loin de (lejos de), au fond de (al fondo de).',
+    grammarNote:'Las contracciones obligatorias: à + le = au (je vais au parc), à + les = aux (je vais aux États-Unis), de + le = du (en face du parc), de + les = des (près des arbres). Con "la" y "l\'" no hay contracción: je vais à la banque, près de l\'école.',
+    question:'¿Cuál es la contracción de "à + le" en francés?',
+    options:['al','au','du'],
+    answer:1,
+  },
+
+  {
+    id:'u11',
+    dialogueNote:'En Francia "prendre" es el verbo para tomar el transporte: je prends le bus, le métro, le train. Para decir el medio de transporte: "en" + vehicule sin artículo para medios en los que uno entra: en voiture, en avion, en train. "À" + pied/vélo: je vais à pied, à vélo.',
+    grammarNote:'Para los transportes: "prendre" + artículo defini: je prends le bus, l\'avion. "Aller en/à": je vais en voiture, à pied, à vélo. Pregunta de dirección: "Pour aller à la gare ?" o "Comment on va à… ?" Importante: en Argentina "tomar" = en Francia "prendre" (nunca "coger").',
+    question:'¿Cómo se dice "tomo el metro" en francés?',
+    options:['Je vais dans le métro','Je prends le métro','Je fais le métro'],
+    answer:1,
+  },
+
+  {
+    id:'u12',
+    dialogueNote:'En las tiendas francesas se usa "vous" por defecto. Para preguntar el precio: "C\'est combien ?" o "Ça coûte combien ?". Los vendedores dicen "Je vous aide ?" (¿le ayudo?). Para pagar: "Je paye par carte" (tarjeta), "Je paye en espèces" (efectivo). "Les soldes" = las rebajas (enero y julio).',
+    grammarNote:'Los pronombres de objeto directo: le (lo/masculino), la (la/femenino), les (los/las). Posición: antes del verbo conjugado. "Je le prends" (me lo llevo). Delante de vocal: l\'achète (l\' = le o la). Con infinitivo: "je veux l\'essayer". En imperativo afirmativo: "Prends-le !".',
+    question:'¿Cómo se dice "lo compro" (objeto masculino, empieza por vocal)?',
+    options:['Je la achète','Je le achète','Je l\'achète'],
+    answer:2,
+  },
+
+  {
+    id:'u13',
+    dialogueNote:'En Francia las entrevistas de trabajo son formales — "vous" obligatoriamente. El CV francés puede incluir foto. "Stage" = pasantía o práctica. "CDI" (contrat à durée indéterminée) = contrato indefinido; "CDD" = temporal. "La fac" = la universidad (familier). "Un poste" = un puesto de trabajo.',
+    grammarNote:'El gérondif en francés: "en + participe présent" (-ant): en travaillant (trabajando). Para "estar + gerundio" en francés: "être en train de + infinitif": je suis en train de travailler (estoy trabajando). El presente simple también puede expresar acción en curso: je travaille puede ser "trabajo" o "estoy trabajando".',
+    question:'¿Cómo se expresa mejor "ella está comiendo" en francés?',
+    options:['Elle mange','Elle est en train de manger','Les deux sont correctes'],
+    answer:2,
+  },
+
+  {
+    id:'u14',
+    dialogueNote:'En Francia para consultar al médico se pide "un rendez-vous" (cita). El médecin généraliste es el médico de familia. Urgencias: "les urgences" o "le SAMU" (número 15). "Ordonnance" = receta médica. Los medicamentos bajo prescripción necesitan ordonnance — no se venden libremente.',
+    grammarNote:'Para los síntomas: "avoir mal à" para dolores, "avoir de la fièvre/toux/nausée" para síntomas, "être + adjectif" para estados: je suis fatigué, malade. "Tousser" (toser) es un verbo: je tousse. "Éternuer" = estornudar. "Avoir des vertiges" = tener mareos. "Se sentir mal" = sentirse mal.',
+    question:'¿Cómo se dice "tengo tos" en francés?',
+    options:['J\'ai la toux','Je tousse','Les deux sont correctes'],
+    answer:2,
+  },
+
+  {
+    id:'u15',
+    dialogueNote:'En francés "être" se usa para las emociones: je suis triste, content, surpris. No hay distinción ser/estar para los adjectivos — el contexto marca si es temporal o permanente. "Se sentir" añade matiz: "je me sens bien" (me siento bien). "Avoir" para algunas emociones: avoir peur, avoir honte.',
+    grammarNote:'En francés "avoir" se usa para: avoir peur (tener miedo), avoir honte (tener vergüenza), avoir envie (tener ganas). "Être" para: être content/triste/en colère. Para expresar que algo te aburre: "c\'est ennuyeux". Para decir que te aburres: "je m\'ennuie" (verbo reflexivo).',
+    question:'"Me aburro" (acción, no carácter) en francés se dice…',
+    options:['Je suis ennuyeux','Je m\'ennuie','Je suis ennuyé'],
+    answer:1,
+  },
+
+  {
+    id:'u16',
+    dialogueNote:'En Francia la météo es un tema de conversación social. "Il fait beau/mauvais" (hace buen/mal tiempo), "il fait chaud/froid" (hace calor/frío). "Le temps" en francés significa tanto "el tiempo meteorológico" como "el tiempo (duración)". Expresión útil: "quel temps fait-il ?" (¿qué tiempo hace?).',
+    grammarNote:'El futur proche: aller + infinitif. Il va pleuvoir (va a llover). "Pleuvoir" es impersonal — siempre con "il": il pleut, il a plu, il va pleuvoir. Para probabilidad: "il devrait faire beau" (debería hacer buen tiempo), "il risque de pleuvoir" (puede que llueva). "Geler" = helar: il gèle.',
+    question:'¿Cómo se dice "va a llover" en francés?',
+    options:['Il va pleuvoir','Il ira pleuvoir','Il fait pleuvoir'],
+    answer:0,
+  },
+
+  {
+    id:'u17',
+    dialogueNote:'En Francia el fútbol se llama "le foot". Los grandes clubs: PSG (Paris), OM (Marseille), OL (Lyon). El rugby es muy popular en el suroeste. "Supporter" (anglicismo) = hincha. "Match" = partido. "Terrain" = cancha. El Tour de France (ciclismo) es el evento deportivo más visto en Francia.',
+    grammarNote:'El passé composé francés: auxiliar (avoir o être) + participe passé. La mayoría usa "avoir": j\'ai mangé, j\'ai joué. Los verbos de movimiento y reflexivos usan "être": je suis allé(e), je suis venu(e). Con "être" el participio concuerda con el sujeto: elle est allée (fue/ha ido).',
+    question:'¿Cómo se dice "jugué al fútbol" en francés?',
+    options:['J\'allais jouer au foot','J\'ai joué au foot','Je jouais au foot'],
+    answer:1,
+  },
+
+  {
+    id:'u18',
+    dialogueNote:'Para viajar desde Argentina a Francia no se necesita visado (turismo, 90 días Schengen). El aeropuerto principal de París es Charles de Gaulle (CDG). El TGV conecta las ciudades. "Gare" = estación de tren. "Gare du Nord" es la estación más concurrida de Europa. "Billet" = pasaje/boleto.',
+    grammarNote:'El subjonctif francés aparece después de: querer, necesitar, dudar, emociones. Formación: radical de ils/elles + -e, -es, -e, -ions, -iez, -ent. Irregulares clave: être → soit, avoir → ait, aller → aille, faire → fasse. Expresiones frecuentes: il faut que, je veux que, je doute que.',
+    question:'Después de "je veux que", ¿qué modo se usa en francés?',
+    options:['l\'indicatif','le subjonctif','l\'infinitif'],
+    answer:1,
+  },
+
+  {
+    id:'u19',
+    dialogueNote:'Francia es una república. La política se divide entre gauche (izquierda) y droite (derecha). El presidente es elegido por 5 años. El 14 de julio es la fiesta nacional (Fête Nationale). "Liberté, Égalité, Fraternité" es el lema de la República. "Les impôts" = los impuestos, tema muy presente en la vida cotidiana francesa.',
+    grammarNote:'L\'imparfait para el pasado habitual o descriptivo: -ais, -ais, -ait, -ions, -iez, -aient. Solo "être" es irregular en la raíz: ét-. "Quand j\'étais petit…" (cuando era pequeño). Contraste: passé composé = acción terminada puntual; imparfait = descripción, habitual o acción de fondo.',
+    question:'¿Cuál es la terminación de "parler" en imparfait (je)?',
+    options:['je parlai','je parlais','je parlerai'],
+    answer:1,
+  },
+
+  {
+    id:'u20',
+    dialogueNote:'El lunfardo tiene muchas palabras de origen italiano y francés. "Laburo" del italiano "lavoro". "Morfar" del italiano "morfea". El "vesre" es el lunfardo al revés (como el verlan francés): "telo" = hotel, "gotán" = tango. El francés también tiene el "verlan": "l\'envers" → verlan, "les keufs" = les flics (la policía).',
+    grammarNote:'Los conectores del discurso B1 son esenciales para argumentar en francés: "cependant" / "pourtant" / "néanmoins" (sin embargo), "donc" / "par conséquent" (por lo tanto), "bien que + subjonctif" (aunque), "malgré" + nom (a pesar de), "c\'est-à-dire" (es decir). En el examen DELF B1 estos conectores son indispensables.',
+    question:'¿Qué significa "cependant" en español?',
+    options:['por lo tanto','sin embargo','es decir'],
+    answer:1,
+  },
+
+];
