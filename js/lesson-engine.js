@@ -314,8 +314,9 @@ const LessonEngine = (() => {
     const esOv = window.CURRICULUM_B1_ES && window.CURRICULUM_B1_ES[unit.id];
     const note       = (_isEsMode(mode) && esOv?.grammarNote) ? esOv.grammarNote : g.note;
     const question   = (_isEsMode(mode) && esOv?.question)    ? esOv.question    : g.question;
-    const rawOptions = (_isEsMode(mode) && esOv?.options)     ? esOv.options     : g.options;
-    const correctText = rawOptions[g.answer];
+    const rawOptions  = (_isEsMode(mode) && esOv?.options)              ? esOv.options        : g.options;
+    const correctIdx  = (_isEsMode(mode) && esOv?.answer !== undefined) ? esOv.answer          : g.answer;
+    const correctText = rawOptions[correctIdx];
     const options    = _shuffle([...rawOptions]);
 
     container.innerHTML = `
