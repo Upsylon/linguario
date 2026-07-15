@@ -1013,3 +1013,5 @@ const CURRICULUM_B1 = [
   },
 
 ];
+
+window.CURRICULUM_B1 = CURRICULUM_B1;
