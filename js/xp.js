@@ -1,4 +1,11 @@
 /* ===== xp.js — Système XP & Gamification LinguaRío ===== */
+
+// Safety net: old cached curriculum-b1.js used `const` without a window assignment.
+// If the global exists but window doesn't have it, bridge the gap.
+/* global CURRICULUM_B1, CURRICULUM_B1_ES */
+if (!window.CURRICULUM_B1   && typeof CURRICULUM_B1   !== 'undefined') window.CURRICULUM_B1   = CURRICULUM_B1;
+if (!window.CURRICULUM_B1_ES && typeof CURRICULUM_B1_ES !== 'undefined') window.CURRICULUM_B1_ES = CURRICULUM_B1_ES;
+
 const XP = (() => {
 
   const K = {
