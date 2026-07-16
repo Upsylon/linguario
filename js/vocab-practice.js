@@ -58,7 +58,7 @@ const VocabPractice = (() => {
       else if (s === 'new')    newWords.push(w);
       else                     known.push(w);
     }
-    return [..._shuffle(learning), ...newWords, ..._shuffle(known)];
+    return [..._shuffle(learning), ..._shuffle(newWords), ..._shuffle(known)];
   }
 
   /* ── Helpers ──────────────────────────────────────────────────────── */

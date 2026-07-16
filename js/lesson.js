@@ -67,14 +67,7 @@ const Lesson = (() => {
   function _nextUnit() {
     const mode       = _getMode();
     const curriculum = window.CURRICULUM_B1 || [];
-    const a1Seen = curriculum.filter(u => u.level === 'a1').some(u => u.words.some(w => _load(_key(u.id, w.en, mode))));
-    const a2Seen = curriculum.filter(u => u.level === 'a2').some(u => u.words.some(w => _load(_key(u.id, w.en, mode))));
-    const available = curriculum.filter(u =>
-      u.level === 'a1' ||
-      (u.level === 'a2' && a1Seen) ||
-      (u.level === 'b1' && a2Seen)
-    );
-    return available.find(u => u.words.some(w => !_load(_key(u.id, w.en, mode)))) || curriculum[0] || null;
+    return curriculum.find(u => u.words.some(w => !_load(_key(u.id, w.en, mode)))) || curriculum[0] || null;
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -132,13 +125,21 @@ const Lesson = (() => {
     let ok = 0, xpEarned = 0, scored = 0;
     const missed = new Set();
 
-    // Optimal sequence (Schmidt noticing hypothesis): dialogue → grammar → exercises (ALL 10) → self-assess
+    // Cap at 15 words per session to keep lessons ≤ 5 min on mobile
+    const SESSION_CAP = 15;
+    const prog     = XP.getUnitProgress();
+    const seen     = new Set((prog[unit.id]?.seen) || []);
+    // Prioritise unseen words, then seen (for review), cap total
+    const unseen   = unit.words.filter(w => !seen.has(w.en));
+    const seenArr  = unit.words.filter(w => seen.has(w.en));
+    const batch    = [...unseen, ...seenArr].slice(0, SESSION_CAP);
+
     const steps = [{ type: 'dialogue' }, { type: 'grammar' }];
     const typeOffset = Math.floor(Math.random() * 3);
-    unit.words.forEach((w, i) => {
+    batch.forEach((w, i) => {
       steps.push({ type: ['meaning-mc', 'gap-fill', 'translate-mc'][(i + typeOffset) % 3], word: w });
     });
-    unit.words.forEach(w => steps.push({ type: 'self-assess', word: w }));
+    batch.forEach(w => steps.push({ type: 'self-assess', word: w }));
 
     let si = 0;
     function run() {

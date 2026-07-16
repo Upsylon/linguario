@@ -86,7 +86,7 @@ const Storage = (() => {
     const toRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if (k && (k.startsWith(P) || k.startsWith('lrio:') || k.startsWith('qs:'))) toRemove.push(k);
+      if (k && (k.startsWith(P) || k.startsWith('lrio:') || k.startsWith('qs:') || k.startsWith('voc:'))) toRemove.push(k);
     }
     toRemove.forEach(k => localStorage.removeItem(k));
   }
