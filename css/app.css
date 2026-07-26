@@ -1071,6 +1071,34 @@ input  { font: inherit; }
 }
 .vc-practice-btn:hover { background: rgba(67,97,238,.22); }
 
+/* ── Reference sections (conjonctions / verbes) ──────────────────── */
+.vc-refs-hd {
+  padding: 1rem .25rem .3rem;
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted);
+}
+.vc-ref .vc-unit-hd { background: rgba(123,159,255,.05); }
+.vc-ref-play {
+  flex-shrink: 0;
+  background: none; border: 1px solid rgba(67,97,238,.3);
+  color: var(--accent); border-radius: .5rem;
+  width: 2rem; height: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; cursor: pointer; transition: background .15s;
+}
+.vc-ref-play:hover { background: rgba(67,97,238,.18); color: #fff; }
+.vc-ref-practice {
+  width: 100%; padding: .62rem 1rem;
+  background: rgba(123,159,255,.1);
+  border: 1px solid rgba(123,159,255,.3);
+  color: var(--accent);
+  border-radius: .75rem;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+  transition: background .15s;
+}
+.vc-ref-practice:hover { background: rgba(123,159,255,.2); }
+
 /* ── VocabPractice session UI ────────────────────────────────────── */
 .vp-wrap { display: flex; flex-direction: column; min-height: 100%; }
 

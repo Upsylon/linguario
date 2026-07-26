@@ -14,6 +14,66 @@ const Vocab = (() => {
     { key: 'b1', label: 'B1', descFr: 'Avancé',        descEs: 'Avanzado',     color: '#c084fc' },
   ];
 
+  const REFS = [
+    {
+      id: 'ref_conj', icon: '🔗',
+      name: 'Conjonctions & connecteurs', nameEs: 'Conjunciones y conectores',
+      words: [
+        { en: 'but',              fr: 'mais',                    es: 'pero',                      esTarget: 'pero',                      example: { fr: 'Je veux venir, mais je suis fatigué.', es: 'Quiero venir, pero estoy cansado.' } },
+        { en: 'because',          fr: 'parce que / car',         es: 'porque',                    esTarget: 'porque',                    example: { fr: 'Je reste parce qu\'il pleut.', es: 'Me quedo porque llueve.' } },
+        { en: 'so/therefore',     fr: 'donc / alors',            es: 'entonces / por lo tanto',   esTarget: 'entonces / por eso',        example: { fr: 'Il est tard, donc je pars.', es: 'Es tarde, entonces me voy.' } },
+        { en: 'however',          fr: 'pourtant / cependant',    es: 'sin embargo / no obstante', esTarget: 'igual / de todas formas',   example: { fr: 'C\'est difficile, pourtant je continue.', es: 'Es difícil, sin embargo sigo.' } },
+        { en: 'although',         fr: 'bien que + subj.',        es: 'aunque',                    esTarget: 'aunque',                    example: { fr: 'Bien qu\'il fasse froid, elle sort.', es: 'Aunque hace frío, ella sale.' } },
+        { en: 'then/next',        fr: 'puis / ensuite',          es: 'luego / después',           esTarget: 'después / luego',           example: { fr: 'Je mange, puis je lis.', es: 'Como, luego leo.' } },
+        { en: 'first',            fr: 'd\'abord',                es: 'primero / en primer lugar', esTarget: 'primero',                   example: { fr: 'D\'abord, parlons de ça.', es: 'Primero, hablemos de esto.' } },
+        { en: 'finally',          fr: 'enfin / finalement',      es: 'por fin / finalmente',      esTarget: 'finalmente / al final',     example: { fr: 'Enfin, nous arrivons !', es: '¡Por fin llegamos!' } },
+        { en: 'before',           fr: 'avant de + inf.',         es: 'antes de + inf.',           esTarget: 'antes de + inf.',           example: { fr: 'Réfléchis avant de parler.', es: 'Pensá antes de hablar.' } },
+        { en: 'after',            fr: 'après + inf. passé',      es: 'después de + inf.',         esTarget: 'después de + inf.',         example: { fr: 'Après avoir mangé, il sort.', es: 'Después de comer, sale.' } },
+        { en: 'while',            fr: 'pendant que',             es: 'mientras (que)',            esTarget: 'mientras',                  example: { fr: 'Je lis pendant qu\'il cuisine.', es: 'Leo mientras él cocina.' } },
+        { en: 'even if',          fr: 'même si',                 es: 'aunque / incluso si',       esTarget: 'aunque',                    example: { fr: 'Je viens même si tu n\'es pas là.', es: 'Vengo aunque no estés.' } },
+        { en: 'since (given that)',fr: 'puisque',                es: 'ya que / puesto que',       esTarget: 'ya que',                    example: { fr: 'Puisque tu es là, aide-moi.', es: 'Ya que estás acá, ayudame.' } },
+        { en: 'when',             fr: 'quand / lorsque',         es: 'cuando',                    esTarget: 'cuando',                    example: { fr: 'Appelle-moi quand tu arrives.', es: 'Llamame cuando llegues.' } },
+        { en: 'if',               fr: 'si',                      es: 'si',                        esTarget: 'si',                        example: { fr: 'Si tu veux, on peut sortir.', es: 'Si querés, podemos salir.' } },
+        { en: 'on the other hand',fr: 'en revanche',             es: 'en cambio / por otro lado', esTarget: 'en cambio',                 example: { fr: 'Il est rapide. En revanche, il est imprudent.', es: 'Es rápido. En cambio, es imprudente.' } },
+        { en: 'moreover',         fr: 'de plus / en outre',      es: 'además',                    esTarget: 'además',                    example: { fr: 'C\'est beau et de plus, c\'est gratuit.', es: 'Es lindo y además es gratis.' } },
+        { en: 'that is to say',   fr: 'c\'est-à-dire',           es: 'es decir',                  esTarget: 'o sea',                     example: { fr: 'Il est bilingue, c\'est-à-dire qu\'il parle deux langues.', es: 'Es bilingüe, o sea que habla dos idiomas.' } },
+        { en: 'anyway',           fr: 'quand même / tout de même',es: 'de todas formas / igual',  esTarget: 'igual / de todas formas',   example: { fr: 'Je vais essayer quand même.', es: 'Voy a intentarlo igual.' } },
+        { en: 'as long as',       fr: 'tant que',                es: 'mientras / siempre que',    esTarget: 'mientras',                  example: { fr: 'Tant que tu es là, je suis heureux.', es: 'Mientras estés, soy feliz.' } },
+      ],
+    },
+    {
+      id: 'ref_verb', icon: '⚡',
+      name: 'Verbes essentiels', nameEs: 'Verbos esenciales',
+      words: [
+        { en: 'to be (identity)',  fr: 'être',              es: 'ser',            esTarget: 'ser',            example: { fr: 'Je suis étudiant.', es: 'Soy estudiante.' } },
+        { en: 'to be (state)',     fr: 'être (état)',        es: 'estar',          esTarget: 'estar',          example: { fr: 'Je suis fatigué.', es: 'Estoy cansado.' } },
+        { en: 'to have',           fr: 'avoir',              es: 'tener',          esTarget: 'tener',          example: { fr: 'J\'ai un chat.', es: 'Tengo un gato.' } },
+        { en: 'to go',             fr: 'aller',              es: 'ir',             esTarget: 'ir',             example: { fr: 'Je vais au marché.', es: 'Voy al mercado.' } },
+        { en: 'to do/make',        fr: 'faire',              es: 'hacer',          esTarget: 'hacer',          example: { fr: 'Qu\'est-ce que tu fais ?', es: '¿Qué hacés?' } },
+        { en: 'can/to be able to', fr: 'pouvoir',            es: 'poder',          esTarget: 'poder',          example: { fr: 'Je peux t\'aider.', es: 'Puedo ayudarte.' } },
+        { en: 'to want',           fr: 'vouloir',            es: 'querer',         esTarget: 'querer',         example: { fr: 'Je veux un café.', es: 'Quiero un café.' } },
+        { en: 'must/to have to',   fr: 'devoir',             es: 'deber / tener que', esTarget: 'tener que',  example: { fr: 'Tu dois étudier.', es: 'Tenés que estudiar.' } },
+        { en: 'to know (fact)',    fr: 'savoir',             es: 'saber',          esTarget: 'saber',          example: { fr: 'Je sais parler français.', es: 'Sé hablar francés.' } },
+        { en: 'to know (person)',  fr: 'connaître',          es: 'conocer',        esTarget: 'conocer',        example: { fr: 'Je connais Buenos Aires.', es: 'Conozco Buenos Aires.' } },
+        { en: 'to come',           fr: 'venir',              es: 'venir',          esTarget: 'venir',          example: { fr: 'Viens avec moi !', es: '¡Vení conmigo!' } },
+        { en: 'to take',           fr: 'prendre',            es: 'tomar',          esTarget: 'tomar',          example: { fr: 'Je prends le bus.', es: 'Tomo el colectivo.' } },
+        { en: 'to see',            fr: 'voir',               es: 'ver',            esTarget: 'ver',            example: { fr: 'Je vois la montagne.', es: 'Veo la montaña.' } },
+        { en: 'to put',            fr: 'mettre',             es: 'poner',          esTarget: 'poner',          example: { fr: 'Mets ton manteau !', es: '¡Ponete el abrigo!' } },
+        { en: 'to leave/go out',   fr: 'partir / sortir',    es: 'irse / salir',   esTarget: 'irse / salir',   example: { fr: 'Je pars demain.', es: 'Me voy mañana.' } },
+        { en: 'to give',           fr: 'donner',             es: 'dar',            esTarget: 'dar',            example: { fr: 'Donne-moi ton numéro.', es: 'Dame tu número.' } },
+        { en: 'to speak',          fr: 'parler',             es: 'hablar',         esTarget: 'hablar',         example: { fr: 'Tu parles bien espagnol.', es: 'Hablás bien el español.' } },
+        { en: 'to understand',     fr: 'comprendre',         es: 'entender',       esTarget: 'entender',       example: { fr: 'Je comprends tout.', es: 'Entiendo todo.' } },
+        { en: 'to say/tell',       fr: 'dire',               es: 'decir',          esTarget: 'decir',          example: { fr: 'Qu\'est-ce qu\'il dit ?', es: '¿Qué dice?' } },
+        { en: 'to write',          fr: 'écrire',             es: 'escribir',       esTarget: 'escribir',       example: { fr: 'J\'écris une lettre.', es: 'Escribo una carta.' } },
+        { en: 'to read',           fr: 'lire',               es: 'leer',           esTarget: 'leer',           example: { fr: 'Je lis tous les jours.', es: 'Leo todos los días.' } },
+        { en: 'to eat',            fr: 'manger',             es: 'comer',          esTarget: 'comer',          example: { fr: 'On mange ensemble ?', es: '¿Comemos juntos?' } },
+        { en: 'to drink',          fr: 'boire',              es: 'tomar / beber',  esTarget: 'tomar',          example: { fr: 'Je bois un verre d\'eau.', es: 'Tomo un vaso de agua.' } },
+        { en: 'to think/believe',  fr: 'penser / croire',    es: 'pensar / creer', esTarget: 'pensar / creer', example: { fr: 'Je pense que c\'est vrai.', es: 'Pienso que es verdad.' } },
+        { en: 'to need',           fr: 'avoir besoin de',    es: 'necesitar',      esTarget: 'necesitar',      example: { fr: 'J\'ai besoin d\'aide.', es: 'Necesito ayuda.' } },
+      ],
+    },
+  ];
+
   // ── Public ────────────────────────────────────────────────────────────
   function render(el) {
     _el = el;
@@ -160,6 +220,7 @@ const Vocab = (() => {
                </div>`
             : groups.map(g => _groupHtml(g, mode, curId, !!q)).join('')
           }
+          ${!q ? `<div class="vc-refs-hd">${isFrEs ? '📚 Références' : '📚 Referencias'}</div>${REFS.map(r => _refSectionHtml(r, mode)).join('')}` : ''}
         </div>
 
         <div class="vc-legend">
@@ -254,6 +315,18 @@ const Vocab = (() => {
         const mode = Storage.getProfile().mode || 'fr-es';
         const unit = (window.CURRICULUM_B1 || []).find(u => u.id === btn.dataset.unit);
         if (unit && window.VocabPractice) VocabPractice.start(_el, unit, mode);
+      });
+    });
+
+    // Reference section play + practice buttons
+    _el.querySelectorAll('.vc-ref-play, .vc-ref-practice').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const m   = Storage.getProfile().mode || 'fr-es';
+        const ref = REFS.find(r => r.id === btn.dataset.ref);
+        if (ref && window.VocabPractice) {
+          VocabPractice.start(_el, { id: ref.id, words: ref.words, icon: ref.icon, name: m === 'fr-es' ? ref.name : ref.nameEs }, m);
+        }
       });
     });
   }
@@ -392,6 +465,41 @@ const Vocab = (() => {
           <div class="vc-wex-t">${esc(exTgt)}</div>
         </div>
       </details>`;
+  }
+
+  // ── Reference section (conjunctions / verbs) ─────────────────────────
+  function _refSectionHtml(ref, mode) {
+    const isFrEs = mode === 'fr-es';
+    const isOpen = _openUnits.has(ref.id);
+    const name   = isFrEs ? ref.name : ref.nameEs;
+    const colA   = isFrEs ? '🇫🇷 Français' : '🇦🇷 Español';
+    const colB   = isFrEs ? '🇦🇷 Español'  : '🇫🇷 Français';
+    return `
+      <div class="vc-unit vc-ref${isOpen ? ' vc-unit--open' : ''}" data-id="${ref.id}">
+        <div class="vc-unit-hd">
+          <button class="vc-toggle-btn" data-unit="${ref.id}">
+            <span class="vc-ico">${ref.icon}</span>
+            <div class="vc-meta">
+              <div class="vc-name-row"><span class="vc-uname">${esc(name)}</span></div>
+            </div>
+            <span class="vc-cnt">${ref.words.length}<span class="vc-ctot"> ${isFrEs ? 'mots' : 'palabras'}</span></span>
+            <span class="vc-arrow">${isOpen ? '▲' : '▼'}</span>
+          </button>
+          <button class="vc-ref-play" data-ref="${ref.id}" title="${isFrEs ? 'Pratiquer' : 'Practicar'}">▶</button>
+        </div>
+        <div class="vc-body"${isOpen ? '' : ' hidden'}>
+          <div class="vc-practice-cta">
+            <button class="vc-ref-practice" data-ref="${ref.id}">
+              🃏 ${isFrEs ? 'Pratiquer' : 'Practicar'}
+            </button>
+          </div>
+          <div class="vc-col-hd">
+            <span>${colA}</span>
+            <span>${colB}</span>
+          </div>
+          ${ref.words.map(w => _wordHtml({ ...w, isSeen: false, isMastered: false }, mode)).join('')}
+        </div>
+      </div>`;
   }
 
   function esc(s) {
