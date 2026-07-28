@@ -32,16 +32,6 @@ const Parcours = (() => {
 
     container.innerHTML = `
       <div class="pa-wrap">
-        <div class="pa-header">
-          <div class="pa-hd-left">
-            <div class="pa-hd-level" style="color:${level.color}">${level.name}</div>
-            <div class="pa-hd-label">${mode === 'es-fr' ? (level.labelEs || level.label) : level.label}</div>
-          </div>
-          <div class="pa-hd-right">
-            <div class="pa-hd-xp">${currentXp.toLocaleString()} XP</div>
-            ${streak ? `<div class="pa-hd-streak">🔥 ${streak}</div>` : ''}
-          </div>
-        </div>
         <div class="pa-lv-bar"><div class="pa-lv-fill" style="width:${progPct}%;background:${level.color}"></div></div>
 
         ${levelGroups.map(group => {
