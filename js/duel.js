@@ -291,8 +291,53 @@ const DUEL = (() => {
         { en: 'cool / nice',    fr: 'bien / super',    es: 'bárbaro'    },
         { en: 'straw (mate)',   fr: 'paille (maté)',  es: 'bombilla'    },
       ],
-    }
-  ];
+    },
+    {
+      id: 'conjug', icon: '🔀', label: 'Conjugaisons', labelEs: 'Conjugaciones',
+      words: [
+        { en: 'être: je suis (présent)',            fr: 'je suis',           es: 'soy'           },
+        { en: 'être: tu es (présent)',              fr: 'tu es',             es: 'vos sos'        },
+        { en: "avoir: j'ai (présent)",              fr: "j'ai",              es: 'tengo'          },
+        { en: 'aller: je vais (présent)',           fr: 'je vais',           es: 'voy'            },
+        { en: 'aller: tu vas (présent)',            fr: 'tu vas',            es: 'vos vas'        },
+        { en: 'faire: je fais (présent)',           fr: 'je fais',           es: 'hago'           },
+        { en: 'faire: tu fais (présent)',           fr: 'tu fais',           es: 'vos hacés'      },
+        { en: 'vouloir: je veux (présent)',         fr: 'je veux',           es: 'quiero'         },
+        { en: 'pouvoir: je peux (présent)',         fr: 'je peux',           es: 'puedo'          },
+        { en: "aller: j'irai (futur)",              fr: "j'irai",            es: 'iré'            },
+        { en: 'aller: tu iras (futur)',             fr: 'tu iras',           es: 'vas a ir'       },
+        { en: 'aller: nous irons (futur)',          fr: 'nous irons',        es: 'vamos a ir'     },
+        { en: 'être: je serai (futur)',             fr: 'je serai',          es: 'voy a estar'    },
+        { en: "avoir: j'aurai (futur)",             fr: "j'aurai",           es: 'voy a tener'    },
+        { en: 'faire: je ferai (futur)',            fr: 'je ferai',          es: 'voy a hacer'    },
+        { en: 'vouloir: je voudrai (futur)',        fr: 'je voudrai',        es: 'voy a querer'   },
+        { en: 'pouvoir: je pourrai (futur)',        fr: 'je pourrai',        es: 'voy a poder'    },
+        { en: "manger: j'ai mangé (passé)",        fr: "j'ai mangé",        es: 'comí'           },
+        { en: 'manger: tu as mangé (passé)',       fr: 'tu as mangé',       es: 'comiste'        },
+        { en: 'manger: nous avons mangé (passé)',  fr: 'nous avons mangé',  es: 'comimos'        },
+        { en: "aller: je suis allé(e) (passé)",    fr: "je suis allé(e)",   es: 'fui'            },
+        { en: "partir: je suis parti(e) (passé)",  fr: "je suis parti(e)",  es: 'me fui'         },
+        { en: "faire: j'ai fait (passé)",          fr: "j'ai fait",         es: 'hice'           },
+        { en: "voir: j'ai vu (passé)",             fr: "j'ai vu",           es: 'vi'             },
+        { en: "parler: j'ai parlé (passé)",        fr: "j'ai parlé",        es: 'hablé'          },
+        { en: "être: j'étais (imparfait)",         fr: "j'étais",           es: 'estaba'         },
+        { en: 'être: tu étais (imparfait)',        fr: 'tu étais',          es: 'estabas'        },
+        { en: 'être: il était (imparfait)',        fr: 'il était',          es: 'estaba'         },
+        { en: "avoir: j'avais (imparfait)",        fr: "j'avais",           es: 'tenía'          },
+        { en: 'manger: je mangeais (imparfait)',   fr: 'je mangeais',       es: 'comía'          },
+        { en: "aller: j'allais (imparfait)",       fr: "j'allais",          es: 'iba'            },
+        { en: 'aller: nous allions (imparfait)',   fr: 'nous allions',      es: 'íbamos'         },
+        { en: 'faire: je faisais (imparfait)',     fr: 'je faisais',        es: 'hacía'          },
+        { en: 'être: je serais (conditionnel)',    fr: 'je serais',         es: 'estaría'        },
+        { en: "avoir: j'aurais (conditionnel)",    fr: "j'aurais",          es: 'tendría'        },
+        { en: "aller: j'irais (conditionnel)",     fr: "j'irais",           es: 'iría'           },
+        { en: 'vouloir: je voudrais (conditionnel)',fr: 'je voudrais',      es: 'quisiera'       },
+        { en: 'pouvoir: je pourrais (conditionnel)',fr: 'je pourrais',      es: 'podría'         },
+        { en: 'faire: je ferais (conditionnel)',   fr: 'je ferais',         es: 'haría'          },
+        { en: 'devoir: je devrais (conditionnel)', fr: 'je devrais',        es: 'debería'        },
+      ],
+    },
+
     {
       id: 'expr', icon: '💬', label: "S'exprimer", labelEs: 'Expresarse',
       words: [
@@ -338,7 +383,7 @@ const DUEL = (() => {
         { en: 'Let me explain.',                  fr: "Laisse-moi t'expliquer.",                 es: 'Dejame explicarte.' },
       ],
     },
-
+  ];
 
   /* Build "all" pool from every theme */
   const ALL_WORDS = [];
