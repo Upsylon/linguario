@@ -647,6 +647,17 @@ const Vocab = (() => {
     const hasTTS  = window.TTS && TTS.supported();
     const listenLbl = isFrEs ? 'Écouter' : 'Escuchar';
 
+    const syns = w.synonymes || {};
+    const synsTgt = isFrEs ? (syns.es || []) : (syns.fr || []);
+    const synsSrc = isFrEs ? (syns.fr || []) : (syns.es || []);
+    const tgtFlag = isFrEs ? '🇦🇷' : '🇫🇷';
+    const srcFlag = isFrEs ? '🇫🇷' : '🇦🇷';
+    const synBlock = (synsTgt.length || synsSrc.length) ? `
+      <div class="vc-wsyns">
+        ${synsTgt.length ? '<span class="vc-wsyn-lbl">' + tgtFlag + ' ≈</span> <span class="vc-wsyn-words">' + synsTgt.join(' · ') + '</span>' : ''}
+        ${synsSrc.length ? '<span class="vc-wsyn-lbl vc-wsyn-lbl--src">' + srcFlag + ' ≈</span> <span class="vc-wsyn-words vc-wsyn-words--src">' + synsSrc.join(' · ') + '</span>' : ''}
+      </div>` : '';
+
     return `
       <details class="vc-word">
         <summary class="vc-wrow">
@@ -657,9 +668,10 @@ const Vocab = (() => {
           <span class="vc-wchev">›</span>
         </summary>
         <div class="vc-wex">
-          ${hasTTS ? `<button class="vc-tts-btn" data-tts="${esc(tgt)}" data-lang="${tgtLang}" title="${listenLbl}">🔊 ${esc(tgt)}</button>` : ''}
+          ${hasTTS ? '<button class="vc-tts-btn" data-tts="' + esc(tgt) + '" data-lang="' + tgtLang + '" title="' + listenLbl + '">🔊 ' + esc(tgt) + '</button>' : ''}
           <div class="vc-wex-s">${esc(exSrc)}</div>
           <div class="vc-wex-t">${esc(exTgt)}</div>
+          ${synBlock}
         </div>
       </details>`;
   }

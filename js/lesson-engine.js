@@ -359,12 +359,31 @@ const LessonEngine = (() => {
     const targetVal  = _target(word, mode);
     const nativeFlag = _nativeFlag(mode);
     const targetFlag = _targetFlag(mode);
-    const exSent     = _targetEx(word, mode);
+    const exNative   = _nativeEx(word, mode);
+    const exTarget   = _targetEx(word, mode);
 
-    const assessLabel  = _isEsMode(mode) ? `${targetFlag} ¿Traducción al francés?`  : `${targetFlag} Traduction espagnole ?`;
-    const revealLabel  = _isEsMode(mode) ? 'Revelar →'  : 'Révéler →';
-    const btnNo        = _isEsMode(mode) ? '✗ Error'    : '✗ Raté';
-    const btnYes       = _isEsMode(mode) ? '✓ ¡Sabía!'  : '✓ Su !';
+    const syns = word.synonymes || {};
+    const synsFr = syns.fr && syns.fr.length ? syns.fr : [];
+    const synsEs = syns.es && syns.es.length ? syns.es : [];
+    const synsNative = _isEsMode(mode) ? synsEs : synsFr;
+    const synsTarget = _isEsMode(mode) ? synsFr : synsEs;
+
+    const assessLabel = _isEsMode(mode) ? targetFlag + ' ¿Traducción al francés?'  : targetFlag + ' Traduction espagnole ?';
+    const revealLabel = _isEsMode(mode) ? 'Revelar →'  : 'Révéler →';
+    const btnNo       = _isEsMode(mode) ? '✗ Error'    : '✗ Raté';
+    const btnYes      = _isEsMode(mode) ? '✓ ¡Sabía!'  : '✓ Su !';
+
+    const exBlock = (exNative || exTarget) ? `
+      <div class="le-assess-ex-block">
+        ${exNative ? '<div class="le-assess-ex le-assess-ex--nat">' + nativeFlag + ' <em>' + exNative + '</em></div>' : ''}
+        ${exTarget ? '<div class="le-assess-ex le-assess-ex--tgt">' + targetFlag + ' <em>' + exTarget + '</em></div>' : ''}
+      </div>` : '';
+
+    const synBlock = (synsTarget.length || synsNative.length) ? `
+      <div class="le-assess-syns">
+        ${synsTarget.length ? '<span class="le-syns-label">' + targetFlag + ' ≈</span> <span class="le-syns-words">' + synsTarget.join(' · ') + '</span>' : ''}
+        ${synsNative.length ? '<span class="le-syns-label le-syns-label--nat">' + nativeFlag + ' ≈</span> <span class="le-syns-words le-syns-words--nat">' + synsNative.join(' · ') + '</span>' : ''}
+      </div>` : '';
 
     container.innerHTML = `
       <div class="le-card le-card--assess">
@@ -374,7 +393,8 @@ const LessonEngine = (() => {
         <div class="le-assess-ans" id="le-ans" style="display:none">
           <div class="le-assess-divider"></div>
           <div class="le-assess-row le-assess-row--target"><span class="le-assess-flag">${targetFlag}</span><span>${targetVal}</span></div>
-          ${exSent ? `<div class="le-assess-ex">${targetFlag} "${exSent}"</div>` : ''}
+          ${exBlock}
+          ${synBlock}
         </div>
         <div id="le-reveal-wrap">
           <button class="le-reveal-btn" id="le-reveal">${revealLabel}</button>
