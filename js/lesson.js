@@ -95,7 +95,7 @@ const Lesson = (() => {
   }
 
   /* ══════════════════════════════════════════════════════════════
-     Review session — SRS self-assess cards
+     Review session — mixed MC + self-assess for variety
   ══════════════════════════════════════════════════════════════ */
   function _review(container, queue) {
     const mode = _getMode();
@@ -104,7 +104,9 @@ const Lesson = (() => {
       if (idx >= queue.length) { _end(container, idx, ok, xp, true, mode); return; }
       const { word, unit, key } = queue[idx];
       _bar(container, idx, queue.length, `${_ui('🔁 Révision', '🔁 Repaso', mode)} — ${unit.icon} ${unit.name}`, mode);
-      LessonEngine.renderSelfAssess(_body(container), word, (isOk) => {
+      const body = _body(container);
+
+      function done(isOk) {
         let e = 0;
         if (isOk) { e = XP.REWARDS.correct; ok++; }
         xp += e; if (e) XP.addXP(e);
@@ -112,7 +114,14 @@ const Lesson = (() => {
         if (isOk) XP.markWordMastered(unit.id, word.en);
         else       XP.markWordSeen(unit.id, word.en);
         idx++; next();
-      }, mode);
+      }
+
+      // Mix in MC exercises (~50%) when possible; always fall back to self-assess
+      const canMC = word.example && word.example.fr && word.example.es && unit.words.length >= 4;
+      const rng = Math.random();
+      if (canMC && rng < 0.28) LessonEngine.renderMeaningMC(body, unit, word, done, mode);
+      else if (canMC && rng < 0.52) LessonEngine.renderTranslateMC(body, unit, word, done, mode);
+      else LessonEngine.renderSelfAssess(body, word, done, mode);
     }
     next();
   }

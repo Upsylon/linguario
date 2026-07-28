@@ -42,7 +42,7 @@ const App = (() => {
       if (!screen || screen === 'quick-session') { showHome(); return; }
       if      (screen === 'home')     showHome();
       else if (screen === 'duel')     showDuelTab();
-      else if (screen === 'parcours') showParcours();
+      else if (screen === 'parcours') showHome();
       else if (screen === 'vocab')    showVocab();
       else                            showHome();
     });
@@ -82,10 +82,9 @@ const App = (() => {
     document.querySelectorAll('.snav-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         const t = tab.dataset.screen;
-        if      (t === 'home')     showHome();
-        else if (t === 'parcours') showParcours();
-        else if (t === 'duel')     showDuelTab();
-        else if (t === 'vocab')    showVocab();
+        if      (t === 'home')  showHome();
+        else if (t === 'duel')  showDuelTab();
+        else if (t === 'vocab') showVocab();
       });
     });
   }
@@ -159,14 +158,14 @@ const App = (() => {
   // ── Nav i18n ──────────────────────────────────────────────────────────
   function _updateNavLabels(mode) {
     const isEs = mode === 'es-fr';
-    [['home','Apprendre','Aprender'],['parcours','Parcours','Recorrido'],['duel','Duel','Duelo'],['vocab','Lexique','Léxico']]
+    [['home','Apprendre','Aprender'],['duel','Duel','Duelo'],['vocab','Lexique','Léxico']]
       .forEach(([screen, fr, es]) => {
         const el = document.querySelector(`.snav-tab[data-screen="${screen}"] .snav-label`);
         if (el) el.textContent = isEs ? es : fr;
       });
   }
 
-  // ── Home ──────────────────────────────────────────────────────────────
+  // ── Home (combined dashboard + parcours roadmap) ──────────────────────
   function showHome() {
     show('home');
     setActiveTab('home');
@@ -174,53 +173,88 @@ const App = (() => {
     if (!el) return;
     const p = Storage.getProfile();
     document.documentElement.lang = (p.mode === 'es-fr') ? 'es' : 'fr';
-    _showHomeXP(el, p);
+    _renderHome(el, p);
   }
 
-  function _showHomeXP(el, p) {
-    const mode    = p.mode || 'fr-es';
+  function _getDueCount(mode) {
+    const now = Date.now();
+    let count = 0;
+    for (const unit of (window.CURRICULUM_B1 || [])) {
+      for (const word of unit.words) {
+        try {
+          const c = JSON.parse(localStorage.getItem('qs:' + mode + ':' + unit.id + ':' + word.en));
+          if (c && c.nextReview <= now) count++;
+        } catch {}
+      }
+    }
+    return count;
+  }
+
+  function _renderHome(el, p) {
+    const mode     = p.mode || 'fr-es';
     _updateNavLabels(mode);
-    const xp      = XP.getXP();
-    const level   = XP.getLevel();
-    const nextLv  = XP.getNextLevel();
-    const prog    = XP.getLevelProgress();
-    const progPct = Math.round(prog * 100);
-    const streak  = XP.getStreak();
-    const unit    = XP.getCurrentUnit();
-    const xpToGo  = nextLv ? nextLv.min - xp : 0;
-    const unitHint = unit ? `${unit.icon} ${esc(unit.name)}` : '🎉 Tout complété !';
+    const xp       = XP.getXP();
+    const level    = XP.getLevel();
+    const nextLv   = XP.getNextLevel();
+    const progPct  = Math.round(XP.getLevelProgress() * 100);
+    const streak   = XP.getStreak();
+    const unit     = XP.getCurrentUnit();
+    const xpToGo   = nextLv ? nextLv.min - xp : 0;
+    const dueCount = _getDueCount(mode);
+    const unitHint = unit ? unit.icon + ' ' + esc(unit.name) : _ui('🎉 Tout complété !', '🎉 ¡Todo completado!', mode);
+
+    const reviewCard = dueCount > 0 ? `
+      <button class="hm-action-card hm-action-review" id="hm-review">
+        <span class="hm-action-icon">🔄</span>
+        <div class="hm-action-body">
+          <div class="hm-action-title">${_ui('Réviser maintenant', 'Repasar ahora', mode)}</div>
+          <div class="hm-action-sub">${dueCount} ${_ui(dueCount > 1 ? 'mots en attente' : 'mot en attente', dueCount > 1 ? 'palabras pendientes' : 'palabra pendiente', mode)}</div>
+        </div>
+      </button>` : '';
 
     el.innerHTML = `
-      <div class="hm-simple">
+      <div class="hm-wrap">
+        <div class="hm-dash">
+          <div class="hm-lang-switch">
+            <span class="hm-lang-label">${_ui("J'apprends :", 'Aprendo:', mode)}</span>
+            <div class="hm-lang-pills">
+              <button class="hm-lang-pill${mode === 'fr-es' ? ' hm-lang-pill--active' : ''}" data-mode="fr-es">🇦🇷 Espagnol</button>
+              <button class="hm-lang-pill${mode === 'es-fr' ? ' hm-lang-pill--active' : ''}" data-mode="es-fr">🇫🇷 Français</button>
+            </div>
+          </div>
 
-        <div class="hm-lang-switch">
-          <span class="hm-lang-label">${_ui('J\'apprends :', 'Aprendo:', mode)}</span>
-          <div class="hm-lang-pills">
-            <button class="hm-lang-pill${mode === 'fr-es' ? ' hm-lang-pill--active' : ''}" data-mode="fr-es">🇦🇷 Espagnol</button>
-            <button class="hm-lang-pill${mode === 'es-fr' ? ' hm-lang-pill--active' : ''}" data-mode="es-fr">🇫🇷 Français</button>
+          ${streak
+            ? '<div class="hm-streak-pill">🔥 ' + streak + ' ' + _ui(streak > 1 ? 'jours' : 'jour', streak > 1 ? 'días' : 'día', mode) + '</div>'
+            : '<div class="hm-streak-pill hm-streak-zero">' + _ui("Commence ta série aujourd'hui !", '¡Empezá tu racha hoy!', mode) + '</div>'}
+
+          <div class="hm-xp-block">
+            <div class="hm-xp-labels">
+              <span class="hm-xp-lv" style="color:${level.color}">${level.name}</span>
+              <span class="hm-xp-num">${xp} XP</span>
+              <span class="hm-xp-next">${nextLv ? nextLv.name : '✓'}</span>
+            </div>
+            <div class="hm-xpbar">
+              <div class="hm-xpbar-fill" style="width:${progPct}%;background:${level.color}"></div>
+            </div>
+            ${nextLv ? '<div class="hm-xp-hint">' + _ui('encore ' + xpToGo + ' XP pour ' + nextLv.name, 'faltan ' + xpToGo + ' XP para ' + nextLv.name, mode) + '</div>' : ''}
+          </div>
+
+          <div class="hm-actions">
+            ${reviewCard}
+            <button class="hm-action-card hm-action-play" id="hm-play">
+              <span class="hm-action-icon">▶</span>
+              <div class="hm-action-body">
+                <div class="hm-action-title">${_ui('Continuer', 'Continuar', mode)}</div>
+                <div class="hm-action-sub">${unitHint}</div>
+              </div>
+            </button>
           </div>
         </div>
 
-        ${streak
-          ? `<div class="hm-streak-pill">🔥 ${streak} ${_ui(`jour${streak > 1 ? 's' : ''}`, `día${streak > 1 ? 's' : ''}`, mode)}</div>`
-          : `<div class="hm-streak-pill hm-streak-zero">${_ui('Commence ta série aujourd\'hui !', '¡Empezá tu racha hoy!', mode)}</div>`}
-
-        <div class="hm-xp-block">
-          <div class="hm-xp-labels">
-            <span class="hm-xp-lv" style="color:${level.color}">${level.name}</span>
-            <span class="hm-xp-num">${xp} XP</span>
-            <span class="hm-xp-next">${nextLv ? nextLv.name : '✓'}</span>
-          </div>
-          <div class="hm-xpbar">
-            <div class="hm-xpbar-fill" style="width:${progPct}%;background:${level.color}"></div>
-          </div>
-          ${nextLv ? `<div class="hm-xp-hint">${_ui(`encore ${xpToGo} XP pour ${nextLv.name}`, `faltan ${xpToGo} XP para ${nextLv.name}`, mode)}</div>` : ''}
+        <div class="hm-parcours-wrap">
+          <div class="hm-parcours-title">🗺️ ${_ui('Mon Parcours', 'Mi Recorrido', mode)}</div>
+          <div id="hm-parcours-body"></div>
         </div>
-
-        <button class="hm-play-btn" id="hm-play">▶ &nbsp;${_ui('APPRENDRE', 'APRENDER', mode)}</button>
-
-        <div class="hm-unit-hint">${unitHint}</div>
-
       </div>`;
 
     el.querySelectorAll('.hm-lang-pill').forEach(btn => {
@@ -233,7 +267,13 @@ const App = (() => {
       });
     });
 
-    el.querySelector('#hm-play').addEventListener('click', showLesson);
+    const playBtn = el.querySelector('#hm-play');
+    if (playBtn) playBtn.addEventListener('click', showLesson);
+    const reviewBtn = el.querySelector('#hm-review');
+    if (reviewBtn) reviewBtn.addEventListener('click', showLesson);
+
+    const parcoursBody = el.querySelector('#hm-parcours-body');
+    if (parcoursBody && window.Parcours) Parcours.render(parcoursBody);
   }
 
   // ── Duel ─────────────────────────────────────────────────────────────
@@ -267,13 +307,8 @@ const App = (() => {
     if (el && window.Vocab) Vocab.render(el);
   }
 
-  // ── Parcours ──────────────────────────────────────────────────────────
-  function showParcours() {
-    show('parcours');
-    setActiveTab('parcours');
-    const el = document.getElementById('screen-parcours');
-    if (el && window.Parcours) Parcours.render(el);
-  }
+  // ── Parcours (merged into home) ───────────────────────────────────────
+  function showParcours() { showHome(); }
 
   // ── Leçon ─────────────────────────────────────────────────────────────
   function showLesson() {
@@ -286,7 +321,7 @@ const App = (() => {
 
   function showLessonForUnit(unit) {
     show('quick-session');
-    setActiveTab('parcours');
+    setActiveTab('home');
     const el = document.getElementById('screen-quick-session');
     if (el && window.Lesson) Lesson.startForUnit(el, unit);
     else if (el && window.QuickSession) QuickSession.renderForUnit(el, unit);

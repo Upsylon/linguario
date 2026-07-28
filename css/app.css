@@ -40,7 +40,7 @@ body {
   background: var(--bg); color: var(--text);
   line-height: 1.6; min-height: 100dvh;
 }
-button { cursor: pointer; border: none; background: none; font: inherit; }
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 input  { font: inherit; }
 
 /* ── Header ─────────────────────────────────────────────────────────── */
@@ -247,6 +247,36 @@ input  { font: inherit; }
 
 /* Unit hint */
 .hm-unit-hint { font-size: .8rem; color: var(--muted); text-align: center; }
+
+/* Combined home layout (dashboard + parcours) */
+.hm-wrap { display: flex; flex-direction: column; gap: 0; padding-bottom: 2rem; }
+.hm-dash {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 1.25rem; padding: 1.75rem 1.5rem 1.25rem;
+}
+.hm-actions { display: flex; flex-direction: column; gap: .55rem; width: 100%; max-width: 340px; }
+.hm-action-card {
+  display: flex; align-items: center; gap: .9rem;
+  padding: .9rem 1.1rem; border-radius: var(--radius);
+  border: 1px solid var(--border2); cursor: pointer;
+  transition: background .15s, transform .1s; text-align: left; width: 100%;
+}
+.hm-action-card:active { transform: scale(.98); }
+.hm-action-review { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); }
+.hm-action-review:hover { background: rgba(239,68,68,.14); }
+.hm-action-play   { background: rgba(67,97,238,.1);  border-color: rgba(67,97,238,.35); }
+.hm-action-play:hover   { background: rgba(67,97,238,.17); }
+.hm-action-icon { font-size: 1.5rem; flex-shrink: 0; }
+.hm-action-body { display: flex; flex-direction: column; gap: .1rem; }
+.hm-action-title { font-size: .94rem; font-weight: 800; }
+.hm-action-sub   { font-size: .72rem; color: var(--muted); }
+.hm-action-review .hm-action-title { color: var(--red2); }
+.hm-action-play .hm-action-title   { color: #7b9fff; }
+.hm-parcours-wrap { padding: .25rem 1rem 0; }
+.hm-parcours-title {
+  font-size: .62rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--muted); padding: .5rem .25rem .75rem;
+}
 
 /* ── Quick Session ───────────────────────────────────────────────────── */
 .qs-session { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 1.25rem 1.5rem; gap: 1rem; }
