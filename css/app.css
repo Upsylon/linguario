@@ -1204,6 +1204,8 @@ input  { font: inherit; }
   letter-spacing: .07em; text-transform: uppercase;
   color: var(--muted);
 }
+.vpp-arrow { font-size: .75rem; color: var(--muted); flex-shrink: 0; }
+.vpp-sub   { margin-left: 1.1rem; width: calc(100% - 1.1rem); }
 
 /* Empty state */
 .vp-empty {

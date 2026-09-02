@@ -14,6 +14,8 @@
 */
 const VocabPractice = (() => {
 
+  let _coursesOpen = false;
+
   /* ── Storage ──────────────────────────────────────────────────────── */
   function _k(mode, uid, en) { return `voc:${mode}:${uid}:${en}`; }
   function _load(k)           { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
@@ -48,12 +50,17 @@ const VocabPractice = (() => {
   function _buildQueue(unitOrNull, mode) {
     const allUnits = window.CURRICULUM_B1 || [];
     const allRefs  = window.VOCAB_REFS || [];
-    const source = unitOrNull
-      ? unitOrNull.words.map(w => ({ ...w, _uid: unitOrNull.id }))
-      : [
-          ...allUnits.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id }))),
-          ...allRefs.flatMap(r => r.words.map(w => ({ ...w, _uid: r.id }))),
-        ];
+    let source;
+    if (!unitOrNull) {
+      source = [
+        ...allUnits.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id }))),
+        ...allRefs.flatMap(r => r.words.map(w => ({ ...w, _uid: r.id }))),
+      ];
+    } else if (unitOrNull.isGroup) {
+      source = unitOrNull.refs.flatMap(r => r.words.map(w => ({ ...w, _uid: r.id })));
+    } else {
+      source = unitOrNull.words.map(w => ({ ...w, _uid: unitOrNull.id }));
+    }
 
     const learning = [], newWords = [], known = [];
     for (const w of source) {
@@ -78,6 +85,7 @@ const VocabPractice = (() => {
   function _goVocab()        { if (window.App) App.showVocab(); }
 
   function _sessionLabel(unitOrNull, mode) {
+    if (unitOrNull && unitOrNull.isGroup) return unitOrNull.label;
     if (unitOrNull) return `${unitOrNull.icon} ${unitOrNull.name}`;
     return _ui('Tous les thèmes', 'Todos los temas', mode);
   }
@@ -87,6 +95,8 @@ const VocabPractice = (() => {
     const isFrEs = mode === 'fr-es';
     const units  = window.CURRICULUM_B1 || [];
     const refs   = (window.VOCAB_REFS || []).map(r => ({ ...r, name: isFrEs ? r.name : r.nameEs }));
+    const otherRefs  = refs.filter(r => !r.course);
+    const courseRefs = refs.filter(r => r.course);
 
     function badges(u) {
       const total    = u.words.length;
@@ -100,8 +110,10 @@ const VocabPractice = (() => {
       ].join('');
     }
 
+    const courseWords = courseRefs.reduce((s, r) => s + r.words.length, 0);
     const totalWords = units.reduce((s, u) => s + u.words.length, 0)
-                      + refs.reduce((s, r) => s + r.words.length, 0);
+                      + otherRefs.reduce((s, r) => s + r.words.length, 0)
+                      + courseWords;
 
     container.innerHTML = `
       <div class="vpp-wrap">
@@ -121,13 +133,35 @@ const VocabPractice = (() => {
               <span class="vpp-name">${u.name}</span>
               <span class="vpp-badges">${badges(u)}</span>
             </button>`).join('')}
-          ${refs.length ? `<div class="vpp-sep">${_ui('📚 Références', '📚 Referencias', mode)}</div>` : ''}
-          ${refs.map(r => `
+          ${otherRefs.length ? `<div class="vpp-sep">${_ui('📚 Références', '📚 Referencias', mode)}</div>` : ''}
+          ${otherRefs.map(r => `
             <button class="vpp-unit" data-unit="${r.id}">
               <span class="vpp-icon">${r.icon}</span>
               <span class="vpp-name">${r.name}</span>
               <span class="vpp-badges">${badges(r)}</span>
             </button>`).join('')}
+          ${courseRefs.length ? `
+            <div class="vpp-sep">${_ui('🎓 Mes cours', '🎓 Mis clases', mode)}</div>
+            <button class="vpp-unit vpp-course-toggle" data-course-toggle="1">
+              <span class="vpp-icon">🎓</span>
+              <span class="vpp-name">${_ui('Vocabulaire de mes cours', 'Vocabulario de mis clases', mode)}</span>
+              <span class="vpp-badges"><span class="vpp-badge vpp-total">${courseWords}</span></span>
+              <span class="vpp-arrow">${_coursesOpen ? '▲' : '▼'}</span>
+            </button>
+            ${_coursesOpen ? `
+              <button class="vpp-all vpp-sub" data-course-all="1">
+                <span class="vpp-icon">🌎</span>
+                <span class="vpp-name">${_ui('Tous mes cours', 'Todas mis clases', mode)}</span>
+                <span class="vpp-badges"><span class="vpp-badge vpp-total">${courseWords}</span></span>
+              </button>
+              ${courseRefs.map(r => `
+                <button class="vpp-unit vpp-sub" data-unit="${r.id}">
+                  <span class="vpp-icon">${r.icon}</span>
+                  <span class="vpp-name">${r.name}</span>
+                  <span class="vpp-badges">${badges(r)}</span>
+                </button>`).join('')}
+            ` : ''}
+          ` : ''}
         </div>
       </div>`;
 
@@ -135,7 +169,22 @@ const VocabPractice = (() => {
       if (window.App) App.showHome();
     });
 
-    container.querySelectorAll('.vpp-all, .vpp-unit').forEach(btn => {
+    const toggleBtn = container.querySelector('[data-course-toggle]');
+    if (toggleBtn) toggleBtn.addEventListener('click', () => {
+      _coursesOpen = !_coursesOpen;
+      _renderPicker(container, mode);
+    });
+
+    const allCoursesBtn = container.querySelector('[data-course-all]');
+    if (allCoursesBtn) allCoursesBtn.addEventListener('click', () => {
+      _runInfinite(container, {
+        isGroup: true,
+        refs: courseRefs,
+        label: _ui('🎓 Tous mes cours', '🎓 Todas mis clases', mode),
+      }, mode);
+    });
+
+    container.querySelectorAll('.vpp-all[data-unit], .vpp-unit[data-unit]').forEach(btn => {
       btn.addEventListener('click', () => {
         const uid  = btn.dataset.unit;
         const item = uid ? (units.find(u => u.id === uid) || refs.find(r => r.id === uid) || null) : null;

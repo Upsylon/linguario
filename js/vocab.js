@@ -271,7 +271,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c01', icon: '🪪',
+      id: 'ref_c01', icon: '🪪', course: true,
       name: 'Cours du 31 mai — Infos personnelles', nameEs: 'Clase del 31 de mayo — Datos personales',
       words: [
         { en: 'journalist', fr: 'le/la journaliste', es: 'el periodista / la periodista', esTarget: 'el periodista / la periodista', example: { fr: 'Elle est journaliste.', es: 'Ella es periodista.' } },
@@ -280,7 +280,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c02', icon: '🎾',
+      id: 'ref_c02', icon: '🎾', course: true,
       name: 'Cours du 2 juin — Loisirs & temps libre', nameEs: 'Clase del 2 de junio — Ocio y tiempo libre',
       words: [
         { en: 'to play', fr: 'jouer', es: 'jugar', esTarget: 'jugar', example: { fr: 'Je joue avec mes amis.', es: 'Juego con mis amigos.' } },
@@ -309,7 +309,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c03', icon: '📖',
+      id: 'ref_c03', icon: '📖', course: true,
       name: 'Cours du 16 juin — Verbes & Ser/Estar', nameEs: 'Clase del 16 de junio — Verbos y Ser/Estar',
       words: [
         { en: "I don't know", fr: 'je ne sais pas', es: 'no sé', esTarget: 'no sé', example: { fr: 'Je ne sais pas où il est.', es: 'No sé dónde está.' } },
@@ -351,7 +351,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c04', icon: '🔄',
+      id: 'ref_c04', icon: '🔄', course: true,
       name: 'Cours du 25 juin — Estar + gérondif', nameEs: 'Clase del 25 de junio — Estar + gerundio',
       words: [
         { en: 'to repair', fr: 'réparer', es: 'reparar', esTarget: 'reparar', example: { fr: 'Il répare le téléphone.', es: 'Él repara el celular.' } },
@@ -388,7 +388,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c05', icon: '🎨',
+      id: 'ref_c05', icon: '🎨', course: true,
       name: 'Cours du 30 juin — Couleurs & activités', nameEs: 'Clase del 30 de junio — Colores y actividades',
       words: [
         { en: 'curiosity', fr: 'la curiosité', es: 'la curiosidad', esTarget: 'la curiosidad', example: { fr: 'Par curiosité.', es: 'Por curiosidad.' } },
@@ -438,7 +438,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c06', icon: '🔑',
+      id: 'ref_c06', icon: '🔑', course: true,
       name: 'Cours du 7 juillet — Possessifs & quotidien', nameEs: 'Clase del 7 de julio — Posesivos y vida cotidiana',
       words: [
         { en: 'my',                    fr: 'mon / ma / mes',              es: 'mi / mis',        esTarget: 'mi / mis',       example: { fr: 'Mon nom est Pat.',            es: 'Mi nombre es Pat.' } },
@@ -483,7 +483,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c07', icon: '💛',
+      id: 'ref_c07', icon: '💛', course: true,
       name: 'Cours du 21 juillet — Goûts & motivations', nameEs: 'Clase del 21 de julio — Gustos y motivaciones',
       words: [
         { en: 'long time no see',      fr: 'ça fait longtemps',           es: 'tanto tiempo',     esTarget: 'tanto tiempo',    example: { fr: "Ça fait longtemps, non ?",     es: '¡Tanto tiempo!' } },
@@ -527,7 +527,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c08', icon: '🗺️',
+      id: 'ref_c08', icon: '🗺️', course: true,
       name: 'Cours du 27 juillet — Lieux & intérêts', nameEs: 'Clase del 27 de julio — Lugares e intereses',
       words: [
         { en: 'people',                fr: 'les gens',                     es: 'la gente',         esTarget: 'la gente',        example: { fr: 'Les gens sont sympas.',        es: 'La gente es amable.' } },
@@ -578,7 +578,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c09', icon: '🍲',
+      id: 'ref_c09', icon: '🍲', course: true,
       name: 'Cours du 30 juillet — Cuisine typique & langues', nameEs: 'Clase del 30 de julio — Comida típica e idiomas',
       words: [
         { en: 'touristy',              fr: 'touristique',                  es: 'turístico',        esTarget: 'turístico',       example: { fr: 'Un quartier très touristique.', es: 'Un barrio muy turístico.' } },
@@ -624,7 +624,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c10', icon: '💬',
+      id: 'ref_c10', icon: '💬', course: true,
       name: 'Cours du 6 août — Ser/Estar & révisions', nameEs: 'Clase del 6 de agosto — Ser/Estar y repaso',
       words: [
         { en: 'specific',              fr: 'spécifique',                   es: 'específico',      esTarget: 'específico',     example: { fr: 'À une heure spécifique.',     es: 'A una hora específica.' } },
@@ -659,7 +659,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c11', icon: '🌎',
+      id: 'ref_c11', icon: '🌎', course: true,
       name: 'Cours du 10 août — Nationalités (repaso) & mucho/muy', nameEs: 'Clase del 10 de agosto — Nacionalidades (repaso) y mucho/muy',
       words: [
         { en: 'weird',                 fr: 'bizarre',                       es: 'raro',             esTarget: 'raro',            example: { fr: "C'est bizarre.",               es: 'Es raro.' } },
@@ -707,7 +707,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c12', icon: '🍴',
+      id: 'ref_c12', icon: '🍴', course: true,
       name: 'Cours du 17 août — Nationalités & gastronomie', nameEs: 'Clase del 17 de agosto — Nacionalidades y gastronomía',
       words: [
         { en: 'Japanese',      fr: 'japonais / japonaise',        es: 'japonés / japonesa',       esTarget: 'japonés / japonesa',       example: { fr: 'Elle est japonaise.',            es: 'Ella es japonesa.' } },
@@ -789,6 +789,92 @@ const Vocab = (() => {
         { en: 'cheese', fr: 'le fromage', es: 'el queso', esTarget: 'el queso', example: { fr: 'Une pizza au fromage.', es: 'Una pizza de queso.' } },
         { en: 'egg', fr: "l'œuf", es: 'el huevo', esTarget: 'el huevo', example: { fr: 'Un œuf dur.', es: 'Un huevo duro.' } },
         { en: 'relative',              fr: 'le parent (famille élargie)', es: 'el pariente',      esTarget: 'el pariente',     example: { fr: "C'est un parent à moi.",       es: 'Es un pariente mío.' } },
+      ],
+    },
+
+    {
+      id: 'ref_c13', icon: '🍖', course: true,
+      name: 'Cours du 24 août — Viande & modes de cuisson', nameEs: 'Clase del 24 de agosto — Carne y formas de cocción',
+      words: [
+        { en: 'to clean', fr: 'nettoyer', es: 'limpiar', esTarget: 'limpiar', example: { fr: 'Je nettoie et je cours.', es: 'Limpio y corro.' } },
+        { en: '6 times a week', fr: '6 fois par semaine', es: '6 veces por semana', esTarget: '6 veces por semana', example: { fr: "Je m'entraîne 6 fois par semaine.", es: 'Entreno 6 veces por semana.' } },
+        { en: 'to train', fr: "s'entraîner", es: 'entrenar', esTarget: 'entrenar', example: { fr: "Je m'entraîne pour un marathon.", es: 'Entreno para un maratón.' } },
+        { en: 'marathon', fr: 'le marathon', es: 'el maratón', esTarget: 'el maratón', example: { fr: 'Je cours un marathon.', es: 'Corro un maratón.' } },
+        { en: 'eternal', fr: 'éternel', es: 'eterno / eterna', esTarget: 'eterno / eterna', example: { fr: 'Je veux que cette nuit soit éternelle.', es: 'Quiero que esta noche sea eterna.' } },
+        { en: 'carrot', fr: 'la carotte', es: 'la zanahoria', esTarget: 'la zanahoria', example: { fr: 'Je connais la carotte.', es: 'Yo conozco la zanahoria.' } },
+        { en: 'peas', fr: 'les petits pois', es: 'las arvejas', esTarget: 'las arvejas', example: { fr: 'Une salade russe avec des petits pois.', es: 'Una ensalada rusa con arvejas.' } },
+        { en: 'matambre (rolled flank steak)', fr: 'le matambre', es: 'el matambre', esTarget: 'el matambre', example: { fr: 'Un matambre avec de la salade russe.', es: 'Un matambre con ensalada rusa.' } },
+        { en: 'Russian salad', fr: 'la salade russe', es: 'la ensalada rusa', esTarget: 'la ensalada rusa', example: { fr: 'La salade russe contient de la mayonnaise.', es: 'La ensalada rusa lleva mayonesa.' } },
+        { en: 'provoleta (grilled provolone)', fr: 'la provoleta', es: 'la provoleta', esTarget: 'la provoleta', example: { fr: 'La provoleta est une entrée.', es: 'La provoleta es una entrada.' } },
+        { en: 'cannelloni', fr: 'les cannellonis', es: 'los canelones', esTarget: 'los canelones', example: { fr: 'Des cannellonis à la ricotta.', es: 'Canelones de ricotta.' } },
+        { en: 'ricotta', fr: 'la ricotta', es: 'la ricotta', esTarget: 'la ricotta', example: { fr: 'Des cannellonis à la ricotta.', es: 'Canelones de ricotta.' } },
+        { en: 'assorted cold cuts', fr: 'les charcuteries variées', es: 'los fiambres surtidos', esTarget: 'los fiambres surtidos', example: { fr: 'Une entrée de charcuteries variées.', es: 'Una entrada de fiambres surtidos.' } },
+        { en: 'bread pudding', fr: 'le pudding au pain', es: 'el budín de pan', esTarget: 'el budín de pan', example: { fr: 'Un pudding au pain en dessert.', es: 'Un budín de pan de postre.' } },
+        { en: 'lentil stew', fr: 'le ragoût de lentilles', es: 'el guiso de lentejas', esTarget: 'el guiso de lentejas', example: { fr: 'Un ragoût de lentilles chaud.', es: 'Un guiso de lentejas caliente.' } },
+        { en: 'milanesa napolitana', fr: 'la milanaise napolitaine', es: 'la milanesa a la napolitana', esTarget: 'la milanesa a la napolitana', example: { fr: 'Une milanaise napolitaine avec du fromage.', es: 'Una milanesa a la napolitana con queso.' } },
+        { en: 'corn pie', fr: 'la tourte au maïs', es: 'la tarta de choclo', esTarget: 'la tarta de choclo', example: { fr: 'Une tourte au maïs maison.', es: 'Una tarta de choclo casera.' } },
+        { en: 'potato omelette', fr: 'la tortilla de pommes de terre', es: 'la tortilla de papas', esTarget: 'la tortilla de papas', example: { fr: 'Une tortilla de pommes de terre.', es: 'Una tortilla de papas.' } },
+        { en: 'pumpkin cream soup', fr: 'la crème de potiron', es: 'la sopa crema de zapallo', esTarget: 'la sopa crema de zapallo', example: { fr: 'Une crème de potiron chaude.', es: 'Una sopa crema de zapallo caliente.' } },
+        { en: 'Cuban-style rice', fr: 'le riz à la cubaine', es: 'el arroz a la cubana', esTarget: 'el arroz a la cubana', example: { fr: 'Un riz à la cubaine avec un œuf.', es: 'Un arroz a la cubana con huevo.' } },
+        { en: 'Provençal chicken', fr: 'le poulet provençal', es: 'el pollo a la provenzal', esTarget: 'el pollo a la provenzal', example: { fr: 'Un poulet provençal aux herbes.', es: 'Un pollo a la provenzal con hierbas.' } },
+        { en: 'melon with ham', fr: 'le melon au jambon', es: 'el melón con jamón', esTarget: 'el melón con jamón', example: { fr: 'Un melon au jambon en entrée.', es: 'Un melón con jamón de entrada.' } },
+        { en: 'peaches in syrup', fr: 'les pêches au sirop', es: 'los duraznos en almíbar', esTarget: 'los duraznos en almíbar', example: { fr: 'Des pêches au sirop en dessert.', es: 'Duraznos en almíbar de postre.' } },
+        { en: "shepherd's pie", fr: 'le hachis parmentier', es: 'el pastel de papas', esTarget: 'el pastel de papas', example: { fr: 'Un hachis parmentier maison.', es: 'Un pastel de papas casero.' } },
+        { en: 'ground meat', fr: 'la viande hachée', es: 'la carne picada', esTarget: 'la carne picada', example: { fr: 'Un hachis parmentier à la viande hachée.', es: 'Un pastel de papas con carne picada.' } },
+        { en: 'fried', fr: 'frit', es: 'frito / frita', esTarget: 'frito / frita', example: { fr: 'Le poulet se mange frit.', es: 'El pollo se come frito.' } },
+        { en: 'grill / BBQ (appliance)', fr: 'le grill / le barbecue', es: 'la parrilla', esTarget: 'la parrilla', example: { fr: 'On cuisine sur le grill.', es: 'Cocinamos en la parrilla.' } },
+        { en: 'oven', fr: 'le four', es: 'el horno', esTarget: 'el horno', example: { fr: 'On cuisine au four.', es: 'Cocinamos en el horno.' } },
+        { en: 'fish', fr: 'le poisson', es: 'el pescado', esTarget: 'el pescado', example: { fr: 'Je mange le poisson grillé à la plancha.', es: 'El pescado lo como a la plancha.' } },
+        { en: 'raw', fr: 'cru', es: 'crudo / cruda', esTarget: 'crudo / cruda', example: { fr: 'Un jambon cru.', es: 'Un jamón crudo.' } },
+        { en: 'cooked', fr: 'cuit', es: 'cocido / cocida', esTarget: 'cocido / cocida', example: { fr: 'Un œuf cuit.', es: 'Un huevo cocido.' } },
+        { en: 'steamed', fr: 'à la vapeur', es: 'al vapor', esTarget: 'al vapor', example: { fr: 'Des légumes à la vapeur.', es: 'Verduras al vapor.' } },
+        { en: 'yearly', fr: 'annuellement', es: 'anualmente', esTarget: 'anualmente', example: { fr: 'On mange 67 kilos de viande par an.', es: 'Se comen 67 kilos de carne anualmente.' } },
+        { en: 'kilo', fr: 'le kilo', es: 'el kilo', esTarget: 'el kilo', example: { fr: '67 kilos de viande.', es: '67 kilos de carne.' } },
+        { en: 'saucepan / pot', fr: 'la casserole', es: 'la cacerola', esTarget: 'la cacerola', example: { fr: 'Une viande à la casserole.', es: 'Una carne a la cacerola.' } },
+        { en: 'boiled', fr: 'bouilli', es: 'hervido / hervida', esTarget: 'hervido / hervida', example: { fr: 'Un œuf bouilli.', es: 'Un huevo hervido.' } },
+        { en: 'grilled / roasted (adj.)', fr: 'grillé / rôti', es: 'asado / asada', esTarget: 'asado / asada', example: { fr: 'Une viande grillée.', es: 'Una carne asada.' } },
+        { en: 'grilled on the barbecue', fr: 'au barbecue', es: 'a la parrilla', esTarget: 'a la parrilla', example: { fr: 'Un steak au barbecue.', es: 'Un bife a la parrilla.' } },
+        { en: 'Nicaraguan', fr: 'nicaraguayen / nicaraguayenne', es: 'nicaragüense', esTarget: 'nicaragüense', example: { fr: 'Les Nicaraguayens mangent de la banane frite.', es: 'Los nicaragüenses comen banana frita.' } },
+        { en: 'Turkish', fr: 'turc / turque', es: 'turco / turca', esTarget: 'turco / turca', example: { fr: 'Les Turcs ont beaucoup de chats.', es: 'Los turcos tienen muchos gatos.' } },
+        { en: 'juice', fr: 'le jus', es: 'el jugo', esTarget: 'el jugo', example: { fr: 'On boit beaucoup de jus au Venezuela.', es: 'Se beben muchos jugos en Venezuela.' } },
+        { en: 'ice cream', fr: 'la glace', es: 'el helado', esTarget: 'el helado', example: { fr: 'On mange beaucoup de glace en Argentine.', es: 'Se come mucho helado en Argentina.' } },
+        { en: 'tapa (Spanish snack)', fr: 'la tapa', es: 'la tapa', esTarget: 'la tapa', example: { fr: 'On mange beaucoup de tapas en Espagne.', es: 'Se comen muchas tapas en España.' } },
+        { en: 'to generalize', fr: 'généraliser', es: 'generalizar', esTarget: 'generalizar', example: { fr: 'La forme impersonale sert à généraliser.', es: 'La forma impersonal sirve para generalizar.' } },
+        { en: 'to go out / leave', fr: 'sortir', es: 'salir', esTarget: 'salir', example: { fr: 'Je sors courir tous les jours.', es: 'Salgo a correr todos los días.' } },
+        { en: 'to put', fr: 'mettre', es: 'poner', esTarget: 'poner', example: { fr: 'Je mets les clés ici.', es: 'Pongo las llaves acá.' } },
+        { en: 'to hear', fr: 'entendre', es: 'oír', esTarget: 'oír', example: { fr: "Je n'entends rien.", es: 'No oigo nada.' } },
+        { en: 'to fall', fr: 'tomber', es: 'caer', esTarget: 'caer', example: { fr: 'Je tombe toujours en skiant.', es: 'Siempre me caigo cuando esquío.' } },
+        { en: 'to be worth', fr: 'valoir', es: 'valer', esTarget: 'valer', example: { fr: 'Je vaux beaucoup !', es: '¡Yo valgo mucho!' } },
+        { en: 'bag', fr: 'le sac', es: 'el bolso', esTarget: 'el bolso', example: { fr: 'Mon portable est dans mon sac.', es: 'Mi celular está en el bolso.' } },
+        { en: 'car', fr: 'la voiture', es: 'el carro', esTarget: 'el carro', example: { fr: 'Les clés sont dans la voiture.', es: 'Las llaves están en el carro.' } },
+        { en: 'hamburger', fr: 'le hamburger', es: 'la hamburguesa', esTarget: 'la hamburguesa', example: { fr: "J'achète des hamburgers chez McDonald's.", es: 'Compro hamburguesas en McDonalds.' } },
+        { en: 'to ski', fr: 'skier', es: 'esquiar', esTarget: 'esquiar', example: { fr: 'Je tombe toujours quand je skie.', es: 'Siempre me caigo cuando voy a esquiar.' } },
+        { en: 'useful', fr: 'utile', es: 'útil', esTarget: 'útil', example: { fr: 'Mon téléphone est très utile.', es: 'Mi celular es muy útil.' } },
+        { en: 'money', fr: "l'argent", es: 'el dinero', esTarget: 'el dinero', example: { fr: "Je n'apporte pas d'argent avec moi.", es: 'No traigo dinero conmigo.' } },
+      ],
+    },
+
+    {
+      id: 'ref_c14', icon: '🌡️', course: true,
+      name: 'Cours du 31 août — Climat & divers', nameEs: 'Clase del 31 de agosto — Clima y variado',
+      words: [
+        { en: 'sometimes', fr: 'parfois', es: 'a veces', esTarget: 'a veces', example: { fr: 'Parfois je fais du sport.', es: 'A veces hago deporte.' } },
+        { en: 'worse', fr: 'pire', es: 'peor', esTarget: 'peor', example: { fr: "Les jours suivants c'était pire.", es: 'Los próximos días fue peor.' } },
+        { en: 'summer', fr: "l'été", es: 'el verano', esTarget: 'el verano', example: { fr: "C'est la fin de l'été.", es: 'Es el fin del verano.' } },
+        { en: 'the cold', fr: 'le froid', es: 'el frío', esTarget: 'el frío', example: { fr: 'Je préfère le froid à la chaleur.', es: 'Prefiero el frío al calor.' } },
+        { en: 'the heat', fr: 'la chaleur', es: 'el calor', esTarget: 'el calor', example: { fr: "Il fait beaucoup de chaleur cet été.", es: 'Hace mucho calor este verano.' } },
+        { en: "it's the same", fr: "c'est pareil", es: 'es lo mismo', esTarget: 'es lo mismo', example: { fr: "C'est pareil, non ?", es: '¿Es lo mismo, no?' } },
+        { en: 'complicated', fr: 'compliqué', es: 'complicado', esTarget: 'complicado', example: { fr: "Cet été a été très compliqué.", es: 'Este verano fue muy complicado.' } },
+        { en: 'consecutive', fr: 'consécutif', es: 'consecutivo / consecutiva', esTarget: 'consecutivo / consecutiva', example: { fr: 'Deux semaines consécutives.', es: 'Dos semanas consecutivas.' } },
+        { en: 'about', fr: 'sur / à propos de', es: 'sobre', esTarget: 'sobre', example: { fr: "Je parle de mes vacances.", es: 'Hablo sobre mis vacaciones.' } },
+        { en: 'sparkling water', fr: "l'eau gazeuse", es: 'la soda', esTarget: 'la soda', example: { fr: "Un verre d'eau gazeuse.", es: 'Un vaso de soda.' } },
+        { en: 'with me', fr: 'avec moi', es: 'conmigo', esTarget: 'conmigo', example: { fr: "Tu ne veux pas venir avec moi ?", es: '¿No querés venir conmigo?' } },
+        { en: 'with you (informal)', fr: 'avec toi', es: 'contigo / con vos', esTarget: 'con vos', example: { fr: "Je veux venir avec toi.", es: 'Quiero ir con vos.' } },
+        { en: 'to contain (ingredients)', fr: 'contenir', es: 'llevar', esTarget: 'llevar', example: { fr: 'Que contient la salade russe ?', es: '¿Qué lleva la ensalada rusa?' } },
+        { en: 'hard-boiled egg', fr: 'un œuf dur', es: 'el huevo duro', esTarget: 'el huevo duro', example: { fr: "La salade complète a un œuf dur.", es: 'La ensalada completa tiene huevo duro.' } },
+        { en: 'mayonnaise', fr: 'la mayonnaise', es: 'la mayonesa', esTarget: 'la mayonesa', example: { fr: 'La salade russe a de la mayonnaise.', es: 'La ensalada rusa lleva mayonesa.' } },
+        { en: 'sangria', fr: 'la sangria', es: 'la sangría', esTarget: 'la sangría', example: { fr: 'La sangria contient de l\'orange.', es: 'La sangría lleva naranja.' } },
+        { en: 'it depends', fr: 'ça dépend', es: 'depende', esTarget: 'depende', example: { fr: 'Ça dépend !', es: '¡Depende!' } },
       ],
     },
   ];
