@@ -47,9 +47,13 @@ const VocabPractice = (() => {
   /* ── Queue builder — learning > new > known ───────────────────────── */
   function _buildQueue(unitOrNull, mode) {
     const allUnits = window.CURRICULUM_B1 || [];
+    const allRefs  = window.VOCAB_REFS || [];
     const source = unitOrNull
       ? unitOrNull.words.map(w => ({ ...w, _uid: unitOrNull.id }))
-      : allUnits.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id })));
+      : [
+          ...allUnits.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id }))),
+          ...allRefs.flatMap(r => r.words.map(w => ({ ...w, _uid: r.id }))),
+        ];
 
     const learning = [], newWords = [], known = [];
     for (const w of source) {
@@ -80,7 +84,9 @@ const VocabPractice = (() => {
 
   /* ── Theme picker ─────────────────────────────────────────────────── */
   function _renderPicker(container, mode) {
-    const units = window.CURRICULUM_B1 || [];
+    const isFrEs = mode === 'fr-es';
+    const units  = window.CURRICULUM_B1 || [];
+    const refs   = (window.VOCAB_REFS || []).map(r => ({ ...r, name: isFrEs ? r.name : r.nameEs }));
 
     function badges(u) {
       const total    = u.words.length;
@@ -94,7 +100,8 @@ const VocabPractice = (() => {
       ].join('');
     }
 
-    const totalWords = units.reduce((s, u) => s + u.words.length, 0);
+    const totalWords = units.reduce((s, u) => s + u.words.length, 0)
+                      + refs.reduce((s, r) => s + r.words.length, 0);
 
     container.innerHTML = `
       <div class="vpp-wrap">
@@ -114,16 +121,25 @@ const VocabPractice = (() => {
               <span class="vpp-name">${u.name}</span>
               <span class="vpp-badges">${badges(u)}</span>
             </button>`).join('')}
+          ${refs.length ? `<div class="vpp-sep">${_ui('📚 Références', '📚 Referencias', mode)}</div>` : ''}
+          ${refs.map(r => `
+            <button class="vpp-unit" data-unit="${r.id}">
+              <span class="vpp-icon">${r.icon}</span>
+              <span class="vpp-name">${r.name}</span>
+              <span class="vpp-badges">${badges(r)}</span>
+            </button>`).join('')}
         </div>
       </div>`;
 
-    container.querySelector('#vp-close').addEventListener('click', () => _goVocab());
+    container.querySelector('#vp-close').addEventListener('click', () => {
+      if (window.App) App.showHome();
+    });
 
     container.querySelectorAll('.vpp-all, .vpp-unit').forEach(btn => {
       btn.addEventListener('click', () => {
         const uid  = btn.dataset.unit;
-        const unit = uid ? (units.find(u => u.id === uid) || null) : null;
-        _runInfinite(container, unit, mode);
+        const item = uid ? (units.find(u => u.id === uid) || refs.find(r => r.id === uid) || null) : null;
+        _runInfinite(container, item, mode);
       });
     });
   }

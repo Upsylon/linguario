@@ -304,7 +304,10 @@ const App = (() => {
     show('vocab');
     setActiveTab('vocab');
     const el = document.getElementById('screen-vocab');
-    if (el && window.Vocab) Vocab.render(el);
+    if (el && window.VocabPractice) {
+      const mode = Storage.getProfile().mode || 'fr-es';
+      VocabPractice.startWithPicker(el, mode);
+    }
   }
 
   // ── Parcours (merged into home) ───────────────────────────────────────

@@ -1198,6 +1198,12 @@ input  { font: inherit; }
 .vpp-new   { background: rgba(148,163,184,.15); color: var(--muted); }
 .vpp-ok    { background: rgba(74,222,128,.15);  color: #4ade80; }
 .vpp-total { background: rgba(67,97,238,.15);   color: var(--accent); }
+.vpp-sep {
+  padding: .9rem .1rem .2rem;
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted);
+}
 
 /* Empty state */
 .vp-empty {

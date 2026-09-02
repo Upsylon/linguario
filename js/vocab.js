@@ -465,6 +465,8 @@ const Vocab = (() => {
     },
   ];
 
+  window.VOCAB_REFS = REFS;
+
   // ── Public ────────────────────────────────────────────────────────────
   function render(el) {
     _el = el;
