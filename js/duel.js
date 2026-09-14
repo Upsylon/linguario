@@ -452,6 +452,12 @@ const DUEL = (() => {
     container.querySelectorAll('.du-theme-card').forEach(btn => {
       btn.addEventListener('click', () => {
         _theme = THEMES.find(t => t.id === btn.dataset.tid);
+        // Give this drill-down its own history entry, so the phone/browser
+        // back button steps out to the theme list instead of exiting the
+        // app entirely (there's otherwise no entry left to pop to).
+        if (!history.state || history.state.screen !== 'duel-deep') {
+          history.pushState({ screen: 'duel-deep' }, '');
+        }
         renderModePicker(container);
       });
     });

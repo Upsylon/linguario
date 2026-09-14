@@ -124,6 +124,12 @@ const Parcours = (() => {
   function _startUnit(uid, container) {
     const unit = (window.CURRICULUM_B1 || []).find(u => u.id === uid);
     if (!unit) return;
+    // Give the unit detail view its own history entry, so the phone/browser
+    // back button returns to the roadmap list instead of exiting the app
+    // (popping it reveals 'home', which already re-renders the list fresh).
+    if (!history.state || history.state.screen !== 'parcours-detail') {
+      history.pushState({ screen: 'parcours-detail' }, '');
+    }
     _renderUnitDetail(container, unit);
   }
 

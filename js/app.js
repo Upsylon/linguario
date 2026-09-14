@@ -41,7 +41,7 @@ const App = (() => {
       const screen = e.state && e.state.screen;
       if (!screen || screen === 'quick-session') { showHome(); return; }
       if      (screen === 'home')     showHome();
-      else if (screen === 'duel')     showDuelTab();
+      else if (screen === 'duel')     showDuelTab(true); // back out of a duel sub-screen -> theme list
       else if (screen === 'parcours') showHome();
       else if (screen === 'vocab')    showVocab();
       else                            showHome();
@@ -277,7 +277,7 @@ const App = (() => {
   }
 
   // ── Duel ─────────────────────────────────────────────────────────────
-  function showDuelTab() {
+  function showDuelTab(resetState) {
     show('duel');
     setActiveTab('duel');
     const el = document.getElementById('screen-duel');
@@ -296,7 +296,7 @@ const App = (() => {
       if (c && window.DUEL) DUEL.reset(c);
     });
     const c = el.querySelector('#du-content');
-    if (c && window.DUEL) DUEL.render(c);
+    if (c && window.DUEL) { resetState ? DUEL.reset(c) : DUEL.render(c); }
   }
 
   // ── Lexique ───────────────────────────────────────────────────────────
