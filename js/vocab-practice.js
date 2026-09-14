@@ -15,6 +15,17 @@
 const VocabPractice = (() => {
 
   let _coursesOpen = false;
+  let _levelFilter = 'all';        // 'all' | 'a1' | 'a2' | 'b1' — picker-side filter
+  let _sessionLevelFilter = 'all'; // snapshot used by the active/last session
+
+  const LEVELS = ['a1', 'a2', 'b1'];
+  function _wordLevel(word, ownerLvl) { return word.lvl || ownerLvl || 'a2'; }
+  function _ownerLevel(owner) { return owner.level || owner.lvl || 'a2'; }
+  function _wordsAtLevel(owner, levelFilter) {
+    if (levelFilter === 'all') return owner.words;
+    const ownerLvl = _ownerLevel(owner);
+    return owner.words.filter(w => _wordLevel(w, ownerLvl) === levelFilter);
+  }
 
   /* ── Storage ──────────────────────────────────────────────────────── */
   function _k(mode, uid, en) { return `voc:${mode}:${uid}:${en}`; }
@@ -51,16 +62,17 @@ const VocabPractice = (() => {
   function _buildQueue(unitOrNull, mode) {
     const allUnits = window.CURRICULUM_B1 || [];
     const allRefs  = window.VOCAB_REFS || [];
+    const lf = _sessionLevelFilter;
     let source;
     if (!unitOrNull) {
       source = [
-        ...allUnits.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id }))),
-        ...allRefs.flatMap(r => r.words.map(w => ({ ...w, _uid: r.id }))),
+        ...allUnits.flatMap(u => _wordsAtLevel(u, lf).map(w => ({ ...w, _uid: u.id }))),
+        ...allRefs.flatMap(r => _wordsAtLevel(r, lf).map(w => ({ ...w, _uid: r.id }))),
       ];
     } else if (unitOrNull.isGroup) {
-      source = unitOrNull.refs.flatMap(r => r.words.map(w => ({ ...w, _uid: r.id })));
+      source = unitOrNull.refs.flatMap(r => _wordsAtLevel(r, lf).map(w => ({ ...w, _uid: r.id })));
     } else {
-      source = unitOrNull.words.map(w => ({ ...w, _uid: unitOrNull.id }));
+      source = _wordsAtLevel(unitOrNull, lf).map(w => ({ ...w, _uid: unitOrNull.id }));
     }
 
     const learning = [], newWords = [], known = [];
@@ -92,23 +104,28 @@ const VocabPractice = (() => {
   }
 
   function _sessionLabel(unitOrNull, mode) {
-    if (unitOrNull && unitOrNull.isGroup) return unitOrNull.label;
-    if (unitOrNull) return `${unitOrNull.icon} ${unitOrNull.name}`;
-    return _ui('Tous les thèmes', 'Todos los temas', mode);
+    const lvlTag = _sessionLevelFilter !== 'all' ? ` · ${_sessionLevelFilter.toUpperCase()}` : '';
+    if (unitOrNull && unitOrNull.isGroup) return unitOrNull.label + lvlTag;
+    if (unitOrNull) return `${unitOrNull.icon} ${unitOrNull.name}${lvlTag}`;
+    return _ui('Tous les thèmes', 'Todos los temas', mode) + lvlTag;
   }
 
   /* ── Theme picker ─────────────────────────────────────────────────── */
   function _renderPicker(container, mode) {
     const isFrEs = mode === 'fr-es';
-    const units  = window.CURRICULUM_B1 || [];
-    const refs   = (window.VOCAB_REFS || []).map(r => ({ ...r, name: isFrEs ? r.name : r.nameEs }));
+    const lf     = _levelFilter;
+    const units  = (window.CURRICULUM_B1 || []).filter(u => _wordsAtLevel(u, lf).length > 0);
+    const refs   = (window.VOCAB_REFS || [])
+      .map(r => ({ ...r, name: isFrEs ? r.name : r.nameEs }))
+      .filter(r => _wordsAtLevel(r, lf).length > 0);
     const otherRefs  = refs.filter(r => !r.course);
     const courseRefs = refs.filter(r => r.course);
 
     function badges(u) {
-      const total    = u.words.length;
-      const learning = u.words.filter(w => _getStatus(mode, u.id, w.en) === 'learning').length;
-      const newW     = u.words.filter(w => _getStatus(mode, u.id, w.en) === 'new').length;
+      const words    = _wordsAtLevel(u, lf);
+      const total    = words.length;
+      const learning = words.filter(w => _getStatus(mode, u.id, w.en) === 'learning').length;
+      const newW     = words.filter(w => _getStatus(mode, u.id, w.en) === 'new').length;
       const known    = total - learning - newW;
       return [
         learning > 0 ? `<span class="vpp-badge vpp-fail">${learning}</span>` : '',
@@ -117,10 +134,19 @@ const VocabPractice = (() => {
       ].join('');
     }
 
-    const courseWords = courseRefs.reduce((s, r) => s + r.words.length, 0);
-    const totalWords = units.reduce((s, u) => s + u.words.length, 0)
-                      + otherRefs.reduce((s, r) => s + r.words.length, 0)
+    const courseWords = courseRefs.reduce((s, r) => s + _wordsAtLevel(r, lf).length, 0);
+    const totalWords = units.reduce((s, u) => s + _wordsAtLevel(u, lf).length, 0)
+                      + otherRefs.reduce((s, r) => s + _wordsAtLevel(r, lf).length, 0)
                       + courseWords;
+
+    const lvlLabel = { a1: 'A1', a2: 'A2', b1: 'B1' };
+    const lvlBar = `
+      <div class="vpp-lvlbar">
+        ${['all', ...LEVELS].map(l => `
+          <button class="vpp-lvl${lf === l ? ' vpp-lvl--on' : ''}" data-lvl="${l}">
+            ${l === 'all' ? _ui('Tous niveaux', 'Todos los niveles', mode) : lvlLabel[l]}
+          </button>`).join('')}
+      </div>`;
 
     container.innerHTML = `
       <div class="vpp-wrap">
@@ -128,12 +154,16 @@ const VocabPractice = (() => {
           <button class="vp-close" id="vp-close">✕</button>
           <h2 class="vpp-title">${_ui('Choisir un thème', 'Elegir un tema', mode)}</h2>
         </div>
+        ${lvlBar}
         <div class="vpp-list">
           <button class="vpp-all" data-unit="">
             <span class="vpp-icon">🌍</span>
             <span class="vpp-name">${_ui('Tous les thèmes', 'Todos los temas', mode)}</span>
             <span class="vpp-badges"><span class="vpp-badge vpp-total">${totalWords}</span></span>
           </button>
+          ${units.length === 0 && otherRefs.length === 0 && courseRefs.length === 0 ? `
+            <div class="vpp-empty">${_ui('Aucun mot à ce niveau pour le moment.', 'Ninguna palabra en este nivel por ahora.', mode)}</div>
+          ` : ''}
           ${units.map(u => `
             <button class="vpp-unit" data-unit="${u.id}">
               <span class="vpp-icon">${u.icon}</span>
@@ -176,6 +206,13 @@ const VocabPractice = (() => {
       if (window.App) App.showHome();
     });
 
+    container.querySelectorAll('[data-lvl]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        _levelFilter = btn.dataset.lvl;
+        _renderPicker(container, mode);
+      });
+    });
+
     const toggleBtn = container.querySelector('[data-course-toggle]');
     if (toggleBtn) toggleBtn.addEventListener('click', () => {
       _coursesOpen = !_coursesOpen;
@@ -184,6 +221,7 @@ const VocabPractice = (() => {
 
     const allCoursesBtn = container.querySelector('[data-course-all]');
     if (allCoursesBtn) allCoursesBtn.addEventListener('click', () => {
+      _sessionLevelFilter = _levelFilter;
       _runInfinite(container, {
         isGroup: true,
         refs: courseRefs,
@@ -195,6 +233,7 @@ const VocabPractice = (() => {
       btn.addEventListener('click', () => {
         const uid  = btn.dataset.unit;
         const item = uid ? (units.find(u => u.id === uid) || refs.find(r => r.id === uid) || null) : null;
+        _sessionLevelFilter = _levelFilter;
         _runInfinite(container, item, mode);
       });
     });

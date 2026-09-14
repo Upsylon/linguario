@@ -1207,6 +1207,36 @@ input  { font: inherit; }
 .vpp-arrow { font-size: .75rem; color: var(--muted); flex-shrink: 0; }
 .vpp-sub   { margin-left: 1.1rem; width: calc(100% - 1.1rem); }
 
+.vpp-lvlbar {
+  display: flex; gap: .4rem;
+  padding: 0 1rem .6rem;
+  overflow-x: auto;
+}
+.vpp-lvl {
+  flex-shrink: 0;
+  padding: .35rem .85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: .78rem; font-weight: 700;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+  white-space: nowrap;
+}
+.vpp-lvl:hover     { background: var(--border); }
+.vpp-lvl--on {
+  border-color: var(--accent);
+  background: rgba(67,97,238,.15);
+  color: var(--accent);
+}
+.vpp-empty {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
 /* Empty state */
 .vp-empty {
   display: flex; flex-direction: column; align-items: center;

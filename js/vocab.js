@@ -16,7 +16,7 @@ const Vocab = (() => {
 
   const REFS = [
     {
-      id: 'ref_conj', icon: '🔗',
+      id: 'ref_conj', icon: '🔗', lvl: 'b1',
       name: 'Conjonctions & connecteurs', nameEs: 'Conjunciones y conectores',
       words: [
         // ── Opposition / concession ──────────────────────────────────────
@@ -68,7 +68,7 @@ const Vocab = (() => {
       ],
     },
     {
-      id: 'ref_verb', icon: '⚡',
+      id: 'ref_verb', icon: '⚡', lvl: 'a2',
       name: 'Verbes essentiels', nameEs: 'Verbos esenciales',
       words: [
         // ── Auxiliaires & modaux ─────────────────────────────────────────
@@ -141,7 +141,7 @@ const Vocab = (() => {
       ],
     },
     {
-      id: 'ref_expr', icon: '💬',
+      id: 'ref_expr', icon: '💬', lvl: 'a2',
       name: "S'exprimer au quotidien", nameEs: 'Expresarse en el día a día',
       words: [
         // ── Politesse & salutations ──
@@ -209,7 +209,7 @@ const Vocab = (() => {
       ],
     },
     {
-      id: 'ref_conjug', icon: '🔀',
+      id: 'ref_conjug', icon: '🔀', lvl: 'b1',
       name: 'Conjugaisons essentielles', nameEs: 'Conjugaciones esenciales',
       words: [
         // ── Présent ──
@@ -271,7 +271,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c01', icon: '🪪', course: true,
+      id: 'ref_c01', icon: '🪪', course: true, lvl: 'a1',
       name: 'Cours du 31 mai — Infos personnelles', nameEs: 'Clase del 31 de mayo — Datos personales',
       words: [
         { en: 'journalist', fr: 'le/la journaliste', es: 'el periodista / la periodista', esTarget: 'el periodista / la periodista', example: { fr: 'Elle est journaliste.', es: 'Ella es periodista.' } },
@@ -280,7 +280,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c02', icon: '🎾', course: true,
+      id: 'ref_c02', icon: '🎾', course: true, lvl: 'a1',
       name: 'Cours du 2 juin — Loisirs & temps libre', nameEs: 'Clase del 2 de junio — Ocio y tiempo libre',
       words: [
         { en: 'to play', fr: 'jouer', es: 'jugar', esTarget: 'jugar', example: { fr: 'Je joue avec mes amis.', es: 'Juego con mis amigos.' } },
@@ -309,7 +309,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c03', icon: '📖', course: true,
+      id: 'ref_c03', icon: '📖', course: true, lvl: 'a2',
       name: 'Cours du 16 juin — Verbes & Ser/Estar', nameEs: 'Clase del 16 de junio — Verbos y Ser/Estar',
       words: [
         { en: "I don't know", fr: 'je ne sais pas', es: 'no sé', esTarget: 'no sé', example: { fr: 'Je ne sais pas où il est.', es: 'No sé dónde está.' } },
@@ -351,7 +351,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c04', icon: '🔄', course: true,
+      id: 'ref_c04', icon: '🔄', course: true, lvl: 'a2',
       name: 'Cours du 25 juin — Estar + gérondif', nameEs: 'Clase del 25 de junio — Estar + gerundio',
       words: [
         { en: 'to repair', fr: 'réparer', es: 'reparar', esTarget: 'reparar', example: { fr: 'Il répare le téléphone.', es: 'Él repara el celular.' } },
@@ -388,7 +388,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c05', icon: '🎨', course: true,
+      id: 'ref_c05', icon: '🎨', course: true, lvl: 'a1',
       name: 'Cours du 30 juin — Couleurs & activités', nameEs: 'Clase del 30 de junio — Colores y actividades',
       words: [
         { en: 'curiosity', fr: 'la curiosité', es: 'la curiosidad', esTarget: 'la curiosidad', example: { fr: 'Par curiosité.', es: 'Por curiosidad.' } },
@@ -438,7 +438,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c06', icon: '🔑', course: true,
+      id: 'ref_c06', icon: '🔑', course: true, lvl: 'a2',
       name: 'Cours du 7 juillet — Possessifs & quotidien', nameEs: 'Clase del 7 de julio — Posesivos y vida cotidiana',
       words: [
         { en: 'my',                    fr: 'mon / ma / mes',              es: 'mi / mis',        esTarget: 'mi / mis',       example: { fr: 'Mon nom est Pat.',            es: 'Mi nombre es Pat.' } },
@@ -483,7 +483,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c07', icon: '💛', course: true,
+      id: 'ref_c07', icon: '💛', course: true, lvl: 'b1',
       name: 'Cours du 21 juillet — Goûts & motivations', nameEs: 'Clase del 21 de julio — Gustos y motivaciones',
       words: [
         { en: 'long time no see',      fr: 'ça fait longtemps',           es: 'tanto tiempo',     esTarget: 'tanto tiempo',    example: { fr: "Ça fait longtemps, non ?",     es: '¡Tanto tiempo!' } },
@@ -527,7 +527,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c08', icon: '🗺️', course: true,
+      id: 'ref_c08', icon: '🗺️', course: true, lvl: 'b1',
       name: 'Cours du 27 juillet — Lieux & intérêts', nameEs: 'Clase del 27 de julio — Lugares e intereses',
       words: [
         { en: 'people',                fr: 'les gens',                     es: 'la gente',         esTarget: 'la gente',        example: { fr: 'Les gens sont sympas.',        es: 'La gente es amable.' } },
@@ -578,7 +578,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c09', icon: '🍲', course: true,
+      id: 'ref_c09', icon: '🍲', course: true, lvl: 'b1',
       name: 'Cours du 30 juillet — Cuisine typique & langues', nameEs: 'Clase del 30 de julio — Comida típica e idiomas',
       words: [
         { en: 'touristy',              fr: 'touristique',                  es: 'turístico',        esTarget: 'turístico',       example: { fr: 'Un quartier très touristique.', es: 'Un barrio muy turístico.' } },
@@ -624,7 +624,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c10', icon: '💬', course: true,
+      id: 'ref_c10', icon: '💬', course: true, lvl: 'a2',
       name: 'Cours du 6 août — Ser/Estar & révisions', nameEs: 'Clase del 6 de agosto — Ser/Estar y repaso',
       words: [
         { en: 'specific',              fr: 'spécifique',                   es: 'específico',      esTarget: 'específico',     example: { fr: 'À une heure spécifique.',     es: 'A una hora específica.' } },
@@ -659,7 +659,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c11', icon: '🌎', course: true,
+      id: 'ref_c11', icon: '🌎', course: true, lvl: 'a2',
       name: 'Cours du 10 août — Nationalités (repaso) & mucho/muy', nameEs: 'Clase del 10 de agosto — Nacionalidades (repaso) y mucho/muy',
       words: [
         { en: 'weird',                 fr: 'bizarre',                       es: 'raro',             esTarget: 'raro',            example: { fr: "C'est bizarre.",               es: 'Es raro.' } },
@@ -707,7 +707,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c12', icon: '🍴', course: true,
+      id: 'ref_c12', icon: '🍴', course: true, lvl: 'a2',
       name: 'Cours du 17 août — Nationalités & gastronomie', nameEs: 'Clase del 17 de agosto — Nacionalidades y gastronomía',
       words: [
         { en: 'Japanese',      fr: 'japonais / japonaise',        es: 'japonés / japonesa',       esTarget: 'japonés / japonesa',       example: { fr: 'Elle est japonaise.',            es: 'Ella es japonesa.' } },
@@ -793,7 +793,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c13', icon: '🍖', course: true,
+      id: 'ref_c13', icon: '🍖', course: true, lvl: 'b1',
       name: 'Cours du 24 août — Viande & modes de cuisson', nameEs: 'Clase del 24 de agosto — Carne y formas de cocción',
       words: [
         { en: 'to clean', fr: 'nettoyer', es: 'limpiar', esTarget: 'limpiar', example: { fr: 'Je nettoie et je cours.', es: 'Limpio y corro.' } },
@@ -855,7 +855,7 @@ const Vocab = (() => {
     },
 
     {
-      id: 'ref_c14', icon: '🌡️', course: true,
+      id: 'ref_c14', icon: '🌡️', course: true, lvl: 'b1',
       name: 'Cours du 31 août — Climat & divers', nameEs: 'Clase del 31 de agosto — Clima y variado',
       words: [
         { en: 'sometimes', fr: 'parfois', es: 'a veces', esTarget: 'a veces', example: { fr: 'Parfois je fais du sport.', es: 'A veces hago deporte.' } },
