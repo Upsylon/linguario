@@ -1237,6 +1237,25 @@ input  { font: inherit; }
   font-size: .85rem;
 }
 
+.vpp-mode-switch { display: flex; gap: .3rem; flex-shrink: 0; }
+.vpp-mode-pill {
+  padding: .3rem .55rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: .72rem; font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.vpp-mode-pill:hover { background: var(--border); }
+.vpp-mode-pill--on {
+  border-color: var(--accent);
+  background: rgba(67,97,238,.15);
+  color: var(--accent);
+}
+
 /* Empty state */
 .vp-empty {
   display: flex; flex-direction: column; align-items: center;

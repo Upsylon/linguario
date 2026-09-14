@@ -66,7 +66,7 @@ const Sync = (() => {
         const msg   = snap.exists
           ? (mode === 'es-fr' ? `¡Bienvenido ${first}! Progreso restaurado.` : `Bienvenue ${first} ! Progression restaurée.`)
           : (mode === 'es-fr' ? `¡Hola ${first}! Progreso guardado en la nube.` : `Bonjour ${first} ! Progression sauvegardée.`);
-        App.showHome();
+        App.showVocab();
         App.toast(msg);
       }
     } catch { /* offline */ }

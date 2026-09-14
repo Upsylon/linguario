@@ -151,8 +151,11 @@ const VocabPractice = (() => {
     container.innerHTML = `
       <div class="vpp-wrap">
         <div class="vpp-header">
-          <button class="vp-close" id="vp-close">✕</button>
           <h2 class="vpp-title">${_ui('Choisir un thème', 'Elegir un tema', mode)}</h2>
+          <div class="vpp-mode-switch">
+            <button class="vpp-mode-pill${isFrEs ? ' vpp-mode-pill--on' : ''}" data-mode="fr-es" title="Français → Espagnol">🇦🇷 ES</button>
+            <button class="vpp-mode-pill${!isFrEs ? ' vpp-mode-pill--on' : ''}" data-mode="es-fr" title="Español → Francés">🇫🇷 FR</button>
+          </div>
         </div>
         ${lvlBar}
         <div class="vpp-list">
@@ -202,8 +205,10 @@ const VocabPractice = (() => {
         </div>
       </div>`;
 
-    container.querySelector('#vp-close').addEventListener('click', () => {
-      if (window.App) App.showHome();
+    container.querySelectorAll('.vpp-mode-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.App) App.setMode(btn.dataset.mode);
+      });
     });
 
     container.querySelectorAll('[data-lvl]').forEach(btn => {

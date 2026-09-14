@@ -16,35 +16,29 @@ const App = (() => {
 
     const profile = Storage.getProfile();
     if (!profile.onboarded || !profile.name) {
-      _rawShow('welcome');
-      hideNav();
+      show('welcome');
       bindWelcome();
     } else {
-      showHome();
+      showVocab();
     }
 
     initTabs();
 
-    // Header logo always navigates home — confirm only if mid-lesson
+    // Header logo always navigates to the Lexique (the app's home screen)
     const hdr = document.querySelector('.app-header');
     if (hdr) {
       hdr.addEventListener('click', e => {
         if (e.target.closest('#sync-btn') || e.target.closest('#audio-toggle')) return;
-        if (_currentScreen === 'quick-session') return; // ✕ in lesson handles exit
-        showHome();
+        showVocab();
       });
     }
 
-    history.replaceState({ screen: _currentScreen || 'home' }, '');
+    history.replaceState({ screen: _currentScreen || 'vocab' }, '');
 
     window.addEventListener('popstate', e => {
       const screen = e.state && e.state.screen;
-      if (!screen || screen === 'quick-session') { showHome(); return; }
-      if      (screen === 'home')     showHome();
-      else if (screen === 'duel')     showDuelTab(true); // back out of a duel sub-screen -> theme list
-      else if (screen === 'parcours') showHome();
-      else if (screen === 'vocab')    showVocab();
-      else                            showHome();
+      if (screen === 'duel') showDuelTab(true); // back out of a duel sub-screen -> theme list
+      else                   showVocab();
     });
   }
 
@@ -82,8 +76,7 @@ const App = (() => {
     document.querySelectorAll('.snav-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         const t = tab.dataset.screen;
-        if      (t === 'home')  showHome();
-        else if (t === 'duel')  showDuelTab();
+        if      (t === 'duel')  showDuelTab();
         else if (t === 'vocab') showVocab();
       });
     });
@@ -102,23 +95,9 @@ const App = (() => {
     const el = document.getElementById('screen-' + id);
     if (el) el.classList.add('active');
 
-    const isDeep = id === 'quick-session';
-    if (isDeep || id === 'welcome') hideNav();
-    else showNav();
-
-    if (isDeep) {
-      if (_currentScreen !== id) { history.pushState({ screen: id }, ''); _currentScreen = id; }
-    } else if (id !== 'welcome') {
-      history.replaceState({ screen: id }, ''); _currentScreen = id;
-    } else {
-      _currentScreen = id;
-    }
-  }
-
-  function _rawShow(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const el = document.getElementById('screen-' + id);
-    if (el) el.classList.add('active');
+    if (id === 'welcome') { hideNav(); _currentScreen = id; return; }
+    showNav();
+    history.replaceState({ screen: id }, '');
     _currentScreen = id;
   }
 
@@ -149,7 +128,7 @@ const App = (() => {
         const defaultName = selectedMode === 'es-fr' ? 'Aprendiz' : 'Apprenant';
         const name = (nameEl ? nameEl.value.trim() : '') || defaultName;
         Storage.saveProfile({ name, mode: selectedMode, onboarded: true, createdAt: SRS.today() });
-        showHome();
+        showVocab();
         toast(I18N.t('toast.welcome', name));
       });
     }
@@ -158,122 +137,11 @@ const App = (() => {
   // ── Nav i18n ──────────────────────────────────────────────────────────
   function _updateNavLabels(mode) {
     const isEs = mode === 'es-fr';
-    [['home','Apprendre','Aprender'],['duel','Duel','Duelo'],['vocab','Lexique','Léxico']]
+    [['duel','Duel','Duelo'],['vocab','Lexique','Léxico']]
       .forEach(([screen, fr, es]) => {
         const el = document.querySelector(`.snav-tab[data-screen="${screen}"] .snav-label`);
         if (el) el.textContent = isEs ? es : fr;
       });
-  }
-
-  // ── Home (combined dashboard + parcours roadmap) ──────────────────────
-  function showHome() {
-    show('home');
-    setActiveTab('home');
-    const el = document.getElementById('screen-home');
-    if (!el) return;
-    const p = Storage.getProfile();
-    document.documentElement.lang = (p.mode === 'es-fr') ? 'es' : 'fr';
-    _renderHome(el, p);
-  }
-
-  function _getDueCount(mode) {
-    const now = Date.now();
-    let count = 0;
-    for (const unit of (window.CURRICULUM_B1 || [])) {
-      for (const word of unit.words) {
-        try {
-          const c = JSON.parse(localStorage.getItem('qs:' + mode + ':' + unit.id + ':' + word.en));
-          if (c && c.nextReview <= now) count++;
-        } catch {}
-      }
-    }
-    return count;
-  }
-
-  function _renderHome(el, p) {
-    const mode     = p.mode || 'fr-es';
-    _updateNavLabels(mode);
-    const xp       = XP.getXP();
-    const level    = XP.getLevel();
-    const nextLv   = XP.getNextLevel();
-    const progPct  = Math.round(XP.getLevelProgress() * 100);
-    const streak   = XP.getStreak();
-    const unit     = XP.getCurrentUnit();
-    const xpToGo   = nextLv ? nextLv.min - xp : 0;
-    const dueCount = _getDueCount(mode);
-    const unitHint = unit ? unit.icon + ' ' + esc(unit.name) : _ui('🎉 Tout complété !', '🎉 ¡Todo completado!', mode);
-
-    const reviewCard = dueCount > 0 ? `
-      <button class="hm-action-card hm-action-review" id="hm-review">
-        <span class="hm-action-icon">🔄</span>
-        <div class="hm-action-body">
-          <div class="hm-action-title">${_ui('Réviser maintenant', 'Repasar ahora', mode)}</div>
-          <div class="hm-action-sub">${dueCount} ${_ui(dueCount > 1 ? 'mots en attente' : 'mot en attente', dueCount > 1 ? 'palabras pendientes' : 'palabra pendiente', mode)}</div>
-        </div>
-      </button>` : '';
-
-    el.innerHTML = `
-      <div class="hm-wrap">
-        <div class="hm-dash">
-          <div class="hm-lang-switch">
-            <span class="hm-lang-label">${_ui("J'apprends :", 'Aprendo:', mode)}</span>
-            <div class="hm-lang-pills">
-              <button class="hm-lang-pill${mode === 'fr-es' ? ' hm-lang-pill--active' : ''}" data-mode="fr-es">🇦🇷 Espagnol</button>
-              <button class="hm-lang-pill${mode === 'es-fr' ? ' hm-lang-pill--active' : ''}" data-mode="es-fr">🇫🇷 Français</button>
-            </div>
-          </div>
-
-          ${streak
-            ? '<div class="hm-streak-pill">🔥 ' + streak + ' ' + _ui(streak > 1 ? 'jours' : 'jour', streak > 1 ? 'días' : 'día', mode) + '</div>'
-            : '<div class="hm-streak-pill hm-streak-zero">' + _ui("Commence ta série aujourd'hui !", '¡Empezá tu racha hoy!', mode) + '</div>'}
-
-          <div class="hm-xp-block">
-            <div class="hm-xp-labels">
-              <span class="hm-xp-lv" style="color:${level.color}">${level.name}</span>
-              <span class="hm-xp-num">${xp} XP</span>
-              <span class="hm-xp-next">${nextLv ? nextLv.name : '✓'}</span>
-            </div>
-            <div class="hm-xpbar">
-              <div class="hm-xpbar-fill" style="width:${progPct}%;background:${level.color}"></div>
-            </div>
-            ${nextLv ? '<div class="hm-xp-hint">' + _ui('encore ' + xpToGo + ' XP pour ' + nextLv.name, 'faltan ' + xpToGo + ' XP para ' + nextLv.name, mode) + '</div>' : ''}
-          </div>
-
-          <div class="hm-actions">
-            ${reviewCard}
-            <button class="hm-action-card hm-action-play" id="hm-play">
-              <span class="hm-action-icon">▶</span>
-              <div class="hm-action-body">
-                <div class="hm-action-title">${_ui('Continuer', 'Continuar', mode)}</div>
-                <div class="hm-action-sub">${unitHint}</div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <div class="hm-parcours-wrap">
-          <div class="hm-parcours-title">🗺️ ${_ui('Mon Parcours', 'Mi Recorrido', mode)}</div>
-          <div id="hm-parcours-body"></div>
-        </div>
-      </div>`;
-
-    el.querySelectorAll('.hm-lang-pill').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const next = btn.dataset.mode;
-        if (next === mode) return;
-        p.mode = next;
-        Storage.saveProfile(p);
-        showHome();
-      });
-    });
-
-    const playBtn = el.querySelector('#hm-play');
-    if (playBtn) playBtn.addEventListener('click', showLesson);
-    const reviewBtn = el.querySelector('#hm-review');
-    if (reviewBtn) reviewBtn.addEventListener('click', showLesson);
-
-    const parcoursBody = el.querySelector('#hm-parcours-body');
-    if (parcoursBody && window.Parcours) Parcours.render(parcoursBody);
   }
 
   // ── Duel ─────────────────────────────────────────────────────────────
@@ -299,47 +167,30 @@ const App = (() => {
     if (c && window.DUEL) { resetState ? DUEL.reset(c) : DUEL.render(c); }
   }
 
-  // ── Lexique ───────────────────────────────────────────────────────────
+  // ── Lexique (app's home screen) ─────────────────────────────────────
   function showVocab() {
     show('vocab');
     setActiveTab('vocab');
     const el = document.getElementById('screen-vocab');
-    if (el && window.VocabPractice) {
-      const mode = Storage.getProfile().mode || 'fr-es';
-      VocabPractice.startWithPicker(el, mode);
-    }
+    if (!el) return;
+    const p = Storage.getProfile();
+    const mode = p.mode || 'fr-es';
+    document.documentElement.lang = (mode === 'es-fr') ? 'es' : 'fr';
+    _updateNavLabels(mode);
+    if (window.VocabPractice) VocabPractice.startWithPicker(el, mode);
   }
 
-  // ── Parcours (merged into home) ───────────────────────────────────────
-  function showParcours() { showHome(); }
-
-  // ── Leçon ─────────────────────────────────────────────────────────────
-  function showLesson() {
-    show('quick-session');
-    setActiveTab('home');
-    const el = document.getElementById('screen-quick-session');
-    if (el && window.Lesson) Lesson.startSmart(el);
-    else if (el && window.QuickSession) QuickSession.render(el);
+  // Switches the FR<->ES learning direction, then re-renders the Lexique.
+  function setMode(mode) {
+    const p = Storage.getProfile();
+    if (p.mode === mode) return;
+    p.mode = mode;
+    Storage.saveProfile(p);
+    showVocab();
   }
-
-  function showLessonForUnit(unit) {
-    show('quick-session');
-    setActiveTab('home');
-    const el = document.getElementById('screen-quick-session');
-    if (el && window.Lesson) Lesson.startForUnit(el, unit);
-    else if (el && window.QuickSession) QuickSession.renderForUnit(el, unit);
-  }
-
-  // Legacy aliases kept for external callers
-  function showQuickSession()             { showLesson(); }
-  function showQuickSessionForUnit(unit)  { showLessonForUnit(unit); }
 
   // ── Utils ─────────────────────────────────────────────────────────────
   function _ui(fr, es, mode) { return mode === 'es-fr' ? es : fr; }
-
-  function esc(s) {
-    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
 
   let _toastTO = null;
   function toast(msg) {
@@ -351,7 +202,7 @@ const App = (() => {
     _toastTO = setTimeout(() => el.classList.remove('show'), 2800);
   }
 
-  return { init, showHome, showParcours, showVocab, showLesson, showLessonForUnit, showQuickSession, showQuickSessionForUnit, toast };
+  return { init, showVocab, showDuelTab, setMode, toast };
 })();
 
 window.App = App;
