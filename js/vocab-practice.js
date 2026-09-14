@@ -43,6 +43,7 @@ const VocabPractice = (() => {
     if (window.XP) {
       XP.markWordSeen(word._uid, word.en);
       if (d.status === 'known') XP.markWordMastered(word._uid, word.en);
+      if (isCorrect) XP.addXP(5);
     }
   }
 
@@ -82,7 +83,13 @@ const VocabPractice = (() => {
     return a;
   }
   function _ui(fr, es, mode) { return mode === 'es-fr' ? es : fr; }
-  function _goVocab()        { if (window.App) App.showVocab(); }
+  function _goVocab() {
+    // If we pushed a history entry for this session, step back through it
+    // (instead of stacking a fresh 'vocab' entry on top) so the back
+    // button still only needs one press to leave the picker afterwards.
+    if (history.state && history.state.screen === 'vocab-session') history.back();
+    else if (window.App) App.showVocab();
+  }
 
   function _sessionLabel(unitOrNull, mode) {
     if (unitOrNull && unitOrNull.isGroup) return unitOrNull.label;
@@ -195,6 +202,14 @@ const VocabPractice = (() => {
 
   /* ── Infinite runner ──────────────────────────────────────────────── */
   function _runInfinite(container, unitOrNull, mode) {
+    // Give the session its own history entry so the phone/browser back
+    // button steps back to the theme picker instead of exiting the app.
+    // Guarded so restarting the same session (e.g. "Continuer") doesn't
+    // pile up extra entries.
+    if (!history.state || history.state.screen !== 'vocab-session') {
+      history.pushState({ screen: 'vocab-session' }, '');
+    }
+
     let queue = _buildQueue(unitOrNull, mode);
     if (!queue.length) { _renderEmpty(container, unitOrNull, mode); return; }
 
@@ -278,8 +293,7 @@ const VocabPractice = (() => {
   function _renderEnd(container, unitOrNull, mode, correct, wrong) {
     const total    = correct + wrong;
     const accuracy = total > 0 ? Math.round(correct / total * 100) : 0;
-    const xpGain   = correct * 5;
-    if (xpGain > 0 && window.XP) XP.addXP(xpGain);
+    const xpGain   = correct * 5; // already credited per answer in _markResult; kept here just for display
 
     const emoji = accuracy === 100 ? '🏆' : accuracy >= 70 ? '✨' : '💪';
 
