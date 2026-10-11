@@ -270,6 +270,235 @@ const Vocab = (() => {
       ],
     },
 
+    // ── Leçons de conjugaison : passé & futur ─────────────────────────────
+    // `lesson` = fiche de grammaire affichée en haut de la section (mode fr-es),
+    // `words`  = formes à pratiquer (FR → ES argentin).
+    {
+      id: 'ref_l_pret', icon: '⏪', lvl: 'a2',
+      name: 'Leçon · Passé 1 — Pretérito (réguliers)', nameEs: 'Lección · Pretérito indefinido (regulares)',
+      lesson: [
+        { h: 'Quand l\'utiliser', p: 'Le <b>pretérito</b> raconte une action <b>terminée</b> : « hier j\'ai mangé », « l\'an passé je suis allé ». En Argentine, il remplace presque toujours le passé composé français — même pour aujourd\'hui : <i>Hoy <b>comí</b> temprano</i> (et non <i>he comido</i>).' },
+        { h: 'Terminaisons', table: [
+          ['', 'hablar', 'comer', 'vivir'],
+          ['yo', 'habl<b>é</b>', 'com<b>í</b>', 'viv<b>í</b>'],
+          ['vos', 'habl<b>aste</b>', 'com<b>iste</b>', 'viv<b>iste</b>'],
+          ['él / ella', 'habl<b>ó</b>', 'com<b>ió</b>', 'viv<b>ió</b>'],
+          ['nosotros', 'habl<b>amos</b>', 'com<b>imos</b>', 'viv<b>imos</b>'],
+          ['ustedes / ellos', 'habl<b>aron</b>', 'com<b>ieron</b>', 'viv<b>ieron</b>'],
+        ] },
+        { tip: '⚠️ L\'accent compte : <b>hablo</b> = je parle, <b>habló</b> = il a parlé. Au pretérito, <i>vos</i> = <i>tú</i> : <b>vos hablaste</b>.' },
+        { tip: '✏️ Orthographe au « yo » : -car → <b>-qué</b> (busqué), -gar → <b>-gué</b> (llegué, jugué), -zar → <b>-cé</b> (empecé).' },
+      ],
+      words: [
+        { en: 'pret: I worked', lvl: 'a2',      fr: "j'ai travaillé",       es: 'trabajé',      esTarget: 'trabajé',          example: { fr: "Hier j'ai travaillé jusqu'à 20h.",     es: 'Ayer trabajé hasta las ocho.' } },
+        { en: 'pret: you worked', lvl: 'a2',    fr: 'tu as travaillé',      es: 'trabajaste',   esTarget: 'vos trabajaste',   example: { fr: 'Tu as travaillé samedi ?',             es: '¿Trabajaste el sábado?' } },
+        { en: 'pret: she bought', lvl: 'a2',    fr: 'elle a acheté',        es: 'compró',       esTarget: 'compró',           example: { fr: 'Elle a acheté du pain.',               es: 'Compró pan.' } },
+        { en: 'pret: we had dinner', lvl: 'a2', fr: 'nous avons dîné',      es: 'cenamos',      esTarget: 'cenamos',          example: { fr: 'Nous avons dîné tard.',                es: 'Cenamos tarde.' } },
+        { en: 'pret: they watched', lvl: 'a2',  fr: 'ils ont regardé',      es: 'miraron',      esTarget: 'miraron',          example: { fr: 'Ils ont regardé le match.',            es: 'Miraron el partido.' } },
+        { en: 'pret: I drank', lvl: 'a2',       fr: "j'ai bu",              es: 'tomé',         esTarget: 'tomé',             example: { fr: "J'ai bu un maté.",                     es: 'Tomé un mate.' } },
+        { en: 'pret: I wrote', lvl: 'a2',       fr: "j'ai écrit",           es: 'escribí',      esTarget: 'escribí',          example: { fr: "J'ai écrit à ma mère.",                es: 'Le escribí a mi mamá.' } },
+        { en: 'pret: you lived', lvl: 'a2',     fr: 'tu as vécu',           es: 'viviste',      esTarget: 'vos viviste',      example: { fr: 'Tu as vécu à Rosario ?',               es: '¿Viviste en Rosario?' } },
+        { en: 'pret: he opened', lvl: 'a2',     fr: 'il a ouvert',          es: 'abrió',        esTarget: 'abrió',            example: { fr: 'Il a ouvert la fenêtre.',              es: 'Abrió la ventana.' } },
+        { en: 'pret: we learned', lvl: 'a2',    fr: 'nous avons appris',    es: 'aprendimos',   esTarget: 'aprendimos',       example: { fr: 'Nous avons appris beaucoup.',          es: 'Aprendimos mucho.' } },
+        { en: 'pret: they went out', lvl: 'a2', fr: 'ils sont sortis',      es: 'salieron',     esTarget: 'salieron',         example: { fr: 'Ils sont sortis tôt.',                 es: 'Salieron temprano.' } },
+        { en: 'pret: I understood', lvl: 'a2',  fr: "j'ai compris",         es: 'entendí',      esTarget: 'entendí',          example: { fr: "Je n'ai pas compris.",                 es: 'No entendí.' } },
+        { en: 'pret: I arrived', lvl: 'a2',     fr: 'je suis arrivé(e)',    es: 'llegué',       esTarget: 'llegué',           example: { fr: 'Je suis arrivé à 9h.',                 es: 'Llegué a las nueve.' } },
+        { en: 'pret: I looked for', lvl: 'a2',  fr: "j'ai cherché",         es: 'busqué',       esTarget: 'busqué',           example: { fr: "J'ai cherché partout.",                es: 'Busqué por todos lados.' } },
+        { en: 'pret: I started', lvl: 'a2',     fr: "j'ai commencé",        es: 'empecé',       esTarget: 'empecé',           example: { fr: "J'ai commencé le cours lundi.",        es: 'Empecé el curso el lunes.' } },
+        { en: 'pret: I played', lvl: 'a2',      fr: "j'ai joué",            es: 'jugué',        esTarget: 'jugué',            example: { fr: "J'ai joué au tennis.",                 es: 'Jugué al tenis.' } },
+        { en: 'pret: you called', lvl: 'a2',    fr: "tu m'as appelé",       es: 'me llamaste',  esTarget: 'me llamaste',      example: { fr: "Tu m'as appelé hier ?",                es: '¿Me llamaste ayer?' } },
+        { en: 'pret: it happened', lvl: 'a2',   fr: "ça s'est passé",       es: 'pasó',         esTarget: 'pasó',             example: { fr: "Qu'est-ce qui s'est passé ?",          es: '¿Qué pasó?' } },
+      ],
+    },
+    {
+      id: 'ref_l_pret_irr', icon: '⏮️', lvl: 'a2',
+      name: 'Leçon · Passé 2 — Pretérito (irréguliers)', nameEs: 'Lección · Pretérito indefinido (irregulares)',
+      lesson: [
+        { h: 'Les incontournables', p: '<b>ser</b> et <b>ir</b> ont la même forme : <b>fui, fuiste, fue, fuimos, fueron</b>. Le contexte fait la différence : <i>Fui a Mendoza</i> (je suis allé) / <i>Fue increíble</i> (c\'était génial). <b>dar</b> → di, diste, dio · <b>ver</b> → vi, viste, vio (sans accent).' },
+        { h: 'Radical irrégulier + terminaisons fixes', p: 'Un nouveau radical, puis toujours <b>-e, -iste, -o, -imos, -ieron</b> — <b>sans accent</b> !' },
+        { table: [
+          ['infinitif', 'radical', 'yo', 'él / ella'],
+          ['tener', 'tuv-', 'tuve', 'tuvo'],
+          ['estar', 'estuv-', 'estuve', 'estuvo'],
+          ['poder', 'pud-', 'pude', 'pudo'],
+          ['poner', 'pus-', 'puse', 'puso'],
+          ['saber', 'sup-', 'supe', 'supo'],
+          ['querer', 'quis-', 'quise', 'quiso'],
+          ['hacer', 'hic-', 'hice', 'hizo'],
+          ['venir', 'vin-', 'vine', 'vino'],
+          ['decir', 'dij-', 'dije', 'dijo'],
+          ['traer', 'traj-', 'traje', 'trajo'],
+        ] },
+        { tip: '✏️ Radical en <b>-j-</b> → <b>-eron</b> (pas -ieron) : dijeron, trajeron. Et <b>pedir, dormir</b> changent à la 3ᵉ personne : pidió, durmió.' },
+      ],
+      words: [
+        { en: 'pret irr: I went', lvl: 'a1',         fr: 'je suis allé(e)',      es: 'fui',          esTarget: 'fui',              example: { fr: 'Je suis allé à la plage.',             es: 'Fui a la playa.' } },
+        { en: 'pret irr: it was', lvl: 'a2',         fr: "c'était (terminé)",    es: 'fue',          esTarget: 'fue',              example: { fr: "C'était une super soirée.",            es: 'Fue una noche genial.' } },
+        { en: 'pret irr: you went', lvl: 'a2',       fr: 'tu es allé(e)',        es: 'fuiste',       esTarget: 'vos fuiste',       example: { fr: 'Tu es allé au concert ?',              es: '¿Fuiste al recital?' } },
+        { en: 'pret irr: we went', lvl: 'a2',        fr: 'nous sommes allés',    es: 'fuimos',       esTarget: 'fuimos',           example: { fr: 'Nous sommes allés au cinéma.',         es: 'Fuimos al cine.' } },
+        { en: 'pret irr: I had', lvl: 'a2',          fr: "j'ai eu",              es: 'tuve',         esTarget: 'tuve',             example: { fr: "J'ai eu un problème.",                 es: 'Tuve un problema.' } },
+        { en: 'pret irr: I was (state)', lvl: 'a2',  fr: "j'ai été (estar)",     es: 'estuve',       esTarget: 'estuve',           example: { fr: "J'ai été malade trois jours.",         es: 'Estuve enfermo tres días.' } },
+        { en: 'pret irr: I could', lvl: 'a2',        fr: "j'ai pu",              es: 'pude',         esTarget: 'pude',             example: { fr: "Je n'ai pas pu venir.",                es: 'No pude venir.' } },
+        { en: 'pret irr: I put', lvl: 'a2',          fr: "j'ai mis",             es: 'puse',         esTarget: 'puse',             example: { fr: "J'ai mis la table.",                   es: 'Puse la mesa.' } },
+        { en: 'pret irr: I found out', lvl: 'b1',    fr: "j'ai su / appris",     es: 'supe',         esTarget: 'supe',             example: { fr: "Je l'ai appris hier.",                 es: 'Lo supe ayer.' } },
+        { en: 'pret irr: I tried', lvl: 'b1',        fr: "j'ai voulu",           es: 'quise',        esTarget: 'quise',            example: { fr: "J'ai voulu t'appeler.",                es: 'Quise llamarte.' } },
+        { en: 'pret irr: I did', lvl: 'a2',          fr: "j'ai fait",            es: 'hice',         esTarget: 'hice',             example: { fr: "J'ai fait les courses.",               es: 'Hice las compras.' } },
+        { en: 'pret irr: he did', lvl: 'a2',         fr: 'il a fait',            es: 'hizo',         esTarget: 'hizo',             example: { fr: 'Il a fait très chaud.',                es: 'Hizo mucho calor.' } },
+        { en: 'pret irr: you did', lvl: 'a2',        fr: 'tu as fait',           es: 'hiciste',      esTarget: 'vos hiciste',      example: { fr: "Qu'est-ce que tu as fait ce week-end ?", es: '¿Qué hiciste el fin de semana?' } },
+        { en: 'pret irr: I came', lvl: 'a2',         fr: 'je suis venu(e)',      es: 'vine',         esTarget: 'vine',             example: { fr: 'Je suis venu en bus.',                 es: 'Vine en colectivo.' } },
+        { en: 'pret irr: she came', lvl: 'a2',       fr: 'elle est venue',       es: 'vino',         esTarget: 'vino',             example: { fr: "Elle n'est pas venue.",                es: 'No vino.' } },
+        { en: 'pret irr: I said', lvl: 'a2',         fr: "j'ai dit",             es: 'dije',         esTarget: 'dije',             example: { fr: 'Je te l\'ai dit !',                    es: '¡Te lo dije!' } },
+        { en: 'pret irr: they said', lvl: 'b1',      fr: 'ils ont dit',          es: 'dijeron',      esTarget: 'dijeron',          example: { fr: "Ils ont dit qu'ils venaient.",         es: 'Dijeron que venían.' } },
+        { en: 'pret irr: I brought', lvl: 'b1',      fr: "j'ai apporté",         es: 'traje',        esTarget: 'traje',            example: { fr: "J'ai apporté du vin.",                 es: 'Traje vino.' } },
+        { en: 'pret irr: I gave', lvl: 'a2',         fr: "j'ai donné",           es: 'di',           esTarget: 'di',               example: { fr: "Je lui ai donné un cadeau.",           es: 'Le di un regalo.' } },
+        { en: 'pret irr: I saw', lvl: 'a2',          fr: "j'ai vu",              es: 'vi',           esTarget: 'vi',               example: { fr: "J'ai vu Juan hier.",                   es: 'Ayer vi a Juan.' } },
+        { en: 'pret irr: he asked for', lvl: 'b1',   fr: 'il a commandé',        es: 'pidió',        esTarget: 'pidió',            example: { fr: 'Il a commandé une milanesa.',          es: 'Pidió una milanesa.' } },
+        { en: 'pret irr: she slept', lvl: 'b1',      fr: 'elle a dormi',         es: 'durmió',       esTarget: 'durmió',           example: { fr: 'Elle a dormi dix heures.',             es: 'Durmió diez horas.' } },
+      ],
+    },
+    {
+      id: 'ref_l_imp', icon: '🕰️', lvl: 'b1',
+      name: 'Leçon · Passé 3 — Imparfait vs pretérito', nameEs: 'Lección · Imperfecto vs pretérito',
+      lesson: [
+        { h: 'Quand l\'utiliser', p: 'L\'<b>imperfecto</b> = l\'imparfait français : <b>habitudes</b> (« avant, je jouais »), <b>descriptions</b> (« il faisait beau, j\'étais fatigué »), action <b>en cours</b> dans le passé. Le <b>pretérito</b> = l\'événement ponctuel qui fait avancer l\'histoire.' },
+        { h: 'Terminaisons', table: [
+          ['', 'hablar', 'comer / vivir'],
+          ['yo', 'habl<b>aba</b>', 'com<b>ía</b>'],
+          ['vos', 'habl<b>abas</b>', 'com<b>ías</b>'],
+          ['él / ella', 'habl<b>aba</b>', 'com<b>ía</b>'],
+          ['nosotros', 'habl<b>ábamos</b>', 'com<b>íamos</b>'],
+          ['ustedes / ellos', 'habl<b>aban</b>', 'com<b>ían</b>'],
+        ] },
+        { tip: '🎯 Seulement 3 irréguliers : <b>ser → era</b>, <b>ir → iba</b>, <b>ver → veía</b>.' },
+        { tip: '🎬 Décor + événement : <i><b>Llovía</b> cuando <b>llegué</b>.</i> (Il pleuvait quand je suis arrivé.) — <i>Cuando <b>era</b> chico, <b>jugaba</b> al fútbol.</i>' },
+      ],
+      words: [
+        { en: 'imp: I spoke', lvl: 'a2',          fr: 'je parlais',             es: 'hablaba',          esTarget: 'hablaba',          example: { fr: 'Je parlais avec Ana.',                es: 'Hablaba con Ana.' } },
+        { en: 'imp: you spoke', lvl: 'a2',        fr: 'tu parlais',             es: 'hablabas',         esTarget: 'vos hablabas',     example: { fr: 'Tu parlais de qui ?',                 es: '¿De quién hablabas?' } },
+        { en: 'imp: we spoke', lvl: 'b1',         fr: 'nous parlions',          es: 'hablábamos',       esTarget: 'hablábamos',       example: { fr: 'Nous parlions de toi.',               es: 'Hablábamos de vos.' } },
+        { en: 'imp: they worked', lvl: 'b1',      fr: 'ils travaillaient',      es: 'trabajaban',       esTarget: 'trabajaban',       example: { fr: 'Ils travaillaient ensemble.',         es: 'Trabajaban juntos.' } },
+        { en: 'imp: I lived', lvl: 'a2',          fr: "j'habitais",             es: 'vivía',            esTarget: 'vivía',            example: { fr: "J'habitais à Genève.",                es: 'Vivía en Ginebra.' } },
+        { en: 'imp: we lived', lvl: 'b1',         fr: 'nous habitions',         es: 'vivíamos',         esTarget: 'vivíamos',         example: { fr: 'Nous habitions près de la mer.',      es: 'Vivíamos cerca del mar.' } },
+        { en: 'imp: I played', lvl: 'a2',         fr: 'je jouais',              es: 'jugaba',           esTarget: 'jugaba',           example: { fr: 'Je jouais au foot le dimanche.',      es: 'Jugaba al fútbol los domingos.' } },
+        { en: 'imp: I was (ser)', lvl: 'a2',      fr: "j'étais (ser)",          es: 'era',              esTarget: 'era',              example: { fr: "Quand j'étais petit…",                es: 'Cuando era chico…' } },
+        { en: 'imp: it was', lvl: 'a2',           fr: "c'était (description)",  es: 'era',              esTarget: 'era',              example: { fr: "C'était une belle maison.",           es: 'Era una casa linda.' } },
+        { en: 'imp: we were', lvl: 'b1',          fr: 'nous étions (ser)',      es: 'éramos',           esTarget: 'éramos',           example: { fr: 'Nous étions très amis.',              es: 'Éramos muy amigos.' } },
+        { en: 'imp: I was (estar)', lvl: 'a2',    fr: "j'étais (estar)",        es: 'estaba',           esTarget: 'estaba',           example: { fr: "J'étais à la maison.",                es: 'Estaba en casa.' } },
+        { en: 'imp: I used to go', lvl: 'a2',     fr: "j'allais",               es: 'iba',              esTarget: 'iba',              example: { fr: "J'allais à l'école à pied.",          es: 'Iba a la escuela caminando.' } },
+        { en: 'imp: they went', lvl: 'b1',        fr: 'ils allaient',           es: 'iban',             esTarget: 'iban',             example: { fr: 'Ils allaient au club.',               es: 'Iban al club.' } },
+        { en: 'imp: I saw', lvl: 'b1',            fr: 'je voyais',              es: 'veía',             esTarget: 'veía',             example: { fr: 'Je le voyais tous les jours.',        es: 'Lo veía todos los días.' } },
+        { en: 'imp: there was', lvl: 'a2',        fr: 'il y avait',             es: 'había',            esTarget: 'había',            example: { fr: 'Il y avait beaucoup de monde.',       es: 'Había mucha gente.' } },
+        { en: 'imp: weather was nice', lvl: 'a2', fr: 'il faisait beau',        es: 'hacía buen tiempo',esTarget: 'hacía buen tiempo',example: { fr: 'Il faisait beau ce jour-là.',         es: 'Ese día hacía buen tiempo.' } },
+        { en: 'imp: I had', lvl: 'a2',            fr: "j'avais",                es: 'tenía',            esTarget: 'tenía',            example: { fr: "J'avais vingt ans.",                  es: 'Tenía veinte años.' } },
+        { en: 'imp: I wanted', lvl: 'b1',         fr: 'je voulais',             es: 'quería',           esTarget: 'quería',           example: { fr: 'Je voulais te demander quelque chose.', es: 'Te quería preguntar algo.' } },
+        { en: 'imp+pret: it rained when', lvl: 'b1', fr: 'il pleuvait quand je suis arrivé', es: 'llovía cuando llegué', esTarget: 'llovía cuando llegué', example: { fr: 'Il pleuvait quand je suis arrivé à Buenos Aires.', es: 'Llovía cuando llegué a Buenos Aires.' } },
+        { en: 'imp+pret: I was sleeping when', lvl: 'b1', fr: 'je dormais quand tu as appelé', es: 'dormía cuando llamaste', esTarget: 'dormía cuando llamaste', example: { fr: 'Je dormais quand tu as appelé.', es: 'Dormía cuando me llamaste.' } },
+      ],
+    },
+    {
+      id: 'ref_l_ira', icon: '⏩', lvl: 'a1',
+      name: 'Leçon · Futur 1 — Ir a + infinitif', nameEs: 'Lección · Futuro con ir a + infinitivo',
+      lesson: [
+        { h: 'Le futur du quotidien', p: 'En Argentine, on parle du futur surtout avec <b>ir a + infinitif</b> — exactement comme « je vais + infinitif » en français. C\'est le futur à maîtriser en premier.' },
+        { h: 'Formation', table: [
+          ['', 'ir (présent)', '+ a + infinitif'],
+          ['yo', 'voy', 'a comer'],
+          ['vos', 'vas', 'a venir'],
+          ['él / ella', 'va', 'a llover'],
+          ['nosotros', 'vamos', 'a salir'],
+          ['ustedes / ellos', 'van', 'a viajar'],
+        ] },
+        { tip: '💡 Avec un pronom : <i><b>me voy a</b> quedar</i> = <i>voy a <b>quedarme</b></i>. Pour un projet fixé, le présent suffit : <i>Mañana <b>trabajo</b>.</i>' },
+      ],
+      words: [
+        { en: 'ir a: I am going to eat', lvl: 'a1',   fr: 'je vais manger',         es: 'voy a comer',       esTarget: 'voy a comer',       example: { fr: 'Ce soir je vais manger une pizza.',   es: 'Esta noche voy a comer una pizza.' } },
+        { en: 'ir a: you are going to come', lvl: 'a1', fr: 'tu vas venir',         es: 'vas a venir',       esTarget: 'vos vas a venir',   example: { fr: 'Tu vas venir à la fête ?',            es: '¿Vas a venir a la fiesta?' } },
+        { en: 'ir a: it is going to rain', lvl: 'a1', fr: 'il va pleuvoir',         es: 'va a llover',       esTarget: 'va a llover',       example: { fr: 'Prends un parapluie, il va pleuvoir.', es: 'Llevá un paraguas, va a llover.' } },
+        { en: 'ir a: we are going out', lvl: 'a1',    fr: 'nous allons sortir',     es: 'vamos a salir',     esTarget: 'vamos a salir',     example: { fr: 'Nous allons sortir samedi.',          es: 'Vamos a salir el sábado.' } },
+        { en: 'ir a: they will travel', lvl: 'a1',    fr: 'ils vont voyager',       es: 'van a viajar',      esTarget: 'van a viajar',      example: { fr: 'Ils vont voyager en Patagonie.',      es: 'Van a viajar a la Patagonia.' } },
+        { en: 'ir a: what will you do', lvl: 'a1',    fr: "qu'est-ce que tu vas faire ?", es: '¿qué vas a hacer?', esTarget: '¿qué vas a hacer?', example: { fr: "Qu'est-ce que tu vas faire demain ?", es: '¿Qué vas a hacer mañana?' } },
+        { en: 'ir a: I am not going', lvl: 'a1',      fr: 'je ne vais pas y aller', es: 'no voy a ir',       esTarget: 'no voy a ir',       example: { fr: 'Je suis fatigué, je ne vais pas y aller.', es: 'Estoy cansado, no voy a ir.' } },
+        { en: 'ir a: I am going to stay', lvl: 'a2',  fr: 'je vais rester',         es: 'me voy a quedar',   esTarget: 'me voy a quedar',   example: { fr: 'Je vais rester à la maison.',         es: 'Me voy a quedar en casa.' } },
+        { en: 'ir a: there will be', lvl: 'a2',       fr: 'il va y avoir',          es: 'va a haber',        esTarget: 'va a haber',        example: { fr: 'Il va y avoir beaucoup de monde.',    es: 'Va a haber mucha gente.' } },
+        { en: 'ir a: I am going to call you', lvl: 'a2', fr: 'je vais t\'appeler',  es: 'te voy a llamar',   esTarget: 'te voy a llamar',   example: { fr: 'Je vais t\'appeler plus tard.',       es: 'Te voy a llamar más tarde.' } },
+        { en: 'ir a: we are going to see', lvl: 'a1', fr: 'on va voir',             es: 'vamos a ver',       esTarget: 'vamos a ver',       example: { fr: 'On va voir…',                         es: 'Vamos a ver…' } },
+        { en: 'ir a: you are going to like', lvl: 'a2', fr: 'ça va te plaire',      es: 'te va a gustar',    esTarget: 'te va a gustar',    example: { fr: 'Ce film va te plaire.',               es: 'Esta película te va a gustar.' } },
+        { en: 'ir a: I am going to buy', lvl: 'a1',   fr: 'je vais acheter',        es: 'voy a comprar',     esTarget: 'voy a comprar',     example: { fr: 'Je vais acheter des empanadas.',      es: 'Voy a comprar empanadas.' } },
+        { en: 'ir a: are you going to study', lvl: 'a1', fr: 'vous allez étudier ?', es: '¿van a estudiar?', esTarget: '¿van a estudiar?',  example: { fr: 'Vous allez étudier ce soir ?',        es: '¿Van a estudiar esta noche?' } },
+      ],
+    },
+    {
+      id: 'ref_l_fut', icon: '🔮', lvl: 'a2',
+      name: 'Leçon · Futur 2 — Futuro simple', nameEs: 'Lección · Futuro simple',
+      lesson: [
+        { h: 'Quand l\'utiliser', p: 'Le <b>futuro simple</b> (hablaré) est plus soutenu / écrit en Argentine : promesses, prévisions, textes. À l\'oral on l\'entend surtout pour exprimer une <b>supposition</b> : <i>¿Qué hora <b>será</b>?</i> (Quelle heure peut-il bien être ?)' },
+        { h: 'Formation : infinitif complet + terminaison', table: [
+          ['', 'hablar', 'comer', 'vivir'],
+          ['yo', 'hablar<b>é</b>', 'comer<b>é</b>', 'vivir<b>é</b>'],
+          ['vos', 'hablar<b>ás</b>', 'comer<b>ás</b>', 'vivir<b>ás</b>'],
+          ['él / ella', 'hablar<b>á</b>', 'comer<b>á</b>', 'vivir<b>á</b>'],
+          ['nosotros', 'hablar<b>emos</b>', 'comer<b>emos</b>', 'vivir<b>emos</b>'],
+          ['ustedes / ellos', 'hablar<b>án</b>', 'comer<b>án</b>', 'vivir<b>án</b>'],
+        ] },
+        { h: 'Radicaux irréguliers', table: [
+          ['infinitif', 'radical', 'yo'],
+          ['tener / poner / salir / venir', 'tendr- / pondr- / saldr- / vendr-', 'tendré, pondré, saldré, vendré'],
+          ['poder / saber / querer / haber', 'podr- / sabr- / querr- / habr-', 'podré, sabré, querré, habrá'],
+          ['hacer / decir', 'har- / dir-', 'haré, diré'],
+        ] },
+        { tip: '💡 Mêmes radicaux qu’au conditionnel : tendré → tendría.' },
+      ],
+      words: [
+        { en: 'fut: I will speak', lvl: 'a2',     fr: 'je parlerai',          es: 'hablaré',      esTarget: 'hablaré',          example: { fr: 'Je lui parlerai demain.',              es: 'Le hablaré mañana.' } },
+        { en: 'fut: you will speak', lvl: 'a2',   fr: 'tu parleras',          es: 'hablarás',     esTarget: 'vos hablarás',     example: { fr: 'Tu parleras espagnol couramment.',     es: 'Hablarás español con fluidez.' } },
+        { en: 'fut: she will eat', lvl: 'a2',     fr: 'elle mangera',         es: 'comerá',       esTarget: 'comerá',           example: { fr: 'Elle mangera avec nous.',              es: 'Comerá con nosotros.' } },
+        { en: 'fut: we will live', lvl: 'a2',     fr: 'nous vivrons',         es: 'viviremos',    esTarget: 'viviremos',        example: { fr: 'Un jour, nous vivrons à Buenos Aires.', es: 'Algún día viviremos en Buenos Aires.' } },
+        { en: 'fut: they will travel', lvl: 'a2', fr: 'ils voyageront',       es: 'viajarán',     esTarget: 'viajarán',         example: { fr: 'Ils voyageront en été.',               es: 'Viajarán en verano.' } },
+        { en: 'fut: I will have', lvl: 'a2',      fr: "j'aurai",              es: 'tendré',       esTarget: 'tendré',           example: { fr: "J'aurai plus de temps.",               es: 'Tendré más tiempo.' } },
+        { en: 'fut: I will be able', lvl: 'a2',   fr: 'je pourrai',           es: 'podré',        esTarget: 'podré',            example: { fr: 'Je pourrai t\'aider.',                 es: 'Podré ayudarte.' } },
+        { en: 'fut: I will go out', lvl: 'b1',    fr: 'je sortirai',          es: 'saldré',       esTarget: 'saldré',           example: { fr: 'Je sortirai tôt.',                     es: 'Saldré temprano.' } },
+        { en: 'fut: he will come', lvl: 'a2',     fr: 'il viendra',           es: 'vendrá',       esTarget: 'vendrá',           example: { fr: 'Il viendra lundi.',                    es: 'Vendrá el lunes.' } },
+        { en: 'fut: I will put', lvl: 'b1',       fr: 'je mettrai',           es: 'pondré',       esTarget: 'pondré',           example: { fr: 'Je mettrai la photo ici.',             es: 'Pondré la foto acá.' } },
+        { en: 'fut: I will do', lvl: 'a2',        fr: 'je ferai',             es: 'haré',         esTarget: 'haré',             example: { fr: 'Je le ferai demain.',                  es: 'Lo haré mañana.' } },
+        { en: 'fut: I will say', lvl: 'b1',       fr: 'je dirai',             es: 'diré',         esTarget: 'diré',             example: { fr: 'Je ne dirai rien.',                    es: 'No diré nada.' } },
+        { en: 'fut: you will know', lvl: 'b1',    fr: 'tu sauras',            es: 'sabrás',       esTarget: 'vos sabrás',       example: { fr: 'Tu le sauras bientôt.',                es: 'Pronto lo sabrás.' } },
+        { en: 'fut: there will be', lvl: 'a2',    fr: 'il y aura',            es: 'habrá',        esTarget: 'habrá',            example: { fr: 'Il y aura du soleil.',                 es: 'Habrá sol.' } },
+        { en: 'fut: we will see', lvl: 'a2',      fr: 'nous verrons',         es: 'veremos',      esTarget: 'veremos',          example: { fr: 'On verra !',                           es: '¡Veremos!' } },
+        { en: 'fut: I will go', lvl: 'a2',        fr: "j'irai",               es: 'iré',          esTarget: 'iré',              example: { fr: "J'irai en Argentine l'an prochain.",   es: 'Iré a Argentina el año que viene.' } },
+        { en: 'fut: probability time', lvl: 'b1', fr: 'il doit être 5 h',     es: 'serán las cinco', esTarget: 'serán las cinco', example: { fr: 'Il doit être environ 5 h.',          es: 'Serán las cinco, más o menos.' } },
+        { en: 'fut: probability where', lvl: 'b1', fr: 'où peut-il bien être ?', es: '¿dónde estará?', esTarget: '¿dónde estará?', example: { fr: 'Il n\'est pas là… où peut-il bien être ?', es: 'No está… ¿dónde estará?' } },
+      ],
+    },
+    {
+      id: 'ref_l_tps', icon: '📅', lvl: 'a2',
+      name: 'Leçon · Repères de temps (passé & futur)', nameEs: 'Lección · Marcadores temporales',
+      lesson: [
+        { h: 'Ces mots choisissent le temps pour toi', p: '<b>Passé terminé → pretérito</b> : ayer, anoche, la semana pasada, hace dos años… <b>Habitude passée → imperfecto</b> : antes, siempre, todos los días, de chico… <b>Futur → ir a / futuro</b> : mañana, la semana que viene, dentro de…' },
+        { tip: '💡 <b>hace + durée</b> = « il y a » : <i>Llegué <b>hace</b> dos días.</i> · <b>dentro de / en + durée</b> = « dans » : <i>Vuelvo <b>en</b> diez minutos.</i>' },
+      ],
+      words: [
+        { en: 'time: yesterday', lvl: 'a1',            fr: 'hier',                      es: 'ayer',                   esTarget: 'ayer',                   example: { fr: 'Hier je suis allé au parc.',          es: 'Ayer fui al parque.' } },
+        { en: 'time: day before yesterday', lvl: 'a2', fr: 'avant-hier',                es: 'anteayer',               esTarget: 'anteayer',               example: { fr: 'Avant-hier il a plu.',                es: 'Anteayer llovió.' } },
+        { en: 'time: last night', lvl: 'a1',           fr: 'hier soir',                 es: 'anoche',                 esTarget: 'anoche',                 example: { fr: 'Hier soir, je suis sorti.',           es: 'Anoche salí.' } },
+        { en: 'time: last week', lvl: 'a1',            fr: 'la semaine dernière',       es: 'la semana pasada',       esTarget: 'la semana pasada',       example: { fr: 'La semaine dernière j\'ai travaillé beaucoup.', es: 'La semana pasada trabajé mucho.' } },
+        { en: 'time: last year', lvl: 'a1',            fr: "l'année dernière",          es: 'el año pasado',          esTarget: 'el año pasado',          example: { fr: "L'année dernière, j'ai voyagé au Chili.", es: 'El año pasado viajé a Chile.' } },
+        { en: 'time: ago', lvl: 'a2',                  fr: 'il y a deux jours',         es: 'hace dos días',          esTarget: 'hace dos días',          example: { fr: 'Je suis arrivé il y a deux jours.',   es: 'Llegué hace dos días.' } },
+        { en: 'time: the other day', lvl: 'a2',        fr: "l'autre jour",              es: 'el otro día',            esTarget: 'el otro día',            example: { fr: "L'autre jour, j'ai vu Pablo.",        es: 'El otro día vi a Pablo.' } },
+        { en: 'time: already', lvl: 'a2',              fr: 'déjà',                      es: 'ya',                     esTarget: 'ya',                     example: { fr: "J'ai déjà mangé.",                    es: 'Ya comí.' } },
+        { en: 'time: not yet', lvl: 'a2',              fr: 'pas encore',                es: 'todavía no',             esTarget: 'todavía no',             example: { fr: "Je n'ai pas encore fini.",            es: 'Todavía no terminé.' } },
+        { en: 'time: before (habit)', lvl: 'a2',       fr: 'avant (autrefois)',         es: 'antes',                  esTarget: 'antes',                  example: { fr: 'Avant, je fumais.',                   es: 'Antes fumaba.' } },
+        { en: 'time: as a kid', lvl: 'b1',             fr: 'quand j\'étais petit',      es: 'de chico',               esTarget: 'de chico / de chica',    example: { fr: 'Petit, je vivais à la campagne.',     es: 'De chico vivía en el campo.' } },
+        { en: 'time: tomorrow', lvl: 'a1',             fr: 'demain',                    es: 'mañana',                 esTarget: 'mañana',                 example: { fr: 'Demain je vais travailler.',          es: 'Mañana voy a trabajar.' } },
+        { en: 'time: day after tomorrow', lvl: 'a2',   fr: 'après-demain',              es: 'pasado mañana',          esTarget: 'pasado mañana',          example: { fr: 'On se voit après-demain.',            es: 'Nos vemos pasado mañana.' } },
+        { en: 'time: next week', lvl: 'a1',            fr: 'la semaine prochaine',      es: 'la semana que viene',    esTarget: 'la semana que viene',    example: { fr: 'La semaine prochaine, je vais à Córdoba.', es: 'La semana que viene voy a Córdoba.' } },
+        { en: 'time: next year', lvl: 'a1',            fr: "l'année prochaine",         es: 'el año que viene',       esTarget: 'el año que viene',       example: { fr: "L'année prochaine j'irai en Argentine.", es: 'El año que viene voy a ir a Argentina.' } },
+        { en: 'time: in (duration)', lvl: 'a2',        fr: 'dans dix minutes',          es: 'en diez minutos',        esTarget: 'en diez minutos / dentro de diez minutos', example: { fr: 'Je reviens dans dix minutes.', es: 'Vuelvo en diez minutos.' } },
+        { en: 'time: someday', lvl: 'a2',              fr: 'un jour',                   es: 'algún día',              esTarget: 'algún día',              example: { fr: 'Un jour, je parlerai bien espagnol.', es: 'Algún día hablaré bien español.' } },
+        { en: 'time: soon', lvl: 'a2',                 fr: 'bientôt',                   es: 'pronto',                 esTarget: 'pronto',                 example: { fr: 'À bientôt !',                         es: '¡Hasta pronto!' } },
+        { en: 'time: later', lvl: 'a1',                fr: 'plus tard',                 es: 'más tarde / después',    esTarget: 'después',                example: { fr: 'On en parle plus tard.',              es: 'Lo hablamos después.' } },
+      ],
+    },
+
     {
       id: 'ref_c01', icon: '🪪', course: true, lvl: 'a1',
       name: 'Cours du 31 mai — Infos personnelles', nameEs: 'Clase del 31 de mayo — Datos personales',
@@ -1401,6 +1630,7 @@ const Vocab = (() => {
           <button class="vc-ref-play" data-ref="${ref.id}" title="${isFrEs ? 'Pratiquer' : 'Practicar'}">▶</button>
         </div>
         <div class="vc-body"${isOpen ? '' : ' hidden'}>
+          ${ref.lesson && isFrEs ? _lessonHtml(ref.lesson) : ''}
           <div class="vc-practice-cta">
             <button class="vc-ref-practice" data-ref="${ref.id}">
               🃏 ${isFrEs ? 'Pratiquer' : 'Practicar'}
@@ -1413,6 +1643,19 @@ const Vocab = (() => {
           ${ref.words.map(w => _wordHtml({ ...w, isSeen: false, isMastered: false }, mode)).join('')}
         </div>
       </div>`;
+  }
+
+  // Grammar sheet for lesson sections (authored HTML, not escaped)
+  function _lessonHtml(blocks) {
+    return `<div class="vc-lesson">${blocks.map(b => `
+      ${b.h ? `<div class="vc-lesson-h">${b.h}</div>` : ''}
+      ${b.p ? `<p class="vc-lesson-p">${b.p}</p>` : ''}
+      ${b.table ? `<div class="vc-lesson-tw"><table class="vc-lesson-t">
+        <tr>${b.table[0].map(c => `<th>${c}</th>`).join('')}</tr>
+        ${b.table.slice(1).map(r => `<tr>${r.map((c, i) => i ? `<td>${c}</td>` : `<th>${c}</th>`).join('')}</tr>`).join('')}
+      </table></div>` : ''}
+      ${b.tip ? `<div class="vc-lesson-tip">${b.tip}</div>` : ''}`).join('')}
+    </div>`;
   }
 
   function esc(s) {

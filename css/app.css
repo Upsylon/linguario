@@ -1293,3 +1293,15 @@ input  { font: inherit; }
   transition: color .15s, border-color .15s;
 }
 .vp-btn-back:hover { color: var(--text); border-color: var(--text); }
+
+/* ── Lesson grammar sheet (Lexique lesson sections) ──────────────── */
+.vc-lesson       { padding: .75rem .85rem .35rem; display: flex; flex-direction: column; gap: .5rem; }
+.vc-lesson-h     { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin-top: .25rem; }
+.vc-lesson-p     { font-size: .88rem; line-height: 1.5; color: var(--text); margin: 0; }
+.vc-lesson-p b, .vc-lesson-t b, .vc-lesson-tip b { color: var(--accent); }
+.vc-lesson-tw    { overflow-x: auto; }
+.vc-lesson-t     { width: 100%; border-collapse: collapse; font-size: .84rem; }
+.vc-lesson-t th, .vc-lesson-t td { padding: .32rem .5rem; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+.vc-lesson-t tr:first-child th { font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--surface2); }
+.vc-lesson-t th  { font-weight: 700; color: var(--muted); }
+.vc-lesson-tip   { font-size: .84rem; line-height: 1.45; padding: .5rem .65rem; border-radius: var(--radius-sm); background: var(--primary-g); border: 1px solid var(--border2); }
