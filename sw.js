@@ -1,12 +1,12 @@
 /* ===== sw.js — Service Worker LinguaRío ===== */
-const CACHE = 'linguario-v115';
+const CACHE = 'linguario-v116';
 const URLS  = [
   './', './index.html', './css/app.css',
   './js/storage.js', './js/srs.js', './js/i18n.js', './js/audio.js',
   './js/duel.js', './js/xp.js',
   './js/lesson-engine.js', './js/vocab.js',
   './js/vocab-practice.js', './js/app.js', './js/sync.js', './js/discreet.js',
-  './data/verbs.js', './data/curriculum-b1.js',
+  './data/verbs.js', './data/curriculum-b1.js', './data/word-cats.js',
   './manifest.json', './icon.svg'
 ];
 

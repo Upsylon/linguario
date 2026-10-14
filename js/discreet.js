@@ -333,7 +333,7 @@ const Discreet = (() => {
     const refs   = (window.VOCAB_REFS || []).filter(r => (r.words || []).length);
     const all    = [...units, ...refs];
     _shorts = {};
-    all.forEach(u => { _shorts[u.id] = _shortName(u.name); });
+    all.forEach(u => { _shorts[u.id] = SHORT_OVERRIDES[u.id] || _shortName(u.name); });
     _themes = [
       { id: 'all', name: isFrEs ? 'Tout' : 'Todo', words: all.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id }))) },
       ...all.map(u => ({ id: u.id, name: isFrEs ? u.name : (u.nameEs || u.name), words: u.words.map(w => ({ ...w, _uid: u.id })) })),
@@ -342,6 +342,12 @@ const Discreet = (() => {
 
   // Nom de thème en 1 mot (« Salutations & politesse » → Salutations, « Cours du 2 juin — Loisirs… » → Loisirs)
   let _shorts = {};
+  const SHORT_OVERRIDES = { ref_expr: 'Expressions', ref_conj: 'Connecteurs', ref_conjug: 'Conjugaison', ref_l_imp: 'Imparfait', u09: 'Verbes', u20: 'Argot' };
+  // Rubrique d'un mot : classement par mot (data/word-cats.js), sinon nom court de sa section
+  function _catFor(w) {
+    const cats = typeof WORD_CATS !== 'undefined' ? WORD_CATS : {};
+    return cats[w._uid + ':' + w.en] || _shorts[w._uid];
+  }
   function _shortName(n) {
     let s = /^Leçon/.test(n) ? n.split('·')[1].split('—')[0] : n.includes('—') ? n.split('—')[1] : n;
     s = s.trim().replace(/^(Le |La |Les |L'|Des |Du )/i, '');
@@ -452,7 +458,7 @@ const Discreet = (() => {
     const item = (d, t) => `<div class="dz-feed"><div class="dz-feed-meta">${_hhmm(new Date(t))} · ${d[0]}</div><div class="dz-feed-txt">${d[1]}</div></div>`;
     _el.querySelector('#dz-decoy1').innerHTML = item(d1, t1);
     _el.querySelector('#dz-decoy2').innerHTML = item(d2, t2);
-    if (_word && !_hidden) _paintMeta(_shorts[_word._uid]);
+    if (_word && !_hidden) _paintMeta(_catFor(_word));
   }
 
   // Scroll rapide → mode finance (seulement dans ce sens ; retour par double-clic)
