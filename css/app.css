@@ -1305,3 +1305,86 @@ input  { font: inherit; }
 .vc-lesson-t tr:first-child th { font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--surface2); }
 .vc-lesson-t th  { font-weight: 700; color: var(--muted); }
 .vc-lesson-tip   { font-size: .84rem; line-height: 1.45; padding: .5rem .65rem; border-radius: var(--radius-sm); background: var(--primary-g); border: 1px solid var(--border2); }
+
+/* ── Mode discret : déguisement en quotidien (journal fictif) ───── */
+body.discreet-on > :not(#discreet):not(script) { display: none !important; }
+body.discreet-on { background: #fff; }
+#discreet {
+  --dz-ink: #111; --dz-mute: #6b6b6b; --dz-line: #e5e5e5; --dz-acc: #a3122a; --dz-link: #0b3d6e;
+  min-height: 100vh; background: #fff; color: var(--dz-ink);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+#discreet a { color: inherit; }
+#discreet .dz-top { display: flex; justify-content: space-between; gap: 1rem; max-width: 1080px; margin: 0 auto; padding: .5rem 16px; font: 12px/1.4 Arial, Helvetica, sans-serif; color: var(--dz-mute); }
+#discreet .dz-date { cursor: default; text-transform: capitalize; }
+#discreet .dz-top-r { display: flex; gap: 1.1rem; }
+#discreet .dz-acc { color: var(--dz-ink); font-weight: 700; }
+#discreet .dz-mast { max-width: 1080px; margin: 0 auto; text-align: center; padding: .4rem 16px 0; border-bottom: 1px solid var(--dz-ink); }
+#discreet .dz-paper { font-size: clamp(1.7rem, 4.2vw, 2.8rem); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; cursor: default; user-select: none; padding-bottom: .5rem; }
+#discreet .dz-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: .3rem 1.5rem; padding: .65rem 0; border-top: 1px solid var(--dz-line); font: 700 13px Arial, Helvetica, sans-serif; color: #222; }
+#discreet .dz-nav .on { color: var(--dz-acc); }
+#discreet .dz-ticker { max-width: 1080px; margin: 0 auto; padding: .45rem 16px; display: flex; gap: 1.4rem; overflow: hidden; white-space: nowrap; font: 12px Arial, Helvetica, sans-serif; border-bottom: 1px solid var(--dz-line); }
+#discreet .dz-tk i { font-style: normal; }
+#discreet .dz-tk .up { color: #0a7d3c; }
+#discreet .dz-tk .dn { color: #b3261e; }
+#discreet .dz-grid { max-width: 1080px; margin: 0 auto; padding: 1.4rem 16px 3rem; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 3rem; align-items: start; }
+#discreet .dz-crumb { font: 12px Arial, Helvetica, sans-serif; color: var(--dz-mute); margin-bottom: 1rem; }
+#discreet .dz-crumb span { margin: 0 .3rem; }
+#discreet .dz-kicker { font: 700 13px Arial, Helvetica, sans-serif; color: var(--dz-acc); margin-bottom: .55rem; display: flex; align-items: center; gap: .5rem; }
+#discreet .dz-badge { font: 700 10px Arial, Helvetica, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: #fff; background: var(--dz-ink); padding: .15rem .4rem; }
+#discreet .dz-title { font-size: clamp(1.7rem, 3.5vw, 2.5rem); line-height: 1.12; margin: 0 0 .9rem; font-weight: 700; letter-spacing: -.01em; }
+#discreet .dz-lead { font-size: 1.2rem; line-height: 1.5; color: #333; margin: 0 0 1.6rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--dz-line); }
+#discreet .dz-by { font: 13px/1.6 Arial, Helvetica, sans-serif; color: var(--dz-mute); padding: .8rem 0; border-top: 1px solid var(--dz-line); border-bottom: 1px solid var(--dz-line); margin-bottom: 1.6rem; }
+#discreet .dz-by b { color: var(--dz-ink); }
+#discreet .dz-share { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin-top: .35rem; color: #444; }
+#discreet .dz-art p { font-size: 1.08rem; line-height: 1.72; margin: 0 0 1.15rem; }
+#discreet .dz-art h2 { font-size: 1.3rem; line-height: 1.3; margin: 1.9rem 0 .7rem; }
+#discreet .dz-art p a { color: var(--dz-link); text-decoration: underline; text-decoration-color: rgba(11,61,110,.35); text-underline-offset: 2px; }
+#discreet .dz-art p a:hover { text-decoration-color: var(--dz-link); }
+#discreet .dz-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.8rem 0 2.2rem; }
+#discreet .dz-tags a { font: 12px Arial, Helvetica, sans-serif; padding: .3rem .65rem; border: 1px solid #ccc; border-radius: 2rem; text-decoration: none; color: #333; }
+#discreet .dz-tags a:hover { border-color: var(--dz-ink); }
+#discreet .dz-also { border-top: 2px solid var(--dz-ink); padding-top: .5rem; }
+#discreet .dz-also-item { display: block; padding: .9rem 0; border-bottom: 1px solid var(--dz-line); text-decoration: none; }
+#discreet .dz-also-k { display: block; font: 700 12px Arial, Helvetica, sans-serif; color: var(--dz-acc); margin-bottom: .25rem; }
+#discreet .dz-also-t { display: block; font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
+#discreet .dz-also-l { display: block; font-size: .95rem; color: #555; line-height: 1.45; margin-top: .3rem; }
+#discreet .dz-also-item:hover .dz-also-t { text-decoration: underline; }
+#discreet .dz-side { position: sticky; top: 1rem; }
+#discreet .dz-box { border-top: 2px solid var(--dz-ink); padding-top: .5rem; margin-bottom: 1.8rem; }
+#discreet .dz-box-h { font: 700 12px Arial, Helvetica, sans-serif; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .5rem; }
+#discreet .dz-op-i { padding: .5rem 0; border-bottom: 1px solid var(--dz-line); }
+#discreet .dz-op-i:last-child { border-bottom: 0; }
+#discreet .dz-op-a { font: 700 12px Arial, Helvetica, sans-serif; color: var(--dz-acc); margin-bottom: .15rem; }
+#discreet .dz-op-t { font-size: .95rem; line-height: 1.35; font-style: italic; }
+#discreet .dz-most { margin: 0; padding-left: 1.2rem; font-size: .95rem; line-height: 1.4; }
+#discreet .dz-most li { margin-bottom: .7rem; }
+#discreet .dz-most a { text-decoration: none; }
+#discreet .dz-most a:hover { text-decoration: underline; }
+#discreet .dz-lex { position: relative; font: 14px Arial, Helvetica, sans-serif; }
+#discreet .dz-lex-nav { position: absolute; top: .45rem; right: 0; display: flex; }
+#discreet .dz-lex-nav button { font: 13px Arial, Helvetica, sans-serif; line-height: 1; width: 20px; height: 20px; padding: 0; background: transparent; color: #555; border: 1px solid #ccc; cursor: pointer; }
+#discreet .dz-lex-nav button + button { border-left: 0; }
+#discreet .dz-lex-nav button:hover { color: var(--dz-ink); background: #f3f3f3; }
+#discreet .dz-lex .dz-box-h { margin-bottom: .2rem; }
+/* Fil à hauteur constante : chaque dépêche = heure/rubrique + 2 lignes de texte.
+   Pour LinguaRío, la réponse s'ajoute en gris à la suite de la phrase dans ces 2 lignes. */
+#discreet .dz-feedwrap { font-size: 12.5px; line-height: 1.35; }
+#discreet .dz-feed { padding: .3rem 0; border-bottom: 1px solid var(--dz-line); }
+#discreet .dz-feed-meta { font-size: 10.5px; line-height: 1.3; color: var(--dz-mute); margin-bottom: 1px; }
+#discreet .dz-feed-txt, #discreet .dz-lex-w { height: 34px; line-height: 17px; overflow: hidden; color: var(--dz-ink); }
+#discreet .dz-lex-t { color: #777; }
+#discreet .dz-lex-btns { display: flex; align-items: center; gap: .35rem; padding-top: .3rem; font-size: 11px; color: #aaa; }
+#discreet .dz-link { font: 11px Arial, Helvetica, sans-serif; padding: 0; background: none; border: 0; color: var(--dz-mute); cursor: pointer; }
+#discreet .dz-link:hover { color: var(--dz-ink); text-decoration: underline; }
+#discreet .dz-foot { background: #111; color: #bbb; font: 12px/1.6 Arial, Helvetica, sans-serif; }
+#discreet .dz-foot-in { max-width: 1080px; margin: 0 auto; padding: 2rem 16px; }
+#discreet .dz-foot-name { font: 700 1.4rem Georgia, 'Times New Roman', serif; color: #fff; margin-bottom: .8rem; }
+#discreet .dz-foot-links { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; margin-bottom: .8rem; }
+@media (max-width: 760px) {
+  #discreet .dz-grid { grid-template-columns: 1fr; gap: 1rem; }
+  #discreet .dz-side { order: -1; top: 0; z-index: 2; background: #fff; padding-bottom: .4rem; border-bottom: 1px solid var(--dz-line); }
+  #discreet .dz-lex { margin-bottom: 0; }
+  #discreet .dz-mostbox, #discreet .dz-op { display: none; }
+  #discreet .dz-top-r { display: none; }
+}

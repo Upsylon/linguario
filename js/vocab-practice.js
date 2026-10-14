@@ -393,7 +393,7 @@ const VocabPractice = (() => {
 
   function getWordStatus(mode, uid, en) { return _getStatus(mode, uid, en); }
 
-  return { start, startWithPicker, getWordStatus };
+  return { start, startWithPicker, getWordStatus, markResult: _markResult };
 })();
 
 window.VocabPractice = VocabPractice;
