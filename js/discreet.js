@@ -7,17 +7,47 @@
    Double-clic n'importe où : la dépêche LinguaRío est remplacée par une vraie fausse dépêche économique
    (R/S désactivés) ; nouveau double-clic pour la faire revenir.
    Scroll rapide : bascule aussi en mode finance (sans retour automatique).
-   R = raté (lien « Commenter »), S = su (lien « Partager »), aussi au clavier : 1er appui enregistre et affiche la réponse, 2e appui = mot suivant. */
+   R = raté (lien « Commenter »), S = su (lien « Partager »), aussi au clavier : 1er appui enregistre et affiche la réponse, 2e appui = mot suivant.
+   6 designs (journaux / intranet fictifs) : un autre à chaque activation ; clic sur un mot du menu = bascule vers un autre design. */
 const Discreet = (() => {
 
   const KEY        = 'langapp:discreet';
   const THEME_KEY  = 'langapp:discreet-theme';
   const FAST_PX    = 500;   // scroll rapide = plus de FAST_PX parcourus en FAST_MS
   const FAST_MS    = 250;
-  const PAPER      = 'L\'Observateur des Marchés';
-  const FAVICON    = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" rx="2" fill="#1a3a5c"/>' +
+  const SKIN_KEY   = 'langapp:discreet-skin';
+  const favicon = bg => 'data:image/svg+xml,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" rx="2" fill="${bg}"/>` +
     '<path d="M3 12l3-4 3 2 4-6" stroke="#fff" stroke-width="1.6" fill="none"/></svg>');
+
+  // Designs fictifs (aucune vraie marque). page = fond hors contenu ; nav = menu (clic = autre design).
+  const SKINS = [
+    { id: 'obs',    paper: 'L\'Observateur des Marchés', fav: '#1a3a5c', page: '#fff',
+      top: ['Newsletters', 'E-paper', 'Mon compte'], crumb: 'Économie', badge: 'Abonnés',
+      nav: ['Suisse', 'Monde', 'Économie', 'Finance', 'Opinions', 'Culture', 'Sciences', 'Sport', 'Lifestyle'], on: 2,
+      feed: 'En continu', op: 'Opinions', most: 'Les plus lus', foot: 'Tous droits réservés. Toute reproduction interdite sans autorisation.' },
+    { id: 'msg',    paper: 'Le Messager Économique', fav: '#0d7680', page: '#fff1e5',
+      top: ['Édition du jour', 'Archives', 'Se connecter'], crumb: 'Marchés', badge: 'Premium',
+      nav: ['À la une', 'Marchés', 'Entreprises', 'Banques', 'Patrimoine', 'Tech', 'Opinions', 'Carrières'], on: 1,
+      feed: 'Dernières nouvelles', op: 'Le point de vue', most: 'Les plus lus', foot: 'Reproduction réservée.' },
+    { id: 'pulse',  paper: 'MarketPulse', fav: '#2f6bff', page: '#f4f6f9',
+      top: ['Watchlist', 'Alertes', 'Profil'], crumb: 'News', badge: 'Pro',
+      nav: ['Markets', 'Economy', 'Rates', 'FX', 'Commodities', 'Tech', 'Wealth'], on: 0, search: 'Rechercher un titre, un indice…',
+      feed: 'Live', op: 'Analyses', most: 'Trending', foot: 'Données indicatives, différées d\'au moins 15 minutes.' },
+    { id: 'rev',    paper: 'Patrimoine & Gestion', fav: '#8a6d3b', page: '#f7f3ec',
+      top: ['Le magazine', 'Événements', 'Mon abonnement'], crumb: 'Le magazine', badge: 'Édition abonnés',
+      nav: ['Investir', 'Fiscalité', 'Immobilier', 'Prévoyance', 'Art & collections', 'Entretiens'], on: 0,
+      feed: 'Brèves', op: 'Chroniques', most: 'À lire', foot: 'Revue trimestrielle de gestion de patrimoine.' },
+    { id: 'fil',    paper: 'Le Fil Éco', fav: '#005a9c', page: '#fff',
+      top: ['Services', 'Abonnement pro', 'Connexion'], crumb: 'Dépêches', badge: 'Dépêche',
+      nav: ['Toutes les dépêches', 'Économie', 'Marchés', 'Entreprises', 'International', 'Agenda'], on: 1,
+      feed: 'Fil des dépêches', op: 'Éclairages', most: 'Les plus consultés', foot: 'Fil d\'information économique en continu.' },
+    { id: 'intra',  paper: 'Portail collaborateurs', fav: '#1f4e79', page: '#f3f4f6',
+      top: ['Aide', 'Paramètres', 'Déconnexion'], crumb: 'Accueil <span>›</span> Veille <span>›</span> Revue de presse', badge: 'Revue de presse',
+      nav: ['Accueil', 'Mes outils', 'RH', 'Veille & revue de presse', 'Documents', 'Annuaire', 'Formation'], on: 3, search: 'Rechercher dans le portail…',
+      feed: 'Actualités', op: 'Notes internes', most: 'Les plus consultés', foot: 'Usage strictement interne. Ne pas diffuser.' },
+  ];
+  let _skin = SKINS[0];
 
   // Corps d'article : '## ' = intertitre ; {{texte|n}} = lien vers l'article n.
   const ARTICLES = [
@@ -184,14 +214,27 @@ const Discreet = (() => {
 
     _prevTitle = document.title;
     const ico = document.querySelector('link[rel="icon"]');
-    if (ico) { _prevIcon = ico.href; ico.href = FAVICON; }
+    if (ico) _prevIcon = ico.href;
+    const last = _get(SKIN_KEY);
+    const pool = SKINS.filter(k => k.id !== last);
+    _skin = pool[Math.floor(Math.random() * pool.length)]; // un autre design qu'à la dernière activation
 
     _buildThemes();
     const saved = _themes.findIndex(t => t.id === _get(THEME_KEY));
     _themeIdx = saved >= 0 ? saved : 0;
 
-    _renderShell();
-    _showArticle(Math.floor(Math.random() * ARTICLES.length));
+    // Écouteurs sur la racine : une seule fois (la page interne est reconstruite à chaque changement de design)
+    _el.addEventListener('dblclick', e => {
+      if (e.target.closest('button, a, .dz-date, [data-skin]')) return;
+      try { window.getSelection().removeAllRanges(); } catch (err) {}
+      _setHidden(!_hidden);
+    });
+    _el.addEventListener('click', e => {
+      const a = e.target.closest('[data-art]');
+      if (a) { e.preventDefault(); _showArticle(+a.dataset.art); }
+    });
+    _artIdx = Math.floor(Math.random() * ARTICLES.length);
+    _applySkin(_skin);
     _setTheme(_themeIdx);
     window.addEventListener('scroll', _onScroll, { passive: true });
     _tickTimer = setInterval(_paintTicker, 7000);
@@ -204,35 +247,61 @@ const Discreet = (() => {
     window.removeEventListener('scroll', _onScroll);
     _el.remove(); _el = null;
     document.body.classList.remove('discreet-on');
+    document.body.style.removeProperty('--dz-page');
     document.title = _prevTitle;
     const ico = document.querySelector('link[rel="icon"]');
     if (ico && _prevIcon) ico.href = _prevIcon;
   }
 
   // ── Page ──────────────────────────────────────────────────────────────
+  // Applique un design : reconstruit la page en gardant l'article, le mot et l'état (réponse, mode finance)
+  function _applySkin(skin) {
+    _skin = skin;
+    _set(SKIN_KEY, skin.id);
+    _el.className = 'dz-skin-' + skin.id;
+    document.body.style.setProperty('--dz-page', skin.page);
+    const ico = document.querySelector('link[rel="icon"]');
+    if (ico) ico.href = favicon(skin.fav);
+    _renderShell();
+    _showArticle(_artIdx);
+    if (!_word) return;
+    if (_hidden) { _paintHiddenFeed(); return; }
+    _paintDecoys();
+    _setLine('#dz-q', _sentence(_word, true));
+    _setLine('#dz-t', _answered ? _sentence(_word, false) : '');
+  }
+
+  function _switchSkin(navIdx) {
+    const others = SKINS.filter(k => k !== _skin);
+    _applySkin(others[navIdx % others.length]);
+    window.scrollTo(0, 0);
+  }
+
   function _renderShell() {
+    const k = _skin;
+    const nav = k.nav.map((n, i) => `<span data-skin="${i}"${i === k.on ? ' class="on"' : ''}>${n}</span>`).join('');
     const date = new Date().toLocaleDateString('fr-CH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     _el.innerHTML = `
       <div class="dz-top">
         <span class="dz-date">${date}</span>
-        <span class="dz-top-r"><span>Newsletters</span><span>E-paper</span><span class="dz-acc">Mon compte</span></span>
+        <span class="dz-top-r">${k.top.map((t, i) => `<span${i === k.top.length - 1 ? ' class="dz-acc"' : ''}>${t}</span>`).join('')}</span>
       </div>
       <header class="dz-mast">
-        <div class="dz-paper">${PAPER}</div>
-        <nav class="dz-nav">
-          <span>Suisse</span><span>Monde</span><span class="on">Économie</span><span>Finance</span><span>Opinions</span><span>Culture</span><span>Sciences</span><span>Sport</span><span>Lifestyle</span>
-        </nav>
+        <div class="dz-paper">${k.paper}</div>
+        ${k.search ? `<div class="dz-search">${k.search}</div>` : ''}
+        <nav class="dz-nav">${nav}</nav>
       </header>
       <div class="dz-ticker" id="dz-ticker"></div>
       <div class="dz-grid">
+        <nav class="dz-left">${nav}</nav>
         <article class="dz-art" id="dz-art"></article>
         <aside class="dz-side">
           <div class="dz-box dz-op">
-            <div class="dz-box-h">Opinions</div>
+            <div class="dz-box-h">${k.op}</div>
             <div id="dz-op"></div>
           </div>
           <div class="dz-box dz-lex">
-            <div class="dz-box-h">En continu</div>
+            <div class="dz-box-h">${k.feed}</div>
             <div class="dz-lex-nav">
               <button id="dz-prev" aria-label="Précédent">‹</button><button id="dz-nxt" aria-label="Suivant">›</button>
             </div>
@@ -249,16 +318,16 @@ const Discreet = (() => {
             </div>
           </div>
           <div class="dz-box dz-mostbox">
-            <div class="dz-box-h">Les plus lus</div>
+            <div class="dz-box-h">${k.most}</div>
             <ol class="dz-most" id="dz-most"></ol>
           </div>
         </aside>
       </div>
       <footer class="dz-foot">
         <div class="dz-foot-in">
-          <div class="dz-foot-name">${PAPER}</div>
+          <div class="dz-foot-name">${k.paper}</div>
           <div class="dz-foot-links"><span>Qui sommes-nous</span><span>Charte éditoriale</span><span>Abonnements</span><span>Publicité</span><span>Contact</span><span>Protection des données</span><span>Conditions générales</span></div>
-          <div class="dz-foot-c">© ${new Date().getFullYear()} ${PAPER}. Tous droits réservés. Toute reproduction interdite sans autorisation.</div>
+          <div class="dz-foot-c">© ${new Date().getFullYear()} ${k.paper}. ${k.foot}</div>
         </div>
       </footer>`;
 
@@ -267,15 +336,7 @@ const Discreet = (() => {
     _el.querySelector('#dz-nxt').addEventListener('click', () => _setTheme(_themeIdx + 1));
     _el.querySelector('#dz-r').addEventListener('click', () => _grade(false));
     _el.querySelector('#dz-s').addEventListener('click', () => _grade(true));
-    _el.addEventListener('dblclick', e => {
-      if (e.target.closest('button, a, .dz-date')) return;
-      try { window.getSelection().removeAllRanges(); } catch (err) {}
-      _setHidden(!_hidden);
-    });
-    _el.addEventListener('click', e => {
-      const a = e.target.closest('[data-art]');
-      if (a) { e.preventDefault(); _showArticle(+a.dataset.art); }
-    });
+    _el.querySelectorAll('[data-skin]').forEach(n => n.addEventListener('click', () => _switchSkin(+n.dataset.skin)));
     _paintTicker();
     _el.querySelector('#dz-op').innerHTML = OPINIONS.slice().sort(() => Math.random() - 0.5).slice(0, 3)
       .map(([who, t]) => `<div class="dz-op-i"><div class="dz-op-a">${who}</div><div class="dz-op-t">${t}</div></div>`).join('');
@@ -286,12 +347,12 @@ const Discreet = (() => {
     const a = ARTICLES[idx];
     const others = ARTICLES.map((o, i) => ({ o, i })).filter(x => x.i !== idx);
     const related = others.slice(0, 3);
-    document.title = a.title.slice(0, 60) + ' — ' + PAPER;
+    document.title = a.title.slice(0, 60) + ' — ' + _skin.paper;
 
     const link = s => s.replace(/\{\{(.+?)\|(\d+)\}\}/g, (_, txt, n) => `<a href="#" data-art="${n}">${txt}</a>`);
     _el.querySelector('#dz-art').innerHTML = `
-      <div class="dz-crumb">Économie <span>›</span> ${a.kicker}</div>
-      <div class="dz-kicker"><span class="dz-badge">Abonnés</span>${a.kicker}</div>
+      <div class="dz-crumb">${_skin.crumb} <span>›</span> ${a.kicker}</div>
+      <div class="dz-kicker"><span class="dz-badge">${_skin.badge}</span>${a.kicker}</div>
       <h1 class="dz-title">${a.title}</h1>
       <p class="dz-lead">${a.lead}</p>
       ${a.body.map(p => p.startsWith('## ') ? `<h2>${p.slice(3)}</h2>` : `<p>${link(p)}</p>`).join('')}
@@ -333,7 +394,7 @@ const Discreet = (() => {
     const refs   = (window.VOCAB_REFS || []).filter(r => (r.words || []).length);
     const all    = [...units, ...refs];
     _shorts = {};
-    all.forEach(u => { _shorts[u.id] = SHORT_OVERRIDES[u.id] || _shortName(u.name); });
+    all.forEach(u => { _shorts[u.id] = _shortName(u.name); });
     _themes = [
       { id: 'all', name: isFrEs ? 'Tout' : 'Todo', words: all.flatMap(u => u.words.map(w => ({ ...w, _uid: u.id }))) },
       ...all.map(u => ({ id: u.id, name: isFrEs ? u.name : (u.nameEs || u.name), words: u.words.map(w => ({ ...w, _uid: u.id })) })),
@@ -342,7 +403,6 @@ const Discreet = (() => {
 
   // Nom de thème en 1 mot (« Salutations & politesse » → Salutations, « Cours du 2 juin — Loisirs… » → Loisirs)
   let _shorts = {};
-  const SHORT_OVERRIDES = { ref_expr: 'Expressions', ref_conj: 'Connecteurs', ref_conjug: 'Conjugaison', ref_l_imp: 'Imparfait', u09: 'Verbes', u20: 'Argot' };
   // Rubrique d'un mot : classement par mot (data/word-cats.js), sinon nom court de sa section
   function _catFor(w) {
     const cats = typeof WORD_CATS !== 'undefined' ? WORD_CATS : {};
